@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.data.dataverse_adapter API documentation</title>
+<title>burdock.reader.sql.engine API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,65 +17,21 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.data.dataverse_adapter</code></h1>
+<h1 class="title">Module <code>burdock.reader.sql.engine</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import os
-import tempfile
-import requests
+<pre><code class="python">class Engine:
+    PANDAS = &#34;pandas&#34;
+    POSTGRES = &#34;postgres&#34;
+    PRESTO = &#34;Presto&#34;
+    SPARK = &#34;Spark&#34;
+    SQL_SERVER = &#34;SqlServer&#34;
 
-import pandas as pd
-
-from burdock.metadata import CollectionMetadata
-from burdock.reader.sql import PandasReader
-
-from .dataset_adapter import DatasetAdapter
-
-def _make_doi_host(host, doi):
-    doi = doi.replace(&#34;doi:&#34;, &#34;&#34;)
-    return &#34;{}/api/access/datafile/:persistentId/?persistentId=doi:{}&#34;.format(host, doi)
-
-
-def dataverse_loader(host, doi=None, token=None):
-    host = host if doi is None else _make_doi_host(host, doi)
-    kwargs = {}
-    if token is not None:
-        kwargs[&#34;headers&#34;] = {&#34;X-Dataverse-key&#34;: token}
-    response = requests.get(host, **kwargs)
-    response.raise_for_status()
-
-    temp_dir = tempfile.gettempdir()
-    path = os.path.join(temp_dir, &#34;data.tsv&#34;)
-    with open(path, &#34;w&#34;) as stream:
-        stream.write(response.text)
-    return pd.read_csv(path, sep=&#34;\t&#34;)
-
-
-class DataverseAdapter(DatasetAdapter):
-    KEY = &#34;dataverse&#34;
-
-    @staticmethod
-    def validate_document(document):
-        if document.dataverse_details is None:
-            raise Exception(&#34;Malformed details.&#34;)
-
-    @staticmethod
-    def _load_df(dataset_document):
-        return dataverse_loader(dataset_document.dataverse_details.host,
-                                token=dataset_document.dataverse_details.token)
-
-    @staticmethod
-    def _load_metadata(dataset_document):
-        return CollectionMetadata.from_file(dataset_document.dataverse_details.local_metadata_path)
-
-    @staticmethod
-    def _load_reader(dataset_document):
-        return PandasReader(DataverseAdapter.load_metadata(dataset_document),
-                               DataverseAdapter.load_df(dataset_document))</code></pre>
+    known_engines = {PANDAS, POSTGRES, PRESTO, SPARK, SQL_SERVER}</code></pre>
 </details>
 </section>
 <section>
@@ -83,39 +39,12 @@ class DataverseAdapter(DatasetAdapter):
 <section>
 </section>
 <section>
-<h2 class="section-title" id="header-functions">Functions</h2>
-<dl>
-<dt id="burdock.data.dataverse_adapter.dataverse_loader"><code class="name flex">
-<span>def <span class="ident">dataverse_loader</span></span>(<span>host, doi=None, token=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def dataverse_loader(host, doi=None, token=None):
-    host = host if doi is None else _make_doi_host(host, doi)
-    kwargs = {}
-    if token is not None:
-        kwargs[&#34;headers&#34;] = {&#34;X-Dataverse-key&#34;: token}
-    response = requests.get(host, **kwargs)
-    response.raise_for_status()
-
-    temp_dir = tempfile.gettempdir()
-    path = os.path.join(temp_dir, &#34;data.tsv&#34;)
-    with open(path, &#34;w&#34;) as stream:
-        stream.write(response.text)
-    return pd.read_csv(path, sep=&#34;\t&#34;)</code></pre>
-</details>
-</dd>
-</dl>
 </section>
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.data.dataverse_adapter.DataverseAdapter"><code class="flex name class">
-<span>class <span class="ident">DataverseAdapter</span></span>
+<dt id="burdock.reader.sql.engine.Engine"><code class="flex name class">
+<span>class <span class="ident">Engine</span></span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -123,55 +52,40 @@ class DataverseAdapter(DatasetAdapter):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DataverseAdapter(DatasetAdapter):
-    KEY = &#34;dataverse&#34;
+<pre><code class="python">class Engine:
+    PANDAS = &#34;pandas&#34;
+    POSTGRES = &#34;postgres&#34;
+    PRESTO = &#34;Presto&#34;
+    SPARK = &#34;Spark&#34;
+    SQL_SERVER = &#34;SqlServer&#34;
 
-    @staticmethod
-    def validate_document(document):
-        if document.dataverse_details is None:
-            raise Exception(&#34;Malformed details.&#34;)
-
-    @staticmethod
-    def _load_df(dataset_document):
-        return dataverse_loader(dataset_document.dataverse_details.host,
-                                token=dataset_document.dataverse_details.token)
-
-    @staticmethod
-    def _load_metadata(dataset_document):
-        return CollectionMetadata.from_file(dataset_document.dataverse_details.local_metadata_path)
-
-    @staticmethod
-    def _load_reader(dataset_document):
-        return PandasReader(DataverseAdapter.load_metadata(dataset_document),
-                               DataverseAdapter.load_df(dataset_document))</code></pre>
+    known_engines = {PANDAS, POSTGRES, PRESTO, SPARK, SQL_SERVER}</code></pre>
 </details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="burdock.data.dataset_adapter.DatasetAdapter" href="dataset_adapter.html#burdock.data.dataset_adapter.DatasetAdapter">DatasetAdapter</a></li>
-</ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="burdock.data.dataverse_adapter.DataverseAdapter.KEY"><code class="name">var <span class="ident">KEY</span></code></dt>
+<dt id="burdock.reader.sql.engine.Engine.PANDAS"><code class="name">var <span class="ident">PANDAS</span></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
-</dl>
-<h3>Static methods</h3>
-<dl>
-<dt id="burdock.data.dataverse_adapter.DataverseAdapter.validate_document"><code class="name flex">
-<span>def <span class="ident">validate_document</span></span>(<span>document)</span>
-</code></dt>
+<dt id="burdock.reader.sql.engine.Engine.POSTGRES"><code class="name">var <span class="ident">POSTGRES</span></code></dt>
 <dd>
 <section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def validate_document(document):
-    if document.dataverse_details is None:
-        raise Exception(&#34;Malformed details.&#34;)</code></pre>
-</details>
+</dd>
+<dt id="burdock.reader.sql.engine.Engine.PRESTO"><code class="name">var <span class="ident">PRESTO</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="burdock.reader.sql.engine.Engine.SPARK"><code class="name">var <span class="ident">SPARK</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="burdock.reader.sql.engine.Engine.SQL_SERVER"><code class="name">var <span class="ident">SQL_SERVER</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+<dt id="burdock.reader.sql.engine.Engine.known_engines"><code class="name">var <span class="ident">known_engines</span></code></dt>
+<dd>
+<section class="desc"></section>
 </dd>
 </dl>
 </dd>
@@ -186,21 +100,20 @@ def validate_document(document):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.data" href="index.html">burdock.data</a></code></li>
-</ul>
-</li>
-<li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="burdock.data.dataverse_adapter.dataverse_loader" href="#burdock.data.dataverse_adapter.dataverse_loader">dataverse_loader</a></code></li>
+<li><code><a title="burdock.reader.sql" href="index.html">burdock.reader.sql</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.data.dataverse_adapter.DataverseAdapter" href="#burdock.data.dataverse_adapter.DataverseAdapter">DataverseAdapter</a></code></h4>
-<ul class="">
-<li><code><a title="burdock.data.dataverse_adapter.DataverseAdapter.KEY" href="#burdock.data.dataverse_adapter.DataverseAdapter.KEY">KEY</a></code></li>
-<li><code><a title="burdock.data.dataverse_adapter.DataverseAdapter.validate_document" href="#burdock.data.dataverse_adapter.DataverseAdapter.validate_document">validate_document</a></code></li>
+<h4><code><a title="burdock.reader.sql.engine.Engine" href="#burdock.reader.sql.engine.Engine">Engine</a></code></h4>
+<ul class="two-column">
+<li><code><a title="burdock.reader.sql.engine.Engine.PANDAS" href="#burdock.reader.sql.engine.Engine.PANDAS">PANDAS</a></code></li>
+<li><code><a title="burdock.reader.sql.engine.Engine.POSTGRES" href="#burdock.reader.sql.engine.Engine.POSTGRES">POSTGRES</a></code></li>
+<li><code><a title="burdock.reader.sql.engine.Engine.PRESTO" href="#burdock.reader.sql.engine.Engine.PRESTO">PRESTO</a></code></li>
+<li><code><a title="burdock.reader.sql.engine.Engine.SPARK" href="#burdock.reader.sql.engine.Engine.SPARK">SPARK</a></code></li>
+<li><code><a title="burdock.reader.sql.engine.Engine.SQL_SERVER" href="#burdock.reader.sql.engine.Engine.SQL_SERVER">SQL_SERVER</a></code></li>
+<li><code><a title="burdock.reader.sql.engine.Engine.known_engines" href="#burdock.reader.sql.engine.Engine.known_engines">known_engines</a></code></li>
 </ul>
 </li>
 </ul>

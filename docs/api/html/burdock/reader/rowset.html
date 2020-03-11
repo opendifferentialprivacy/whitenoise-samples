@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.reader.sql.rowset API documentation</title>
+<title>burdock.reader.rowset API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.reader.sql.rowset</code></h1>
+<h1 class="title">Module <code>burdock.reader.rowset</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -28,7 +28,8 @@
 import datetime
 import operator
 from numpy import inf
-from burdock.metadata.report import Report
+
+from burdock.report import Report
 
 &#34;&#34;&#34;
     Represents a typed rowset supporting the types used in differentially private
@@ -41,9 +42,8 @@ class TypedRowset:
         :param rows: A list of tuples representing rows, with the first tuple being the
             column names, and the rest being the rows of the rowset.
         :param types: A list of types for the columns 
-        :param sens: A list of sensitivities
     &#34;&#34;&#34;
-    def __init__(self, rows, types, sens):
+    def __init__(self, rows, types):
         header = [c.lower() for c in rows[0]]
         body = rows[1:]
         self.n_rows = len(body)
@@ -53,7 +53,6 @@ class TypedRowset:
         cur_col = 1
 
         self.types = {}
-        self.sens = {}
         self.colnames = []
         self.report = Report()
 
@@ -63,7 +62,6 @@ class TypedRowset:
                 cname = prefix + str(cur_col)
                 cur_col += 1
             self.types[cname] = types[idx]
-            self.sens[cname] = sens[idx]
             self.colnames.append(cname)
         # for quick lookup
         self.colidx = dict(list(zip(self.colnames, range(len(self.colnames)))))
@@ -143,32 +141,13 @@ class TypedRowset:
         &#39;=&#39;: operator.eq}
         col = self[colname]
         types = [self.types[name] for name in self.colnames]
-        sens = [self.sens[name] for name in self.colnames]
         rows = [tuple(self.colnames)]
         for idx in range(self.n_rows):
             if ops[relation](col[idx], value):
                 rows.append(tuple(self[name][idx] for name in self.colnames))
-        filtered_rs = TypedRowset(rows, types, sens)
+        filtered_rs = TypedRowset(rows, types)
         filtered_rs.report = self.report
         return filtered_rs
-
-    def sort(self, sortcols):
-        body = self.rows(False)
-        for sf in reversed(sortcols):
-            desc = sf.startswith(&#34;-&#34;)
-            if desc:
-                sf = sf[1:]
-            colnum = self.colidx[sf]
-            body = sorted(body, key=operator.itemgetter(colnum), reverse=desc)
-        tmpcol = {}
-        for name in self.colnames:
-            tmpcol[name] = []
-
-        for r in body:
-            for cidx in range(len(self.colnames)):
-                tmpcol[self.idxcol[cidx]].append(r[cidx])
-        for name in self.colnames:
-            self[name] = tmpcol[name]
 
     def rows(self, header = True):
         return ([self.colnames] if header else []) + [tuple(self.m_cols[name][idx] for name in self.colnames) for idx in range(self.n_rows)]
@@ -234,16 +213,15 @@ class TypedRowset:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.reader.sql.rowset.TypedRowset"><code class="flex name class">
+<dt id="burdock.reader.rowset.TypedRowset"><code class="flex name class">
 <span>class <span class="ident">TypedRowset</span></span>
-<span>(</span><span>rows, types, sens)</span>
+<span>(</span><span>rows, types)</span>
 </code></dt>
 <dd>
 <section class="desc"><p>Initialize rowset</p>
 <p>:param rows: A list of tuples representing rows, with the first tuple being the
 column names, and the rest being the rows of the rowset.
-:param types: A list of types for the columns
-:param sens: A list of sensitivities</p></section>
+:param types: A list of types for the columns</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -255,9 +233,8 @@ column names, and the rest being the rows of the rowset.
         :param rows: A list of tuples representing rows, with the first tuple being the
             column names, and the rest being the rows of the rowset.
         :param types: A list of types for the columns 
-        :param sens: A list of sensitivities
     &#34;&#34;&#34;
-    def __init__(self, rows, types, sens):
+    def __init__(self, rows, types):
         header = [c.lower() for c in rows[0]]
         body = rows[1:]
         self.n_rows = len(body)
@@ -267,7 +244,6 @@ column names, and the rest being the rows of the rowset.
         cur_col = 1
 
         self.types = {}
-        self.sens = {}
         self.colnames = []
         self.report = Report()
 
@@ -277,7 +253,6 @@ column names, and the rest being the rows of the rowset.
                 cname = prefix + str(cur_col)
                 cur_col += 1
             self.types[cname] = types[idx]
-            self.sens[cname] = sens[idx]
             self.colnames.append(cname)
         # for quick lookup
         self.colidx = dict(list(zip(self.colnames, range(len(self.colnames)))))
@@ -357,32 +332,13 @@ column names, and the rest being the rows of the rowset.
         &#39;=&#39;: operator.eq}
         col = self[colname]
         types = [self.types[name] for name in self.colnames]
-        sens = [self.sens[name] for name in self.colnames]
         rows = [tuple(self.colnames)]
         for idx in range(self.n_rows):
             if ops[relation](col[idx], value):
                 rows.append(tuple(self[name][idx] for name in self.colnames))
-        filtered_rs = TypedRowset(rows, types, sens)
+        filtered_rs = TypedRowset(rows, types)
         filtered_rs.report = self.report
         return filtered_rs
-
-    def sort(self, sortcols):
-        body = self.rows(False)
-        for sf in reversed(sortcols):
-            desc = sf.startswith(&#34;-&#34;)
-            if desc:
-                sf = sf[1:]
-            colnum = self.colidx[sf]
-            body = sorted(body, key=operator.itemgetter(colnum), reverse=desc)
-        tmpcol = {}
-        for name in self.colnames:
-            tmpcol[name] = []
-
-        for r in body:
-            for cidx in range(len(self.colnames)):
-                tmpcol[self.idxcol[cidx]].append(r[cidx])
-        for name in self.colnames:
-            self[name] = tmpcol[name]
 
     def rows(self, header = True):
         return ([self.colnames] if header else []) + [tuple(self.m_cols[name][idx] for name in self.colnames) for idx in range(self.n_rows)]
@@ -440,7 +396,7 @@ column names, and the rest being the rows of the rowset.
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.reader.sql.rowset.TypedRowset.compare"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.compare"><code class="name flex">
 <span>def <span class="ident">compare</span></span>(<span>self, other, ratio=0.05)</span>
 </code></dt>
 <dd>
@@ -467,7 +423,7 @@ column names, and the rest being the rows of the rowset.
     return True</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.filter"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.filter"><code class="name flex">
 <span>def <span class="ident">filter</span></span>(<span>self, colname, relation, value)</span>
 </code></dt>
 <dd>
@@ -484,17 +440,16 @@ column names, and the rest being the rows of the rowset.
     &#39;=&#39;: operator.eq}
     col = self[colname]
     types = [self.types[name] for name in self.colnames]
-    sens = [self.sens[name] for name in self.colnames]
     rows = [tuple(self.colnames)]
     for idx in range(self.n_rows):
         if ops[relation](col[idx], value):
             rows.append(tuple(self[name][idx] for name in self.colnames))
-    filtered_rs = TypedRowset(rows, types, sens)
+    filtered_rs = TypedRowset(rows, types)
     filtered_rs.report = self.report
     return filtered_rs</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.format_width"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.format_width"><code class="name flex">
 <span>def <span class="ident">format_width</span></span>(<span>self, val, width)</span>
 </code></dt>
 <dd>
@@ -519,7 +474,7 @@ column names, and the rest being the rows of the rowset.
         return str_val + padding</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.get_width"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.get_width"><code class="name flex">
 <span>def <span class="ident">get_width</span></span>(<span>self, colname)</span>
 </code></dt>
 <dd>
@@ -544,7 +499,7 @@ column names, and the rest being the rows of the rowset.
         raise ValueError(&#34;Unknown type: &#34; + t)</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.rows"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.rows"><code class="name flex">
 <span>def <span class="ident">rows</span></span>(<span>self, header=True)</span>
 </code></dt>
 <dd>
@@ -557,35 +512,7 @@ column names, and the rest being the rows of the rowset.
     return ([self.colnames] if header else []) + [tuple(self.m_cols[name][idx] for name in self.colnames) for idx in range(self.n_rows)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.sort"><code class="name flex">
-<span>def <span class="ident">sort</span></span>(<span>self, sortcols)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def sort(self, sortcols):
-    body = self.rows(False)
-    for sf in reversed(sortcols):
-        desc = sf.startswith(&#34;-&#34;)
-        if desc:
-            sf = sf[1:]
-        colnum = self.colidx[sf]
-        body = sorted(body, key=operator.itemgetter(colnum), reverse=desc)
-    tmpcol = {}
-    for name in self.colnames:
-        tmpcol[name] = []
-
-    for r in body:
-        for cidx in range(len(self.colnames)):
-            tmpcol[self.idxcol[cidx]].append(r[cidx])
-    for name in self.colnames:
-        self[name] = tmpcol[name]</code></pre>
-</details>
-</dd>
-<dt id="burdock.reader.sql.rowset.TypedRowset.unescape"><code class="name flex">
+<dt id="burdock.reader.rowset.TypedRowset.unescape"><code class="name flex">
 <span>def <span class="ident">unescape</span></span>(<span>self, value)</span>
 </code></dt>
 <dd>
@@ -612,21 +539,20 @@ column names, and the rest being the rows of the rowset.
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.reader.sql" href="index.html">burdock.reader.sql</a></code></li>
+<li><code><a title="burdock.reader" href="index.html">burdock.reader</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.reader.sql.rowset.TypedRowset" href="#burdock.reader.sql.rowset.TypedRowset">TypedRowset</a></code></h4>
+<h4><code><a title="burdock.reader.rowset.TypedRowset" href="#burdock.reader.rowset.TypedRowset">TypedRowset</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.compare" href="#burdock.reader.sql.rowset.TypedRowset.compare">compare</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.filter" href="#burdock.reader.sql.rowset.TypedRowset.filter">filter</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.format_width" href="#burdock.reader.sql.rowset.TypedRowset.format_width">format_width</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.get_width" href="#burdock.reader.sql.rowset.TypedRowset.get_width">get_width</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.rows" href="#burdock.reader.sql.rowset.TypedRowset.rows">rows</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.sort" href="#burdock.reader.sql.rowset.TypedRowset.sort">sort</a></code></li>
-<li><code><a title="burdock.reader.sql.rowset.TypedRowset.unescape" href="#burdock.reader.sql.rowset.TypedRowset.unescape">unescape</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.compare" href="#burdock.reader.rowset.TypedRowset.compare">compare</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.filter" href="#burdock.reader.rowset.TypedRowset.filter">filter</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.format_width" href="#burdock.reader.rowset.TypedRowset.format_width">format_width</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.get_width" href="#burdock.reader.rowset.TypedRowset.get_width">get_width</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.rows" href="#burdock.reader.rowset.TypedRowset.rows">rows</a></code></li>
+<li><code><a title="burdock.reader.rowset.TypedRowset.unescape" href="#burdock.reader.rowset.TypedRowset.unescape">unescape</a></code></li>
 </ul>
 </li>
 </ul>

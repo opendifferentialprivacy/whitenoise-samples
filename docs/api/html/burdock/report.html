@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.metadata.report API documentation</title>
+<title>burdock.report API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.metadata.report</code></h1>
+<h1 class="title">Module <code>burdock.report</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -60,7 +60,7 @@ class IntervalRange:
         return (self.low &gt;= other.low and self.low &lt;= other.high) or (self.high &gt;= other.low and self.high &lt;= other.high)
     def __iter__(self):
         return iter([self.low, self.high])
-    
+
 
 &#34;&#34;&#34;A vector of CIs for a single column and confidence.&#34;&#34;&#34;
 class Interval:
@@ -310,7 +310,7 @@ class Report:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.metadata.report.Interval"><code class="flex name class">
+<dt id="burdock.report.Interval"><code class="flex name class">
 <span>class <span class="ident">Interval</span></span>
 <span>(</span><span>confidence, accuracy, low=None, high=None)</span>
 </code></dt>
@@ -433,7 +433,7 @@ Between 0.0 and 1.0 inclusive.
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.metadata.report.Interval.append"><code class="name flex">
+<dt id="burdock.report.Interval.append"><code class="name flex">
 <span>def <span class="ident">append</span></span>(<span>self, value)</span>
 </code></dt>
 <dd>
@@ -460,7 +460,7 @@ Between 0.0 and 1.0 inclusive.
             raise ValueError(&#34;Can only append intervals as tuples, or automatically convert values.&#34;)        </code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.clear"><code class="name flex">
+<dt id="burdock.report.Interval.clear"><code class="name flex">
 <span>def <span class="ident">clear</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -474,7 +474,7 @@ Between 0.0 and 1.0 inclusive.
     self.high.clear()</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.contains"><code class="name flex">
+<dt id="burdock.report.Interval.contains"><code class="name flex">
 <span>def <span class="ident">contains</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -487,7 +487,7 @@ Between 0.0 and 1.0 inclusive.
     return all([s.contains(o) for s, o in zip(self, other)])</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.extend"><code class="name flex">
+<dt id="burdock.report.Interval.extend"><code class="name flex">
 <span>def <span class="ident">extend</span></span>(<span>self, values)</span>
 </code></dt>
 <dd>
@@ -505,7 +505,7 @@ Between 0.0 and 1.0 inclusive.
         raise ValueError(&#34;Interval only supports extending intervals by auto-converting values&#34;)</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.inside"><code class="name flex">
+<dt id="burdock.report.Interval.inside"><code class="name flex">
 <span>def <span class="ident">inside</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -518,7 +518,7 @@ Between 0.0 and 1.0 inclusive.
     return all([s.inside(o) for s, o in zip(self, other)])</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.intersects"><code class="name flex">
+<dt id="burdock.report.Interval.intersects"><code class="name flex">
 <span>def <span class="ident">intersects</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -531,7 +531,7 @@ Between 0.0 and 1.0 inclusive.
     return all([s.intersects(o) for s, o in zip(self, other)])</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.pop"><code class="name flex">
+<dt id="burdock.report.Interval.pop"><code class="name flex">
 <span>def <span class="ident">pop</span></span>(<span>self, item=None)</span>
 </code></dt>
 <dd>
@@ -550,7 +550,7 @@ Between 0.0 and 1.0 inclusive.
     return IntervalRange(low, high)</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Interval.remove"><code class="name flex">
+<dt id="burdock.report.Interval.remove"><code class="name flex">
 <span>def <span class="ident">remove</span></span>(<span>self, value)</span>
 </code></dt>
 <dd>
@@ -570,7 +570,7 @@ Between 0.0 and 1.0 inclusive.
 </dd>
 </dl>
 </dd>
-<dt id="burdock.metadata.report.IntervalRange"><code class="flex name class">
+<dt id="burdock.report.IntervalRange"><code class="flex name class">
 <span>class <span class="ident">IntervalRange</span></span>
 <span>(</span><span>low, high)</span>
 </code></dt>
@@ -603,7 +603,7 @@ Between 0.0 and 1.0 inclusive.
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.metadata.report.IntervalRange.contains"><code class="name flex">
+<dt id="burdock.report.IntervalRange.contains"><code class="name flex">
 <span>def <span class="ident">contains</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -616,7 +616,7 @@ Between 0.0 and 1.0 inclusive.
     return self.low &lt;= other.low and self.high &gt;= other.high</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.IntervalRange.inside"><code class="name flex">
+<dt id="burdock.report.IntervalRange.inside"><code class="name flex">
 <span>def <span class="ident">inside</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -629,7 +629,7 @@ Between 0.0 and 1.0 inclusive.
     return other.contains(self)</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.IntervalRange.intersects"><code class="name flex">
+<dt id="burdock.report.IntervalRange.intersects"><code class="name flex">
 <span>def <span class="ident">intersects</span></span>(<span>self, other)</span>
 </code></dt>
 <dd>
@@ -644,7 +644,7 @@ Between 0.0 and 1.0 inclusive.
 </dd>
 </dl>
 </dd>
-<dt id="burdock.metadata.report.Intervals"><code class="flex name class">
+<dt id="burdock.report.Intervals"><code class="flex name class">
 <span>class <span class="ident">Intervals</span></span>
 <span>(</span><span>intervals)</span>
 </code></dt>
@@ -702,7 +702,7 @@ Between 0.0 and 1.0 inclusive.
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="burdock.metadata.report.Intervals.accuracy"><code class="name">var <span class="ident">accuracy</span></code></dt>
+<dt id="burdock.report.Intervals.accuracy"><code class="name">var <span class="ident">accuracy</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -714,7 +714,7 @@ def accuracy(self):
     return [self._intervals[k].accuracy for k in self._intervals.keys()]</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.alphas"><code class="name">var <span class="ident">alphas</span></code></dt>
+<dt id="burdock.report.Intervals.alphas"><code class="name">var <span class="ident">alphas</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -726,7 +726,7 @@ def alphas(self):
     return [1 - confidence for confidence in self.interval_widths]</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.interval_widths"><code class="name">var <span class="ident">interval_widths</span></code></dt>
+<dt id="burdock.report.Intervals.interval_widths"><code class="name">var <span class="ident">interval_widths</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -741,7 +741,7 @@ def interval_widths(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.metadata.report.Intervals.append"><code class="name flex">
+<dt id="burdock.report.Intervals.append"><code class="name flex">
 <span>def <span class="ident">append</span></span>(<span>self, value)</span>
 </code></dt>
 <dd>
@@ -758,7 +758,7 @@ def interval_widths(self):
         raise ValueError(&#34;Interval collection only supports appending intervals by auto-converting values&#34;)</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.clear"><code class="name flex">
+<dt id="burdock.report.Intervals.clear"><code class="name flex">
 <span>def <span class="ident">clear</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -772,7 +772,7 @@ def interval_widths(self):
         self._intervals[k].clear()</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.delete_row"><code class="name flex">
+<dt id="burdock.report.Intervals.delete_row"><code class="name flex">
 <span>def <span class="ident">delete_row</span></span>(<span>self, idx)</span>
 </code></dt>
 <dd>
@@ -787,7 +787,7 @@ def interval_widths(self):
         del interval[idx]</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.extend"><code class="name flex">
+<dt id="burdock.report.Intervals.extend"><code class="name flex">
 <span>def <span class="ident">extend</span></span>(<span>self, values)</span>
 </code></dt>
 <dd>
@@ -804,7 +804,7 @@ def interval_widths(self):
         raise ValueError(&#34;Interval collection only supports extending intervals by auto-converting values&#34;)</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Intervals.keys"><code class="name flex">
+<dt id="burdock.report.Intervals.keys"><code class="name flex">
 <span>def <span class="ident">keys</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -819,7 +819,7 @@ def interval_widths(self):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.metadata.report.Report"><code class="flex name class">
+<dt id="burdock.report.Report"><code class="flex name class">
 <span>class <span class="ident">Report</span></span>
 <span>(</span><span>results=None)</span>
 </code></dt>
@@ -845,7 +845,7 @@ def interval_widths(self):
         return key in self._results</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Result"><code class="flex name class">
+<dt id="burdock.report.Result"><code class="flex name class">
 <span>class <span class="ident">Result</span></span>
 <span>(</span><span>mechanism, statistic, source, values, epsilon, delta, sensitivity, scale, max_contrib, intervals, name=None)</span>
 </code></dt>
@@ -922,7 +922,7 @@ If missing, uses the source.</p></section>
 </details>
 <h3>Instance variables</h3>
 <dl>
-<dt id="burdock.metadata.report.Result.accuracy"><code class="name">var <span class="ident">accuracy</span></code></dt>
+<dt id="burdock.report.Result.accuracy"><code class="name">var <span class="ident">accuracy</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -934,7 +934,7 @@ def accuracy(self):
     return None if self.intervals is None else self.intervals.accuracy</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Result.alphas"><code class="name">var <span class="ident">alphas</span></code></dt>
+<dt id="burdock.report.Result.alphas"><code class="name">var <span class="ident">alphas</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -946,7 +946,7 @@ def alphas(self):
     return None if self.intervals is None else self.intervals.alphas</code></pre>
 </details>
 </dd>
-<dt id="burdock.metadata.report.Result.interval_widths"><code class="name">var <span class="ident">interval_widths</span></code></dt>
+<dt id="burdock.report.Result.interval_widths"><code class="name">var <span class="ident">interval_widths</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -971,54 +971,54 @@ def interval_widths(self):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.metadata" href="index.html">burdock.metadata</a></code></li>
+<li><code><a title="burdock" href="index.html">burdock</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.metadata.report.Interval" href="#burdock.metadata.report.Interval">Interval</a></code></h4>
+<h4><code><a title="burdock.report.Interval" href="#burdock.report.Interval">Interval</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.metadata.report.Interval.append" href="#burdock.metadata.report.Interval.append">append</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.clear" href="#burdock.metadata.report.Interval.clear">clear</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.contains" href="#burdock.metadata.report.Interval.contains">contains</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.extend" href="#burdock.metadata.report.Interval.extend">extend</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.inside" href="#burdock.metadata.report.Interval.inside">inside</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.intersects" href="#burdock.metadata.report.Interval.intersects">intersects</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.pop" href="#burdock.metadata.report.Interval.pop">pop</a></code></li>
-<li><code><a title="burdock.metadata.report.Interval.remove" href="#burdock.metadata.report.Interval.remove">remove</a></code></li>
+<li><code><a title="burdock.report.Interval.append" href="#burdock.report.Interval.append">append</a></code></li>
+<li><code><a title="burdock.report.Interval.clear" href="#burdock.report.Interval.clear">clear</a></code></li>
+<li><code><a title="burdock.report.Interval.contains" href="#burdock.report.Interval.contains">contains</a></code></li>
+<li><code><a title="burdock.report.Interval.extend" href="#burdock.report.Interval.extend">extend</a></code></li>
+<li><code><a title="burdock.report.Interval.inside" href="#burdock.report.Interval.inside">inside</a></code></li>
+<li><code><a title="burdock.report.Interval.intersects" href="#burdock.report.Interval.intersects">intersects</a></code></li>
+<li><code><a title="burdock.report.Interval.pop" href="#burdock.report.Interval.pop">pop</a></code></li>
+<li><code><a title="burdock.report.Interval.remove" href="#burdock.report.Interval.remove">remove</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.metadata.report.IntervalRange" href="#burdock.metadata.report.IntervalRange">IntervalRange</a></code></h4>
+<h4><code><a title="burdock.report.IntervalRange" href="#burdock.report.IntervalRange">IntervalRange</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.metadata.report.IntervalRange.contains" href="#burdock.metadata.report.IntervalRange.contains">contains</a></code></li>
-<li><code><a title="burdock.metadata.report.IntervalRange.inside" href="#burdock.metadata.report.IntervalRange.inside">inside</a></code></li>
-<li><code><a title="burdock.metadata.report.IntervalRange.intersects" href="#burdock.metadata.report.IntervalRange.intersects">intersects</a></code></li>
+<li><code><a title="burdock.report.IntervalRange.contains" href="#burdock.report.IntervalRange.contains">contains</a></code></li>
+<li><code><a title="burdock.report.IntervalRange.inside" href="#burdock.report.IntervalRange.inside">inside</a></code></li>
+<li><code><a title="burdock.report.IntervalRange.intersects" href="#burdock.report.IntervalRange.intersects">intersects</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.metadata.report.Intervals" href="#burdock.metadata.report.Intervals">Intervals</a></code></h4>
+<h4><code><a title="burdock.report.Intervals" href="#burdock.report.Intervals">Intervals</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.metadata.report.Intervals.accuracy" href="#burdock.metadata.report.Intervals.accuracy">accuracy</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.alphas" href="#burdock.metadata.report.Intervals.alphas">alphas</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.append" href="#burdock.metadata.report.Intervals.append">append</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.clear" href="#burdock.metadata.report.Intervals.clear">clear</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.delete_row" href="#burdock.metadata.report.Intervals.delete_row">delete_row</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.extend" href="#burdock.metadata.report.Intervals.extend">extend</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.interval_widths" href="#burdock.metadata.report.Intervals.interval_widths">interval_widths</a></code></li>
-<li><code><a title="burdock.metadata.report.Intervals.keys" href="#burdock.metadata.report.Intervals.keys">keys</a></code></li>
+<li><code><a title="burdock.report.Intervals.accuracy" href="#burdock.report.Intervals.accuracy">accuracy</a></code></li>
+<li><code><a title="burdock.report.Intervals.alphas" href="#burdock.report.Intervals.alphas">alphas</a></code></li>
+<li><code><a title="burdock.report.Intervals.append" href="#burdock.report.Intervals.append">append</a></code></li>
+<li><code><a title="burdock.report.Intervals.clear" href="#burdock.report.Intervals.clear">clear</a></code></li>
+<li><code><a title="burdock.report.Intervals.delete_row" href="#burdock.report.Intervals.delete_row">delete_row</a></code></li>
+<li><code><a title="burdock.report.Intervals.extend" href="#burdock.report.Intervals.extend">extend</a></code></li>
+<li><code><a title="burdock.report.Intervals.interval_widths" href="#burdock.report.Intervals.interval_widths">interval_widths</a></code></li>
+<li><code><a title="burdock.report.Intervals.keys" href="#burdock.report.Intervals.keys">keys</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.metadata.report.Report" href="#burdock.metadata.report.Report">Report</a></code></h4>
+<h4><code><a title="burdock.report.Report" href="#burdock.report.Report">Report</a></code></h4>
 </li>
 <li>
-<h4><code><a title="burdock.metadata.report.Result" href="#burdock.metadata.report.Result">Result</a></code></h4>
+<h4><code><a title="burdock.report.Result" href="#burdock.report.Result">Result</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.metadata.report.Result.accuracy" href="#burdock.metadata.report.Result.accuracy">accuracy</a></code></li>
-<li><code><a title="burdock.metadata.report.Result.alphas" href="#burdock.metadata.report.Result.alphas">alphas</a></code></li>
-<li><code><a title="burdock.metadata.report.Result.interval_widths" href="#burdock.metadata.report.Result.interval_widths">interval_widths</a></code></li>
+<li><code><a title="burdock.report.Result.accuracy" href="#burdock.report.Result.accuracy">accuracy</a></code></li>
+<li><code><a title="burdock.report.Result.alphas" href="#burdock.report.Result.alphas">alphas</a></code></li>
+<li><code><a title="burdock.report.Result.interval_widths" href="#burdock.report.Result.interval_widths">interval_widths</a></code></li>
 </ul>
 </li>
 </ul>

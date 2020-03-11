@@ -24,10 +24,8 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from burdock.metadata.collection import CollectionMetadata
-from .private_rewriter import Rewriter
+<pre><code class="python">from .private_rewriter import Rewriter
 from .private_reader import PrivateReader
-from burdock.reader.sql.pandas import PandasReader
 from .parse import QueryParser
 
 
@@ -36,17 +34,13 @@ def execute_private_query(reader, schema, budget, query):
     query = reader._sanitize_query(query) if hasattr(reader ,&#34;_sanitize_query&#34;) else query
     return PrivateReader(reader, schema, budget).execute(query)
 
-__all__ = [&#34;CollectionMetadata&#34;, &#34;Rewriter&#34;, &#34;QueryParser&#34;,
-           &#34;PandasReader&#34;, &#34;execute_private_query&#34;]</code></pre>
+
+__all__ = [&#34;Rewriter&#34;, &#34;QueryParser&#34;, &#34;execute_private_query&#34;]</code></pre>
 </details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
-<dt><code class="name"><a title="burdock.sql.ast" href="ast/index.html">burdock.sql.ast</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
 <dt><code class="name"><a title="burdock.sql.parse" href="parse.html">burdock.sql.parse</a></code></dt>
 <dd>
 <section class="desc"></section>
@@ -90,285 +84,6 @@ __all__ = [&#34;CollectionMetadata&#34;, &#34;Rewriter&#34;, &#34;QueryParser&#3
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.sql.CollectionMetadata"><code class="flex name class">
-<span>class <span class="ident">CollectionMetadata</span></span>
-<span>(</span><span>tables, engine, compare=None)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class CollectionMetadata:
-    def __init__(self, tables, engine, compare=None):
-        self.m_tables = dict([(t.table_name(), t) for t in tables])
-        self.engine = engine if engine is not None else &#34;Unknown&#34;
-        self.compare = NameCompare.get_name_compare(engine) if compare is None else compare
-
-    def __getitem__(self, tablename):
-        schema_name = &#39;&#39;
-        parts = tablename.split(&#39;.&#39;)
-        if len(parts) == 2:
-            schema_name, tablename = parts
-        for tname in self.m_tables.keys():
-            table = self.m_tables[tname]
-            if self.compare.schema_match(schema_name, table.schema) and self.compare.identifier_match(tablename, table.name):
-                table.compare = self.compare
-                return table
-        return None
-    def __str__(self):
-        return &#34;\n\n&#34;.join([str(self.m_tables[table]) for table in self.m_tables.keys()])
-    def tables(self):
-        return [self.m_tables[tname] for tname in self.m_tables.keys()]
-
-    @staticmethod
-    def from_file(filename):
-        ys = CollectionYamlLoader(filename)
-        return ys.read_file()
-
-    @staticmethod
-    def from_dict(schema_dict):
-        ys = CollectionYamlLoader(&#34;dummy&#34;)
-        return ys._create_metadata_object(schema_dict)
-
-    def to_file(self, filename, collection_name):
-        ys = CollectionYamlLoader(filename)
-        ys.write_file(self, collection_name)</code></pre>
-</details>
-<h3>Static methods</h3>
-<dl>
-<dt id="burdock.sql.CollectionMetadata.from_dict"><code class="name flex">
-<span>def <span class="ident">from_dict</span></span>(<span>schema_dict)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_dict(schema_dict):
-    ys = CollectionYamlLoader(&#34;dummy&#34;)
-    return ys._create_metadata_object(schema_dict)</code></pre>
-</details>
-</dd>
-<dt id="burdock.sql.CollectionMetadata.from_file"><code class="name flex">
-<span>def <span class="ident">from_file</span></span>(<span>filename)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">@staticmethod
-def from_file(filename):
-    ys = CollectionYamlLoader(filename)
-    return ys.read_file()</code></pre>
-</details>
-</dd>
-</dl>
-<h3>Methods</h3>
-<dl>
-<dt id="burdock.sql.CollectionMetadata.tables"><code class="name flex">
-<span>def <span class="ident">tables</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def tables(self):
-    return [self.m_tables[tname] for tname in self.m_tables.keys()]</code></pre>
-</details>
-</dd>
-<dt id="burdock.sql.CollectionMetadata.to_file"><code class="name flex">
-<span>def <span class="ident">to_file</span></span>(<span>self, filename, collection_name)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def to_file(self, filename, collection_name):
-    ys = CollectionYamlLoader(filename)
-    ys.write_file(self, collection_name)</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
-<dt id="burdock.sql.PandasReader"><code class="flex name class">
-<span>class <span class="ident">PandasReader</span></span>
-<span>(</span><span>metadata, df)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class PandasReader(Reader):
-    def __init__(self, metadata, df):
-        super().__init__()
-        self.original_column_names = []
-        self.df = df
-        self.metadata = self._sanitize_metadata(metadata)
-        self.serializer = None
-        self.engine = &#34;Pandas&#34;
-
-    def _sanitize_column_name(self, column_name):
-        x = re.search(r&#34;.*[a-zA-Z0-9()_]&#34;, column_name)
-        if x is None:
-            raise Exception(&#34;Unsupported column name {}. Column names must be alphanumeric or _, (, ).&#34;.format(
-                column_name))
-        column_name = column_name.replace(&#34; &#34;, &#34;_&#34;).replace(&#34;(&#34;, &#34;_0_&#34;).replace(&#34;)&#34;, &#34;_1_&#34;)
-        return column_name
-
-    def _sanitize_metadata(self, metadata):
-        metadata = copy.deepcopy(metadata)
-        table_names = list(metadata.m_tables.keys())
-        if len(table_names) &gt; 1:
-            raise Exception(&#34;Only one table is supported for PandasReader. {} found.&#34;.format(len(table_names)))
-        table_name = table_names[0]
-        self.original_column_names = list(metadata.m_tables[table_name].m_columns)
-
-        has_key = False
-        for column_name in self.original_column_names:
-            sanitized_column_name = self._sanitize_column_name(column_name)
-            metadata.m_tables[table_name].m_columns[sanitized_column_name] = metadata.m_tables[table_name].m_columns[column_name]
-            metadata.m_tables[table_name].m_columns[sanitized_column_name].name = sanitized_column_name
-            has_key = has_key or metadata.m_tables[table_name].m_columns[sanitized_column_name].is_key
-            self.df[sanitized_column_name] = self.df[column_name]
-            if column_name != sanitized_column_name:
-                del metadata.m_tables[table_name].m_columns[column_name]
-
-        if not has_key:
-            key = &#34;primary_key&#34;
-            self.df[key] = range(len(self.df))
-            metadata.m_tables[table_name].m_columns[key] = Int(key,
-            minval=0,
-            maxval=len(self.df),
-            is_key=True)
-        return metadata
-
-    def _sanitize_query(self, query):
-        for column in self.original_column_names:
-            sanitized_column = self._sanitize_column_name(column)
-            for column_form in [&#34;&#39;{}&#39;&#34;.format(column), &#39;&#34;{}&#34;&#39;.format(column), column]:
-                query = query.replace(column_form, sanitized_column)
-        return query
-    &#34;&#34;&#34;
-        Get the database associated with this connection
-    &#34;&#34;&#34;
-    def db_name(self):
-        sql = &#34;SELECT current_database();&#34;
-        dbname = self.execute(sql)[1][0]
-        return dbname
-    &#34;&#34;&#34;
-        Executes a raw SQL string against the database and returns
-        tuples for rows.  This will NOT fix the query to target the
-        specific SQL dialect.  Call execute_typed to fix dialect.
-    &#34;&#34;&#34;
-    def execute(self, query):
-        query = self._sanitize_query(query)
-        from pandasql import sqldf
-        if not isinstance(query, str):
-            raise ValueError(&#34;Please pass strings to execute.  To execute ASTs, use execute_typed.&#34;)
-        table_names = list(self.metadata.m_tables.keys())
-        if len(table_names) &gt; 1:
-            raise Exception(&#34;PandasReader only supports one table, {} found.&#34;.format(len(table_names)))
-
-        df_name = &#34;df_for_diffpriv1234&#34;
-        table_name = table_names[0]
-        def clean_query(query):
-            for column in self.metadata.m_tables[table_name].m_columns:
-                if &#34; &#34; in column or &#34;(&#34; in column or &#34;)&#34; in column:
-                    new_column_name = column.replace(&#34; &#34;, &#34;_&#34;).replace(&#34;(&#34;, &#34;_&#34;).replace(&#34;)&#34;, &#34;_&#34;)
-                    query = query.replace(column, new_column_name)
-                    query = query.replace(&#34;&#39;{}&#39;&#34;.format(new_column_name), new_column_name)
-            return query.replace(table_name, df_name)
-
-        for column in self.metadata.m_tables[table_name].m_columns:
-            new_column_name = column.replace(&#34; &#34;, &#34;_&#34;).replace(&#34;(&#34;, &#34;_&#34;).replace(&#34;)&#34;, &#34;_&#34;)
-            if self.metadata.m_tables[table_name].m_columns[column].is_key:
-                if column not in self.df:
-                    self.df[column] = range(len(self.df))
-            else:
-                if new_column_name not in self.df:
-                    self.df[new_column_name] = self.df[column]
-
-        df_for_diffpriv1234 = self.df
-        q_result = sqldf(clean_query(query), locals())
-        return [tuple([col for col in q_result.columns])] + [val[1:] for val in q_result.itertuples()]</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="../reader/sql/base.html#burdock.reader.sql.base.Reader">Reader</a></li>
-</ul>
-<h3>Methods</h3>
-<dl>
-<dt id="burdock.sql.PandasReader.db_name"><code class="name flex">
-<span>def <span class="ident">db_name</span></span>(<span>self)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def db_name(self):
-    sql = &#34;SELECT current_database();&#34;
-    dbname = self.execute(sql)[1][0]
-    return dbname</code></pre>
-</details>
-</dd>
-<dt id="burdock.sql.PandasReader.execute"><code class="name flex">
-<span>def <span class="ident">execute</span></span>(<span>self, query)</span>
-</code></dt>
-<dd>
-<section class="desc"></section>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def execute(self, query):
-    query = self._sanitize_query(query)
-    from pandasql import sqldf
-    if not isinstance(query, str):
-        raise ValueError(&#34;Please pass strings to execute.  To execute ASTs, use execute_typed.&#34;)
-    table_names = list(self.metadata.m_tables.keys())
-    if len(table_names) &gt; 1:
-        raise Exception(&#34;PandasReader only supports one table, {} found.&#34;.format(len(table_names)))
-
-    df_name = &#34;df_for_diffpriv1234&#34;
-    table_name = table_names[0]
-    def clean_query(query):
-        for column in self.metadata.m_tables[table_name].m_columns:
-            if &#34; &#34; in column or &#34;(&#34; in column or &#34;)&#34; in column:
-                new_column_name = column.replace(&#34; &#34;, &#34;_&#34;).replace(&#34;(&#34;, &#34;_&#34;).replace(&#34;)&#34;, &#34;_&#34;)
-                query = query.replace(column, new_column_name)
-                query = query.replace(&#34;&#39;{}&#39;&#34;.format(new_column_name), new_column_name)
-        return query.replace(table_name, df_name)
-
-    for column in self.metadata.m_tables[table_name].m_columns:
-        new_column_name = column.replace(&#34; &#34;, &#34;_&#34;).replace(&#34;(&#34;, &#34;_&#34;).replace(&#34;)&#34;, &#34;_&#34;)
-        if self.metadata.m_tables[table_name].m_columns[column].is_key:
-            if column not in self.df:
-                self.df[column] = range(len(self.df))
-        else:
-            if new_column_name not in self.df:
-                self.df[new_column_name] = self.df[column]
-
-    df_for_diffpriv1234 = self.df
-    q_result = sqldf(clean_query(query), locals())
-    return [tuple([col for col in q_result.columns])] + [val[1:] for val in q_result.itertuples()]</code></pre>
-</details>
-</dd>
-</dl>
-</dd>
 <dt id="burdock.sql.QueryParser"><code class="flex name class">
 <span>class <span class="ident">QueryParser</span></span>
 <span>(</span><span>metadata=None)</span>
@@ -611,7 +326,7 @@ def from_file(filename):
     def push_sum_or_count(self, exp, scope):
         new_name = scope.push_name(AggFunction(exp.name, exp.quantifier, exp.expression))
 
-        new_exp = AggFunction(&#34;SUM&#34;, None, Column(new_name))
+        new_exp = Column(new_name)
         return new_exp
 
     &#34;&#34;&#34;
@@ -678,19 +393,26 @@ def from_file(filename):
 
     def exact_aggregates(self, query):
 
-        key_col = self.key_col(query)
 
         child_scope = Scope()
 
-        keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
-        child_scope.push_name(keycount_expr.expression)
-        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) # need to either treat this as reserved or pass through to outer
+        if self.options.row_privacy:
+            keycount_expr = AggFunction(&#34;COUNT&#34;, None,  AllColumns())
+        else:
+            key_col = self.key_col(query)
+            keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
+            child_scope.push_name(keycount_expr.expression)
 
-        select = Seq([keycount] + [self.rewrite_outer_named_expression(ne, child_scope) for ne in query.select.namedExpressions])
+        for ne in query.select.namedExpressions:
+            child_scope.push_name(ne.expression)
+        
+        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) 
+
+        select = Seq([keycount] + [ne for ne in query.select.namedExpressions])
         select = Select(None, select)
 
         subquery = Query(child_scope.select(), query.source, query.where, query.agg, query.having, None, None)
-        if self.options.reservoir_sample:
+        if self.options.reservoir_sample and not self.options.row_privacy:
             subquery = self.per_key_random(subquery)
             subquery = [AliasedRelation(subquery, &#34;per_key_random&#34;)]
 
@@ -708,32 +430,18 @@ def from_file(filename):
         select = Select(None, select)
 
         subquery = self.per_key_clamped(query)
-        subquery = [AliasedRelation(subquery, &#34;per_key_clamped&#34;)]
+        subquery = [AliasedRelation(subquery, &#34;clamped&#34; if self.options.clamp_columns else &#34;not_clamped&#34;)]
 
         return Query(select, From(subquery), None, None, None, None, None)
 
 
     def per_key_clamped(self, query):
-
-        key_col = self.key_col(query)
-
         child_scope = Scope()
-
-        keygroup = [GroupingExpression(Column(key_col))] + (query.agg.groupingExpressions.seq if query.agg is not None else [])
-        new_agg = Aggregate(Seq(keygroup))
-
         relations = query.source.relations
-
         select = Seq([self.clampExpression(ne, relations, child_scope, self.options.clamp_columns) for ne in query.select.namedExpressions])
         select = Select(None, select)
         subquery = Query(child_scope.select(), query.source, query.where, None, None, None, None)
-
-        if self.options.clamp_columns:
-            subquery = [AliasedRelation(subquery, &#34;clamped&#34;)]
-        else:
-            subquery = [AliasedRelation(subquery, &#34;not_clamped&#34;)]
-
-        return Query(select, From(subquery), None, new_agg, None, None, None)
+        return subquery
 
 
     &#34;&#34;&#34;
@@ -775,11 +483,17 @@ def from_file(filename):
         keys = [str(tc) for tc in tcsyms if tc.is_key]
         if len(keys) &gt; 1:
             raise ValueError(&#34;We only know how to handle tables with one key: &#34; + str(keys))
-        elif len(keys) &lt; 1:
-            raise ValueError(&#34;No key column available in query relations&#34;)
-
-        kp = keys[0].split(&#34;.&#34;)
-        return kp[len(kp) - 1]</code></pre>
+        if self.options.row_privacy:
+            if len(keys) &gt; 0:
+                raise ValueError(&#34;Row privacy is set, but metadata specifies a private_id&#34;)
+            else:
+                return None
+        else:
+            if len(keys) &lt; 1:
+                raise ValueError(&#34;No private_id column specified, and row_privacy is not set&#34;)
+            else:
+                kp = keys[0].split(&#34;.&#34;)
+                return kp[len(kp) - 1]</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -888,19 +602,26 @@ def from_file(filename):
 </summary>
 <pre><code class="python">def exact_aggregates(self, query):
 
-    key_col = self.key_col(query)
 
     child_scope = Scope()
 
-    keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
-    child_scope.push_name(keycount_expr.expression)
-    keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) # need to either treat this as reserved or pass through to outer
+    if self.options.row_privacy:
+        keycount_expr = AggFunction(&#34;COUNT&#34;, None,  AllColumns())
+    else:
+        key_col = self.key_col(query)
+        keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
+        child_scope.push_name(keycount_expr.expression)
 
-    select = Seq([keycount] + [self.rewrite_outer_named_expression(ne, child_scope) for ne in query.select.namedExpressions])
+    for ne in query.select.namedExpressions:
+        child_scope.push_name(ne.expression)
+    
+    keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) 
+
+    select = Seq([keycount] + [ne for ne in query.select.namedExpressions])
     select = Select(None, select)
 
     subquery = Query(child_scope.select(), query.source, query.where, query.agg, query.having, None, None)
-    if self.options.reservoir_sample:
+    if self.options.reservoir_sample and not self.options.row_privacy:
         subquery = self.per_key_random(subquery)
         subquery = [AliasedRelation(subquery, &#34;per_key_random&#34;)]
 
@@ -927,11 +648,17 @@ def from_file(filename):
     keys = [str(tc) for tc in tcsyms if tc.is_key]
     if len(keys) &gt; 1:
         raise ValueError(&#34;We only know how to handle tables with one key: &#34; + str(keys))
-    elif len(keys) &lt; 1:
-        raise ValueError(&#34;No key column available in query relations&#34;)
-
-    kp = keys[0].split(&#34;.&#34;)
-    return kp[len(kp) - 1]</code></pre>
+    if self.options.row_privacy:
+        if len(keys) &gt; 0:
+            raise ValueError(&#34;Row privacy is set, but metadata specifies a private_id&#34;)
+        else:
+            return None
+    else:
+        if len(keys) &lt; 1:
+            raise ValueError(&#34;No private_id column specified, and row_privacy is not set&#34;)
+        else:
+            kp = keys[0].split(&#34;.&#34;)
+            return kp[len(kp) - 1]</code></pre>
 </details>
 </dd>
 <dt id="burdock.sql.Rewriter.per_key_clamped"><code class="name flex">
@@ -944,26 +671,12 @@ def from_file(filename):
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def per_key_clamped(self, query):
-
-    key_col = self.key_col(query)
-
     child_scope = Scope()
-
-    keygroup = [GroupingExpression(Column(key_col))] + (query.agg.groupingExpressions.seq if query.agg is not None else [])
-    new_agg = Aggregate(Seq(keygroup))
-
     relations = query.source.relations
-
     select = Seq([self.clampExpression(ne, relations, child_scope, self.options.clamp_columns) for ne in query.select.namedExpressions])
     select = Select(None, select)
     subquery = Query(child_scope.select(), query.source, query.where, None, None, None, None)
-
-    if self.options.clamp_columns:
-        subquery = [AliasedRelation(subquery, &#34;clamped&#34;)]
-    else:
-        subquery = [AliasedRelation(subquery, &#34;not_clamped&#34;)]
-
-    return Query(select, From(subquery), None, new_agg, None, None, None)</code></pre>
+    return subquery</code></pre>
 </details>
 </dd>
 <dt id="burdock.sql.Rewriter.per_key_random"><code class="name flex">
@@ -982,7 +695,7 @@ def from_file(filename):
     select = Select(None, select)
 
     subquery = self.per_key_clamped(query)
-    subquery = [AliasedRelation(subquery, &#34;per_key_clamped&#34;)]
+    subquery = [AliasedRelation(subquery, &#34;clamped&#34; if self.options.clamp_columns else &#34;not_clamped&#34;)]
 
     return Query(select, From(subquery), None, None, None, None, None)</code></pre>
 </details>
@@ -999,7 +712,7 @@ def from_file(filename):
 <pre><code class="python">def push_sum_or_count(self, exp, scope):
     new_name = scope.push_name(AggFunction(exp.name, exp.quantifier, exp.expression))
 
-    new_exp = AggFunction(&#34;SUM&#34;, None, Column(new_name))
+    new_exp = Column(new_name)
     return new_exp</code></pre>
 </details>
 </dd>
@@ -1097,7 +810,6 @@ def from_file(filename):
 </li>
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
-<li><code><a title="burdock.sql.ast" href="ast/index.html">burdock.sql.ast</a></code></li>
 <li><code><a title="burdock.sql.parse" href="parse.html">burdock.sql.parse</a></code></li>
 <li><code><a title="burdock.sql.parser" href="parser/index.html">burdock.sql.parser</a></code></li>
 <li><code><a title="burdock.sql.private_reader" href="private_reader.html">burdock.sql.private_reader</a></code></li>
@@ -1111,22 +823,6 @@ def from_file(filename):
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
-<li>
-<h4><code><a title="burdock.sql.CollectionMetadata" href="#burdock.sql.CollectionMetadata">CollectionMetadata</a></code></h4>
-<ul class="">
-<li><code><a title="burdock.sql.CollectionMetadata.from_dict" href="#burdock.sql.CollectionMetadata.from_dict">from_dict</a></code></li>
-<li><code><a title="burdock.sql.CollectionMetadata.from_file" href="#burdock.sql.CollectionMetadata.from_file">from_file</a></code></li>
-<li><code><a title="burdock.sql.CollectionMetadata.tables" href="#burdock.sql.CollectionMetadata.tables">tables</a></code></li>
-<li><code><a title="burdock.sql.CollectionMetadata.to_file" href="#burdock.sql.CollectionMetadata.to_file">to_file</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="burdock.sql.PandasReader" href="#burdock.sql.PandasReader">PandasReader</a></code></h4>
-<ul class="">
-<li><code><a title="burdock.sql.PandasReader.db_name" href="#burdock.sql.PandasReader.db_name">db_name</a></code></li>
-<li><code><a title="burdock.sql.PandasReader.execute" href="#burdock.sql.PandasReader.execute">execute</a></code></li>
-</ul>
-</li>
 <li>
 <h4><code><a title="burdock.sql.QueryParser" href="#burdock.sql.QueryParser">QueryParser</a></code></h4>
 <ul class="">

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.reader.sql.sqlserver API documentation</title>
+<title>burdock.reader.sql.sql_server API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,33 +17,33 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.reader.sql.sqlserver</code></h1>
+<h1 class="title">Module <code>burdock.reader.sql.sql_server</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import pyodbc
-import os
+<pre><code class="python">import os
 
-from .base import Reader, NameCompare
-from burdock.sql.ast.ast import Relation
-from burdock.sql.ast.tokens import Literal
-from burdock.sql.ast.expression import Expression
-from burdock.sql.ast.expressions.numeric import BareFunction
-from burdock.sql.ast.expressions.sql import BooleanJoinCriteria, UsingJoinCriteria
+from .sql_base import SqlReader, NameCompare
+from .engine import Engine
+from burdock.ast.ast import Relation
+from burdock.ast.tokens import Literal
+from burdock.ast.expression import Expression
+from burdock.ast.expressions.numeric import BareFunction
+from burdock.ast.expressions.sql import BooleanJoinCriteria, UsingJoinCriteria
 
 &#34;&#34;&#34;
-    A dumb pipe that gets a rowset back from a database using 
+    A dumb pipe that gets a rowset back from a database using
     a SQL string, and converts types to some useful subset
 &#34;&#34;&#34;
-class SqlServerReader(Reader):
+class SqlServerReader(SqlReader):
+    ENGINE = Engine.SQL_SERVER
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(SqlServerNameCompare(), SqlServerSerializer())
+        import pyodbc
         self.api = pyodbc
-        self.engine = &#34;SqlServer&#34;
-
         self.host = host
         self.database = database
         self.user = user
@@ -55,9 +55,6 @@ class SqlServerReader(Reader):
         self.password = password
 
         self.update_connection_string()
-
-        self.serializer = SqlServerSerializer()
-        self.compare = SqlServerNameCompare()
 
     def execute(self, query):
         if not isinstance(query, str):
@@ -94,7 +91,7 @@ class SqlServerSerializer:
     def serialize(self, query):
         for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
             re.name = &#39;NEWID&#39;
-        
+
         for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
             b.text = &#34;&#39;TRUE&#39;&#34; if b.value else &#34;&#39;FALSE&#39;&#34;
 
@@ -132,7 +129,7 @@ class SqlServerNameCompare(NameCompare):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.reader.sql.sqlserver.SqlServerNameCompare"><code class="flex name class">
+<dt id="burdock.reader.sql.sql_server.SqlServerNameCompare"><code class="flex name class">
 <span>class <span class="ident">SqlServerNameCompare</span></span>
 <span>(</span><span>search_path=None)</span>
 </code></dt>
@@ -150,11 +147,11 @@ class SqlServerNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.NameCompare" href="base.html#burdock.reader.sql.base.NameCompare">NameCompare</a></li>
+<li><a title="burdock.reader.sql.sql_base.NameCompare" href="sql_base.html#burdock.reader.sql.sql_base.NameCompare">NameCompare</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.reader.sql.sqlserver.SqlServerNameCompare.identifier_match"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerNameCompare.identifier_match"><code class="name flex">
 <span>def <span class="ident">identifier_match</span></span>(<span>self, query, meta)</span>
 </code></dt>
 <dd>
@@ -169,7 +166,7 @@ class SqlServerNameCompare(NameCompare):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.reader.sql.sqlserver.SqlServerReader"><code class="flex name class">
+<dt id="burdock.reader.sql.sql_server.SqlServerReader"><code class="flex name class">
 <span>class <span class="ident">SqlServerReader</span></span>
 <span>(</span><span>host, database, user, password=None, port=None)</span>
 </code></dt>
@@ -179,12 +176,12 @@ class SqlServerNameCompare(NameCompare):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class SqlServerReader(Reader):
+<pre><code class="python">class SqlServerReader(SqlReader):
+    ENGINE = Engine.SQL_SERVER
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(SqlServerNameCompare(), SqlServerSerializer())
+        import pyodbc
         self.api = pyodbc
-        self.engine = &#34;SqlServer&#34;
-
         self.host = host
         self.database = database
         self.user = user
@@ -196,9 +193,6 @@ class SqlServerNameCompare(NameCompare):
         self.password = password
 
         self.update_connection_string()
-
-        self.serializer = SqlServerSerializer()
-        self.compare = SqlServerNameCompare()
 
     def execute(self, query):
         if not isinstance(query, str):
@@ -232,11 +226,19 @@ class SqlServerNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="base.html#burdock.reader.sql.base.Reader">Reader</a></li>
+<li><a title="burdock.reader.sql.sql_base.SqlReader" href="sql_base.html#burdock.reader.sql.sql_base.SqlReader">SqlReader</a></li>
+<li><a title="burdock.reader.base.Reader" href="../base.html#burdock.reader.base.Reader">Reader</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="burdock.reader.sql.sql_server.SqlServerReader.ENGINE"><code class="name">var <span class="ident">ENGINE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.reader.sql.sqlserver.SqlServerReader.db_name"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerReader.db_name"><code class="name flex">
 <span>def <span class="ident">db_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -251,7 +253,7 @@ class SqlServerNameCompare(NameCompare):
     return dbname</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.sqlserver.SqlServerReader.execute"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerReader.execute"><code class="name flex">
 <span>def <span class="ident">execute</span></span>(<span>self, query)</span>
 </code></dt>
 <dd>
@@ -274,7 +276,7 @@ class SqlServerNameCompare(NameCompare):
         return col_names + rows</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.sqlserver.SqlServerReader.switch_database"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerReader.switch_database"><code class="name flex">
 <span>def <span class="ident">switch_database</span></span>(<span>self, dbname)</span>
 </code></dt>
 <dd>
@@ -288,7 +290,7 @@ class SqlServerNameCompare(NameCompare):
     self.execute(sql)</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.sqlserver.SqlServerReader.update_connection_string"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerReader.update_connection_string"><code class="name flex">
 <span>def <span class="ident">update_connection_string</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -308,7 +310,7 @@ class SqlServerNameCompare(NameCompare):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.reader.sql.sqlserver.SqlServerSerializer"><code class="flex name class">
+<dt id="burdock.reader.sql.sql_server.SqlServerSerializer"><code class="flex name class">
 <span>class <span class="ident">SqlServerSerializer</span></span>
 </code></dt>
 <dd>
@@ -321,7 +323,7 @@ class SqlServerNameCompare(NameCompare):
     def serialize(self, query):
         for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
             re.name = &#39;NEWID&#39;
-        
+
         for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
             b.text = &#34;&#39;TRUE&#39;&#34; if b.value else &#34;&#39;FALSE&#39;&#34;
 
@@ -345,7 +347,7 @@ class SqlServerNameCompare(NameCompare):
 </details>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.reader.sql.sqlserver.SqlServerSerializer.serialize"><code class="name flex">
+<dt id="burdock.reader.sql.sql_server.SqlServerSerializer.serialize"><code class="name flex">
 <span>def <span class="ident">serialize</span></span>(<span>self, query)</span>
 </code></dt>
 <dd>
@@ -357,7 +359,7 @@ class SqlServerNameCompare(NameCompare):
 <pre><code class="python">def serialize(self, query):
     for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
         re.name = &#39;NEWID&#39;
-    
+
     for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
         b.text = &#34;&#39;TRUE&#39;&#34; if b.value else &#34;&#39;FALSE&#39;&#34;
 
@@ -399,24 +401,25 @@ class SqlServerNameCompare(NameCompare):
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.reader.sql.sqlserver.SqlServerNameCompare" href="#burdock.reader.sql.sqlserver.SqlServerNameCompare">SqlServerNameCompare</a></code></h4>
+<h4><code><a title="burdock.reader.sql.sql_server.SqlServerNameCompare" href="#burdock.reader.sql.sql_server.SqlServerNameCompare">SqlServerNameCompare</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerNameCompare.identifier_match" href="#burdock.reader.sql.sqlserver.SqlServerNameCompare.identifier_match">identifier_match</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerNameCompare.identifier_match" href="#burdock.reader.sql.sql_server.SqlServerNameCompare.identifier_match">identifier_match</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.reader.sql.sqlserver.SqlServerReader" href="#burdock.reader.sql.sqlserver.SqlServerReader">SqlServerReader</a></code></h4>
+<h4><code><a title="burdock.reader.sql.sql_server.SqlServerReader" href="#burdock.reader.sql.sql_server.SqlServerReader">SqlServerReader</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerReader.db_name" href="#burdock.reader.sql.sqlserver.SqlServerReader.db_name">db_name</a></code></li>
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerReader.execute" href="#burdock.reader.sql.sqlserver.SqlServerReader.execute">execute</a></code></li>
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerReader.switch_database" href="#burdock.reader.sql.sqlserver.SqlServerReader.switch_database">switch_database</a></code></li>
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerReader.update_connection_string" href="#burdock.reader.sql.sqlserver.SqlServerReader.update_connection_string">update_connection_string</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerReader.ENGINE" href="#burdock.reader.sql.sql_server.SqlServerReader.ENGINE">ENGINE</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerReader.db_name" href="#burdock.reader.sql.sql_server.SqlServerReader.db_name">db_name</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerReader.execute" href="#burdock.reader.sql.sql_server.SqlServerReader.execute">execute</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerReader.switch_database" href="#burdock.reader.sql.sql_server.SqlServerReader.switch_database">switch_database</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerReader.update_connection_string" href="#burdock.reader.sql.sql_server.SqlServerReader.update_connection_string">update_connection_string</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.reader.sql.sqlserver.SqlServerSerializer" href="#burdock.reader.sql.sqlserver.SqlServerSerializer">SqlServerSerializer</a></code></h4>
+<h4><code><a title="burdock.reader.sql.sql_server.SqlServerSerializer" href="#burdock.reader.sql.sql_server.SqlServerSerializer">SqlServerSerializer</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.reader.sql.sqlserver.SqlServerSerializer.serialize" href="#burdock.reader.sql.sqlserver.SqlServerSerializer.serialize">serialize</a></code></li>
+<li><code><a title="burdock.reader.sql.sql_server.SqlServerSerializer.serialize" href="#burdock.reader.sql.sql_server.SqlServerSerializer.serialize">serialize</a></code></li>
 </ul>
 </li>
 </ul>

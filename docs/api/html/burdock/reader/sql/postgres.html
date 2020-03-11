@@ -26,18 +26,20 @@
 </summary>
 <pre><code class="python">import os
 
-from .base import Reader, NameCompare
+from .sql_base import SqlReader, NameCompare
+from .engine import Engine
 
 &#34;&#34;&#34;
-    A dumb pipe that gets a rowset back from a database using 
+    A dumb pipe that gets a rowset back from a database using
     a SQL string, and converts types to some useful subset
 &#34;&#34;&#34;
-class PostgresReader(Reader):
+class PostgresReader(SqlReader):
+    ENGINE = Engine.POSTGRES
+
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(PostgresNameCompare(), PostgresSerializer())
         import psycopg2
         self.api = psycopg2
-        self.engine = &#34;Postgres&#34;
         self.host = host
         self.database = database
         self.user = user
@@ -49,9 +51,6 @@ class PostgresReader(Reader):
         self.password = password
 
         self.update_connection_string()
-
-        self.serializer = PostgresSerializer()
-        self.compare = PostgresNameCompare()
 
     def execute(self, query):
         if not isinstance(query, str):
@@ -152,7 +151,7 @@ class PostgresNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.NameCompare" href="base.html#burdock.reader.sql.base.NameCompare">NameCompare</a></li>
+<li><a title="burdock.reader.sql.sql_base.NameCompare" href="sql_base.html#burdock.reader.sql.sql_base.NameCompare">NameCompare</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -209,12 +208,13 @@ class PostgresNameCompare(NameCompare):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class PostgresReader(Reader):
+<pre><code class="python">class PostgresReader(SqlReader):
+    ENGINE = Engine.POSTGRES
+
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(PostgresNameCompare(), PostgresSerializer())
         import psycopg2
         self.api = psycopg2
-        self.engine = &#34;Postgres&#34;
         self.host = host
         self.database = database
         self.user = user
@@ -226,9 +226,6 @@ class PostgresNameCompare(NameCompare):
         self.password = password
 
         self.update_connection_string()
-
-        self.serializer = PostgresSerializer()
-        self.compare = PostgresNameCompare()
 
     def execute(self, query):
         if not isinstance(query, str):
@@ -259,8 +256,16 @@ class PostgresNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="base.html#burdock.reader.sql.base.Reader">Reader</a></li>
+<li><a title="burdock.reader.sql.sql_base.SqlReader" href="sql_base.html#burdock.reader.sql.sql_base.SqlReader">SqlReader</a></li>
+<li><a title="burdock.reader.base.Reader" href="../base.html#burdock.reader.base.Reader">Reader</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="burdock.reader.sql.postgres.PostgresReader.ENGINE"><code class="name">var <span class="ident">ENGINE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="burdock.reader.sql.postgres.PostgresReader.execute"><code class="name flex">
@@ -374,6 +379,7 @@ class PostgresNameCompare(NameCompare):
 <li>
 <h4><code><a title="burdock.reader.sql.postgres.PostgresReader" href="#burdock.reader.sql.postgres.PostgresReader">PostgresReader</a></code></h4>
 <ul class="">
+<li><code><a title="burdock.reader.sql.postgres.PostgresReader.ENGINE" href="#burdock.reader.sql.postgres.PostgresReader.ENGINE">ENGINE</a></code></li>
 <li><code><a title="burdock.reader.sql.postgres.PostgresReader.execute" href="#burdock.reader.sql.postgres.PostgresReader.execute">execute</a></code></li>
 <li><code><a title="burdock.reader.sql.postgres.PostgresReader.switch_database" href="#burdock.reader.sql.postgres.PostgresReader.switch_database">switch_database</a></code></li>
 <li><code><a title="burdock.reader.sql.postgres.PostgresReader.update_connection_string" href="#burdock.reader.sql.postgres.PostgresReader.update_connection_string">update_connection_string</a></code></li>

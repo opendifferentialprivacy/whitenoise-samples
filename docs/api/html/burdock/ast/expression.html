@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.sql.ast.expression API documentation</title>
+<title>burdock.ast.expression API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.sql.ast.expression</code></h1>
+<h1 class="title">Module <code>burdock.ast.expression</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -60,6 +60,9 @@ class NestedExpression(SqlExpr):
     @property
     def is_key_count(self):
         return self.expression.is_key_count
+    @property
+    def is_count(self):
+        return self.expression.is_count
 
 class NamedExpression(SqlExpr):
     &#34;&#34;&#34;An expression with optional name&#34;&#34;&#34;
@@ -87,6 +90,9 @@ class NamedExpression(SqlExpr):
     @property
     def is_key_count(self):
         return self.expression.is_key_count
+    @property
+    def is_count(self):
+        return self.expression.is_count
     </code></pre>
 </details>
 </section>
@@ -99,7 +105,7 @@ class NamedExpression(SqlExpr):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.sql.ast.expression.Expression"><code class="flex name class">
+<dt id="burdock.ast.expression.Expression"><code class="flex name class">
 <span>class <span class="ident">Expression</span></span>
 <span>(</span><span>fragment)</span>
 </code></dt>
@@ -124,12 +130,12 @@ class NamedExpression(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expression.Expression.symbol"><code class="name flex">
+<dt id="burdock.ast.expression.Expression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -144,7 +150,7 @@ class NamedExpression(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expression.NamedExpression"><code class="flex name class">
+<dt id="burdock.ast.expression.NamedExpression"><code class="flex name class">
 <span>class <span class="ident">NamedExpression</span></span>
 <span>(</span><span>name, expression)</span>
 </code></dt>
@@ -179,16 +185,31 @@ class NamedExpression(SqlExpr):
         return self.expression.evaluate(bindings)
     @property
     def is_key_count(self):
-        return self.expression.is_key_count</code></pre>
+        return self.expression.is_key_count
+    @property
+    def is_count(self):
+        return self.expression.is_count</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="burdock.sql.ast.expression.NamedExpression.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
+<dt id="burdock.ast.expression.NamedExpression.is_count"><code class="name">var <span class="ident">is_count</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def is_count(self):
+    return self.expression.is_count</code></pre>
+</details>
+</dd>
+<dt id="burdock.ast.expression.NamedExpression.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -203,7 +224,7 @@ def is_key_count(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expression.NamedExpression.children"><code class="name flex">
+<dt id="burdock.ast.expression.NamedExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -216,7 +237,7 @@ def is_key_count(self):
     return [self.expression] + ([Token(&#34;AS&#34;), self.name] if self.name is not None else [])</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NamedExpression.column_name"><code class="name flex">
+<dt id="burdock.ast.expression.NamedExpression.column_name"><code class="name flex">
 <span>def <span class="ident">column_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -237,7 +258,7 @@ def is_key_count(self):
         return &#34;???&#34;</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NamedExpression.evaluate"><code class="name flex">
+<dt id="burdock.ast.expression.NamedExpression.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -250,7 +271,7 @@ def is_key_count(self):
     return self.expression.evaluate(bindings)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NamedExpression.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expression.NamedExpression.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -263,7 +284,7 @@ def is_key_count(self):
     return self.expression.sensitivity()</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NamedExpression.type"><code class="name flex">
+<dt id="burdock.ast.expression.NamedExpression.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -278,7 +299,7 @@ def is_key_count(self):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expression.NestedExpression"><code class="flex name class">
+<dt id="burdock.ast.expression.NestedExpression"><code class="flex name class">
 <span>class <span class="ident">NestedExpression</span></span>
 <span>(</span><span>expression)</span>
 </code></dt>
@@ -304,16 +325,31 @@ def is_key_count(self):
         return self.expression.evaluate(bindings)
     @property
     def is_key_count(self):
-        return self.expression.is_key_count</code></pre>
+        return self.expression.is_key_count
+    @property
+    def is_count(self):
+        return self.expression.is_count</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="burdock.sql.ast.expression.NestedExpression.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
+<dt id="burdock.ast.expression.NestedExpression.is_count"><code class="name">var <span class="ident">is_count</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def is_count(self):
+    return self.expression.is_count</code></pre>
+</details>
+</dd>
+<dt id="burdock.ast.expression.NestedExpression.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -328,7 +364,7 @@ def is_key_count(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expression.NestedExpression.children"><code class="name flex">
+<dt id="burdock.ast.expression.NestedExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -341,7 +377,7 @@ def is_key_count(self):
     return [Token(&#34;(&#34;), self.expression, Token(&#34;)&#34;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NestedExpression.evaluate"><code class="name flex">
+<dt id="burdock.ast.expression.NestedExpression.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -354,7 +390,7 @@ def is_key_count(self):
     return self.expression.evaluate(bindings)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NestedExpression.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expression.NestedExpression.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -367,7 +403,7 @@ def is_key_count(self):
     return self.expression.sensitivity()</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NestedExpression.symbol"><code class="name flex">
+<dt id="burdock.ast.expression.NestedExpression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -380,7 +416,7 @@ def is_key_count(self):
     return NestedExpression(self.expression.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expression.NestedExpression.type"><code class="name flex">
+<dt id="burdock.ast.expression.NestedExpression.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -406,37 +442,39 @@ def is_key_count(self):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.sql.ast" href="index.html">burdock.sql.ast</a></code></li>
+<li><code><a title="burdock.ast" href="index.html">burdock.ast</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.sql.ast.expression.Expression" href="#burdock.sql.ast.expression.Expression">Expression</a></code></h4>
+<h4><code><a title="burdock.ast.expression.Expression" href="#burdock.ast.expression.Expression">Expression</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expression.Expression.symbol" href="#burdock.sql.ast.expression.Expression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expression.Expression.symbol" href="#burdock.ast.expression.Expression.symbol">symbol</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expression.NamedExpression" href="#burdock.sql.ast.expression.NamedExpression">NamedExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expression.NamedExpression" href="#burdock.ast.expression.NamedExpression">NamedExpression</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.children" href="#burdock.sql.ast.expression.NamedExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.column_name" href="#burdock.sql.ast.expression.NamedExpression.column_name">column_name</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.evaluate" href="#burdock.sql.ast.expression.NamedExpression.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.is_key_count" href="#burdock.sql.ast.expression.NamedExpression.is_key_count">is_key_count</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.sensitivity" href="#burdock.sql.ast.expression.NamedExpression.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NamedExpression.type" href="#burdock.sql.ast.expression.NamedExpression.type">type</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.children" href="#burdock.ast.expression.NamedExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.column_name" href="#burdock.ast.expression.NamedExpression.column_name">column_name</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.evaluate" href="#burdock.ast.expression.NamedExpression.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.is_count" href="#burdock.ast.expression.NamedExpression.is_count">is_count</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.is_key_count" href="#burdock.ast.expression.NamedExpression.is_key_count">is_key_count</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.sensitivity" href="#burdock.ast.expression.NamedExpression.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expression.NamedExpression.type" href="#burdock.ast.expression.NamedExpression.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expression.NestedExpression" href="#burdock.sql.ast.expression.NestedExpression">NestedExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expression.NestedExpression" href="#burdock.ast.expression.NestedExpression">NestedExpression</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.children" href="#burdock.sql.ast.expression.NestedExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.evaluate" href="#burdock.sql.ast.expression.NestedExpression.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.is_key_count" href="#burdock.sql.ast.expression.NestedExpression.is_key_count">is_key_count</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.sensitivity" href="#burdock.sql.ast.expression.NestedExpression.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.symbol" href="#burdock.sql.ast.expression.NestedExpression.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expression.NestedExpression.type" href="#burdock.sql.ast.expression.NestedExpression.type">type</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.children" href="#burdock.ast.expression.NestedExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.evaluate" href="#burdock.ast.expression.NestedExpression.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.is_count" href="#burdock.ast.expression.NestedExpression.is_count">is_count</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.is_key_count" href="#burdock.ast.expression.NestedExpression.is_key_count">is_key_count</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.sensitivity" href="#burdock.ast.expression.NestedExpression.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.symbol" href="#burdock.ast.expression.NestedExpression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expression.NestedExpression.type" href="#burdock.ast.expression.NestedExpression.type">type</a></code></li>
 </ul>
 </li>
 </ul>

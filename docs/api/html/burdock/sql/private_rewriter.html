@@ -28,13 +28,13 @@
 import string
 
 from .parse import QueryParser
-from .ast import Validate
+from burdock.ast import Validate
 
-from .ast.validate import Validate
-from .ast.ast import Select, From, Query, AliasedRelation, Where, Aggregate, Order
-from .ast.ast import Literal, Column, TableColumn, AllColumns
-from .ast.ast import NamedExpression, NestedExpression, Expression, Seq
-from .ast.ast import AggFunction, MathFunction, ArithmeticExpression, BooleanCompare, GroupingExpression
+from burdock.ast.validate import Validate
+from burdock.ast.ast import Select, From, Query, AliasedRelation, Where, Aggregate, Order
+from burdock.ast.ast import Literal, Column, TableColumn, AllColumns
+from burdock.ast.ast import NamedExpression, NestedExpression, Expression, Seq
+from burdock.ast.ast import AggFunction, MathFunction, ArithmeticExpression, BooleanCompare, GroupingExpression
 
 &#34;&#34;&#34;
     Modifies parsed ASTs to augment with information needed
@@ -98,7 +98,7 @@ class Rewriter:
     def push_sum_or_count(self, exp, scope):
         new_name = scope.push_name(AggFunction(exp.name, exp.quantifier, exp.expression))
 
-        new_exp = AggFunction(&#34;SUM&#34;, None, Column(new_name))
+        new_exp = Column(new_name)
         return new_exp
 
     &#34;&#34;&#34;
@@ -165,19 +165,26 @@ class Rewriter:
 
     def exact_aggregates(self, query):
 
-        key_col = self.key_col(query)
 
         child_scope = Scope()
 
-        keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
-        child_scope.push_name(keycount_expr.expression)
-        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) # need to either treat this as reserved or pass through to outer
+        if self.options.row_privacy:
+            keycount_expr = AggFunction(&#34;COUNT&#34;, None,  AllColumns())
+        else:
+            key_col = self.key_col(query)
+            keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
+            child_scope.push_name(keycount_expr.expression)
 
-        select = Seq([keycount] + [self.rewrite_outer_named_expression(ne, child_scope) for ne in query.select.namedExpressions])
+        for ne in query.select.namedExpressions:
+            child_scope.push_name(ne.expression)
+        
+        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) 
+
+        select = Seq([keycount] + [ne for ne in query.select.namedExpressions])
         select = Select(None, select)
 
         subquery = Query(child_scope.select(), query.source, query.where, query.agg, query.having, None, None)
-        if self.options.reservoir_sample:
+        if self.options.reservoir_sample and not self.options.row_privacy:
             subquery = self.per_key_random(subquery)
             subquery = [AliasedRelation(subquery, &#34;per_key_random&#34;)]
 
@@ -195,32 +202,18 @@ class Rewriter:
         select = Select(None, select)
 
         subquery = self.per_key_clamped(query)
-        subquery = [AliasedRelation(subquery, &#34;per_key_clamped&#34;)]
+        subquery = [AliasedRelation(subquery, &#34;clamped&#34; if self.options.clamp_columns else &#34;not_clamped&#34;)]
 
         return Query(select, From(subquery), None, None, None, None, None)
 
 
     def per_key_clamped(self, query):
-
-        key_col = self.key_col(query)
-
         child_scope = Scope()
-
-        keygroup = [GroupingExpression(Column(key_col))] + (query.agg.groupingExpressions.seq if query.agg is not None else [])
-        new_agg = Aggregate(Seq(keygroup))
-
         relations = query.source.relations
-
         select = Seq([self.clampExpression(ne, relations, child_scope, self.options.clamp_columns) for ne in query.select.namedExpressions])
         select = Select(None, select)
         subquery = Query(child_scope.select(), query.source, query.where, None, None, None, None)
-
-        if self.options.clamp_columns:
-            subquery = [AliasedRelation(subquery, &#34;clamped&#34;)]
-        else:
-            subquery = [AliasedRelation(subquery, &#34;not_clamped&#34;)]
-
-        return Query(select, From(subquery), None, new_agg, None, None, None)
+        return subquery
 
 
     &#34;&#34;&#34;
@@ -262,11 +255,17 @@ class Rewriter:
         keys = [str(tc) for tc in tcsyms if tc.is_key]
         if len(keys) &gt; 1:
             raise ValueError(&#34;We only know how to handle tables with one key: &#34; + str(keys))
-        elif len(keys) &lt; 1:
-            raise ValueError(&#34;No key column available in query relations&#34;)
-
-        kp = keys[0].split(&#34;.&#34;)
-        return kp[len(kp) - 1]
+        if self.options.row_privacy:
+            if len(keys) &gt; 0:
+                raise ValueError(&#34;Row privacy is set, but metadata specifies a private_id&#34;)
+            else:
+                return None
+        else:
+            if len(keys) &lt; 1:
+                raise ValueError(&#34;No private_id column specified, and row_privacy is not set&#34;)
+            else:
+                kp = keys[0].split(&#34;.&#34;)
+                return kp[len(kp) - 1]
 
 
 
@@ -408,7 +407,7 @@ class RewriterOptions:
     def push_sum_or_count(self, exp, scope):
         new_name = scope.push_name(AggFunction(exp.name, exp.quantifier, exp.expression))
 
-        new_exp = AggFunction(&#34;SUM&#34;, None, Column(new_name))
+        new_exp = Column(new_name)
         return new_exp
 
     &#34;&#34;&#34;
@@ -475,19 +474,26 @@ class RewriterOptions:
 
     def exact_aggregates(self, query):
 
-        key_col = self.key_col(query)
 
         child_scope = Scope()
 
-        keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
-        child_scope.push_name(keycount_expr.expression)
-        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) # need to either treat this as reserved or pass through to outer
+        if self.options.row_privacy:
+            keycount_expr = AggFunction(&#34;COUNT&#34;, None,  AllColumns())
+        else:
+            key_col = self.key_col(query)
+            keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
+            child_scope.push_name(keycount_expr.expression)
 
-        select = Seq([keycount] + [self.rewrite_outer_named_expression(ne, child_scope) for ne in query.select.namedExpressions])
+        for ne in query.select.namedExpressions:
+            child_scope.push_name(ne.expression)
+        
+        keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) 
+
+        select = Seq([keycount] + [ne for ne in query.select.namedExpressions])
         select = Select(None, select)
 
         subquery = Query(child_scope.select(), query.source, query.where, query.agg, query.having, None, None)
-        if self.options.reservoir_sample:
+        if self.options.reservoir_sample and not self.options.row_privacy:
             subquery = self.per_key_random(subquery)
             subquery = [AliasedRelation(subquery, &#34;per_key_random&#34;)]
 
@@ -505,32 +511,18 @@ class RewriterOptions:
         select = Select(None, select)
 
         subquery = self.per_key_clamped(query)
-        subquery = [AliasedRelation(subquery, &#34;per_key_clamped&#34;)]
+        subquery = [AliasedRelation(subquery, &#34;clamped&#34; if self.options.clamp_columns else &#34;not_clamped&#34;)]
 
         return Query(select, From(subquery), None, None, None, None, None)
 
 
     def per_key_clamped(self, query):
-
-        key_col = self.key_col(query)
-
         child_scope = Scope()
-
-        keygroup = [GroupingExpression(Column(key_col))] + (query.agg.groupingExpressions.seq if query.agg is not None else [])
-        new_agg = Aggregate(Seq(keygroup))
-
         relations = query.source.relations
-
         select = Seq([self.clampExpression(ne, relations, child_scope, self.options.clamp_columns) for ne in query.select.namedExpressions])
         select = Select(None, select)
         subquery = Query(child_scope.select(), query.source, query.where, None, None, None, None)
-
-        if self.options.clamp_columns:
-            subquery = [AliasedRelation(subquery, &#34;clamped&#34;)]
-        else:
-            subquery = [AliasedRelation(subquery, &#34;not_clamped&#34;)]
-
-        return Query(select, From(subquery), None, new_agg, None, None, None)
+        return subquery
 
 
     &#34;&#34;&#34;
@@ -572,11 +564,17 @@ class RewriterOptions:
         keys = [str(tc) for tc in tcsyms if tc.is_key]
         if len(keys) &gt; 1:
             raise ValueError(&#34;We only know how to handle tables with one key: &#34; + str(keys))
-        elif len(keys) &lt; 1:
-            raise ValueError(&#34;No key column available in query relations&#34;)
-
-        kp = keys[0].split(&#34;.&#34;)
-        return kp[len(kp) - 1]</code></pre>
+        if self.options.row_privacy:
+            if len(keys) &gt; 0:
+                raise ValueError(&#34;Row privacy is set, but metadata specifies a private_id&#34;)
+            else:
+                return None
+        else:
+            if len(keys) &lt; 1:
+                raise ValueError(&#34;No private_id column specified, and row_privacy is not set&#34;)
+            else:
+                kp = keys[0].split(&#34;.&#34;)
+                return kp[len(kp) - 1]</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
@@ -685,19 +683,26 @@ class RewriterOptions:
 </summary>
 <pre><code class="python">def exact_aggregates(self, query):
 
-    key_col = self.key_col(query)
 
     child_scope = Scope()
 
-    keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
-    child_scope.push_name(keycount_expr.expression)
-    keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) # need to either treat this as reserved or pass through to outer
+    if self.options.row_privacy:
+        keycount_expr = AggFunction(&#34;COUNT&#34;, None,  AllColumns())
+    else:
+        key_col = self.key_col(query)
+        keycount_expr = AggFunction(&#34;COUNT&#34;, &#34;DISTINCT&#34;, Column(key_col))
+        child_scope.push_name(keycount_expr.expression)
 
-    select = Seq([keycount] + [self.rewrite_outer_named_expression(ne, child_scope) for ne in query.select.namedExpressions])
+    for ne in query.select.namedExpressions:
+        child_scope.push_name(ne.expression)
+    
+    keycount = NamedExpression(&#34;keycount&#34;, keycount_expr) 
+
+    select = Seq([keycount] + [ne for ne in query.select.namedExpressions])
     select = Select(None, select)
 
     subquery = Query(child_scope.select(), query.source, query.where, query.agg, query.having, None, None)
-    if self.options.reservoir_sample:
+    if self.options.reservoir_sample and not self.options.row_privacy:
         subquery = self.per_key_random(subquery)
         subquery = [AliasedRelation(subquery, &#34;per_key_random&#34;)]
 
@@ -724,11 +729,17 @@ class RewriterOptions:
     keys = [str(tc) for tc in tcsyms if tc.is_key]
     if len(keys) &gt; 1:
         raise ValueError(&#34;We only know how to handle tables with one key: &#34; + str(keys))
-    elif len(keys) &lt; 1:
-        raise ValueError(&#34;No key column available in query relations&#34;)
-
-    kp = keys[0].split(&#34;.&#34;)
-    return kp[len(kp) - 1]</code></pre>
+    if self.options.row_privacy:
+        if len(keys) &gt; 0:
+            raise ValueError(&#34;Row privacy is set, but metadata specifies a private_id&#34;)
+        else:
+            return None
+    else:
+        if len(keys) &lt; 1:
+            raise ValueError(&#34;No private_id column specified, and row_privacy is not set&#34;)
+        else:
+            kp = keys[0].split(&#34;.&#34;)
+            return kp[len(kp) - 1]</code></pre>
 </details>
 </dd>
 <dt id="burdock.sql.private_rewriter.Rewriter.per_key_clamped"><code class="name flex">
@@ -741,26 +752,12 @@ class RewriterOptions:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def per_key_clamped(self, query):
-
-    key_col = self.key_col(query)
-
     child_scope = Scope()
-
-    keygroup = [GroupingExpression(Column(key_col))] + (query.agg.groupingExpressions.seq if query.agg is not None else [])
-    new_agg = Aggregate(Seq(keygroup))
-
     relations = query.source.relations
-
     select = Seq([self.clampExpression(ne, relations, child_scope, self.options.clamp_columns) for ne in query.select.namedExpressions])
     select = Select(None, select)
     subquery = Query(child_scope.select(), query.source, query.where, None, None, None, None)
-
-    if self.options.clamp_columns:
-        subquery = [AliasedRelation(subquery, &#34;clamped&#34;)]
-    else:
-        subquery = [AliasedRelation(subquery, &#34;not_clamped&#34;)]
-
-    return Query(select, From(subquery), None, new_agg, None, None, None)</code></pre>
+    return subquery</code></pre>
 </details>
 </dd>
 <dt id="burdock.sql.private_rewriter.Rewriter.per_key_random"><code class="name flex">
@@ -779,7 +776,7 @@ class RewriterOptions:
     select = Select(None, select)
 
     subquery = self.per_key_clamped(query)
-    subquery = [AliasedRelation(subquery, &#34;per_key_clamped&#34;)]
+    subquery = [AliasedRelation(subquery, &#34;clamped&#34; if self.options.clamp_columns else &#34;not_clamped&#34;)]
 
     return Query(select, From(subquery), None, None, None, None, None)</code></pre>
 </details>
@@ -796,7 +793,7 @@ class RewriterOptions:
 <pre><code class="python">def push_sum_or_count(self, exp, scope):
     new_name = scope.push_name(AggFunction(exp.name, exp.quantifier, exp.expression))
 
-    new_exp = AggFunction(&#34;SUM&#34;, None, Column(new_name))
+    new_exp = Column(new_name)
     return new_exp</code></pre>
 </details>
 </dd>

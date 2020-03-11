@@ -24,21 +24,20 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .base import Reader, NameCompare
+<pre><code class="python">from .sql_base import SqlReader, NameCompare
+from .engine import Engine
 
-from burdock.metadata.collection import Int
 import copy
 import re
 
 
-class PandasReader(Reader):
+class PandasReader(SqlReader):
+    ENGINE = Engine.PANDAS
+
     def __init__(self, metadata, df):
         super().__init__()
-        self.original_column_names = []
         self.df = df
-        self.metadata = self._sanitize_metadata(metadata)
-        self.serializer = None
-        self.engine = &#34;Pandas&#34;
+        self.metadata, self.original_column_names = self._sanitize_metadata(metadata)
 
     def _sanitize_column_name(self, column_name):
         x = re.search(r&#34;.*[a-zA-Z0-9()_]&#34;, column_name)
@@ -54,10 +53,10 @@ class PandasReader(Reader):
         if len(table_names) &gt; 1:
             raise Exception(&#34;Only one table is supported for PandasReader. {} found.&#34;.format(len(table_names)))
         table_name = table_names[0]
-        self.original_column_names = list(metadata.m_tables[table_name].m_columns)
+        original_column_names = list(metadata.m_tables[table_name].m_columns)
 
         has_key = False
-        for column_name in self.original_column_names:
+        for column_name in original_column_names:
             sanitized_column_name = self._sanitize_column_name(column_name)
             metadata.m_tables[table_name].m_columns[sanitized_column_name] = metadata.m_tables[table_name].m_columns[column_name]
             metadata.m_tables[table_name].m_columns[sanitized_column_name].name = sanitized_column_name
@@ -66,14 +65,16 @@ class PandasReader(Reader):
             if column_name != sanitized_column_name:
                 del metadata.m_tables[table_name].m_columns[column_name]
 
-        if not has_key:
+        if not has_key:  # TODO handle this in metadata to avoid circ dep
             key = &#34;primary_key&#34;
             self.df[key] = range(len(self.df))
+
+            from burdock.metadata.collection import Int
             metadata.m_tables[table_name].m_columns[key] = Int(key,
             minval=0,
             maxval=len(self.df),
             is_key=True)
-        return metadata
+        return metadata, original_column_names
 
     def _sanitize_query(self, query):
         for column in self.original_column_names:
@@ -145,14 +146,13 @@ class PandasReader(Reader):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class PandasReader(Reader):
+<pre><code class="python">class PandasReader(SqlReader):
+    ENGINE = Engine.PANDAS
+
     def __init__(self, metadata, df):
         super().__init__()
-        self.original_column_names = []
         self.df = df
-        self.metadata = self._sanitize_metadata(metadata)
-        self.serializer = None
-        self.engine = &#34;Pandas&#34;
+        self.metadata, self.original_column_names = self._sanitize_metadata(metadata)
 
     def _sanitize_column_name(self, column_name):
         x = re.search(r&#34;.*[a-zA-Z0-9()_]&#34;, column_name)
@@ -168,10 +168,10 @@ class PandasReader(Reader):
         if len(table_names) &gt; 1:
             raise Exception(&#34;Only one table is supported for PandasReader. {} found.&#34;.format(len(table_names)))
         table_name = table_names[0]
-        self.original_column_names = list(metadata.m_tables[table_name].m_columns)
+        original_column_names = list(metadata.m_tables[table_name].m_columns)
 
         has_key = False
-        for column_name in self.original_column_names:
+        for column_name in original_column_names:
             sanitized_column_name = self._sanitize_column_name(column_name)
             metadata.m_tables[table_name].m_columns[sanitized_column_name] = metadata.m_tables[table_name].m_columns[column_name]
             metadata.m_tables[table_name].m_columns[sanitized_column_name].name = sanitized_column_name
@@ -180,14 +180,16 @@ class PandasReader(Reader):
             if column_name != sanitized_column_name:
                 del metadata.m_tables[table_name].m_columns[column_name]
 
-        if not has_key:
+        if not has_key:  # TODO handle this in metadata to avoid circ dep
             key = &#34;primary_key&#34;
             self.df[key] = range(len(self.df))
+
+            from burdock.metadata.collection import Int
             metadata.m_tables[table_name].m_columns[key] = Int(key,
             minval=0,
             maxval=len(self.df),
             is_key=True)
-        return metadata
+        return metadata, original_column_names
 
     def _sanitize_query(self, query):
         for column in self.original_column_names:
@@ -241,8 +243,16 @@ class PandasReader(Reader):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="base.html#burdock.reader.sql.base.Reader">Reader</a></li>
+<li><a title="burdock.reader.sql.sql_base.SqlReader" href="sql_base.html#burdock.reader.sql.sql_base.SqlReader">SqlReader</a></li>
+<li><a title="burdock.reader.base.Reader" href="../base.html#burdock.reader.base.Reader">Reader</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="burdock.reader.sql.pandas.PandasReader.ENGINE"><code class="name">var <span class="ident">ENGINE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="burdock.reader.sql.pandas.PandasReader.db_name"><code class="name flex">
@@ -323,6 +333,7 @@ class PandasReader(Reader):
 <li>
 <h4><code><a title="burdock.reader.sql.pandas.PandasReader" href="#burdock.reader.sql.pandas.PandasReader">PandasReader</a></code></h4>
 <ul class="">
+<li><code><a title="burdock.reader.sql.pandas.PandasReader.ENGINE" href="#burdock.reader.sql.pandas.PandasReader.ENGINE">ENGINE</a></code></li>
 <li><code><a title="burdock.reader.sql.pandas.PandasReader.db_name" href="#burdock.reader.sql.pandas.PandasReader.db_name">db_name</a></code></li>
 <li><code><a title="burdock.reader.sql.pandas.PandasReader.execute" href="#burdock.reader.sql.pandas.PandasReader.execute">execute</a></code></li>
 </ul>

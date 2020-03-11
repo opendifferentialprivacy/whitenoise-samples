@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.sql.ast.tokens API documentation</title>
+<title>burdock.ast.tokens API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,7 +17,7 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.sql.ast.tokens</code></h1>
+<h1 class="title">Module <code>burdock.ast.tokens</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
@@ -223,6 +223,9 @@ class SqlExpr(Sql):
     @property
     def is_key_count(self):
         return False
+    @property
+    def is_count(self):
+        return False
 
 
 class Literal(SqlExpr):
@@ -309,7 +312,7 @@ def unique(iter):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="burdock.sql.ast.tokens.flatten"><code class="name flex">
+<dt id="burdock.ast.tokens.flatten"><code class="name flex">
 <span>def <span class="ident">flatten</span></span>(<span>iter)</span>
 </code></dt>
 <dd>
@@ -322,7 +325,7 @@ def unique(iter):
     return list(itertools.chain.from_iterable(iter))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.unique"><code class="name flex">
+<dt id="burdock.ast.tokens.unique"><code class="name flex">
 <span>def <span class="ident">unique</span></span>(<span>iter)</span>
 </code></dt>
 <dd>
@@ -340,7 +343,7 @@ def unique(iter):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.sql.ast.tokens.Column"><code class="flex name class">
+<dt id="burdock.ast.tokens.Column"><code class="flex name class">
 <span>class <span class="ident">Column</span></span>
 <span>(</span><span>name)</span>
 </code></dt>
@@ -383,12 +386,12 @@ def unique(iter):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Column.escaped"><code class="name flex">
+<dt id="burdock.ast.tokens.Column.escaped"><code class="name flex">
 <span>def <span class="ident">escaped</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -403,7 +406,7 @@ def unique(iter):
     return any([p.startswith(&#39;&#34;&#39;) or p.startswith(&#39;[&#39;) for p in parts])</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Column.evaluate"><code class="name flex">
+<dt id="burdock.ast.tokens.Column.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -420,7 +423,7 @@ def unique(iter):
         return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Column.symbol"><code class="name flex">
+<dt id="burdock.ast.tokens.Column.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -439,7 +442,7 @@ def unique(iter):
         return sym[0]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Column.symbol_name"><code class="name flex">
+<dt id="burdock.ast.tokens.Column.symbol_name"><code class="name flex">
 <span>def <span class="ident">symbol_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -454,7 +457,7 @@ def unique(iter):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.FuncName"><code class="flex name class">
+<dt id="burdock.ast.tokens.FuncName"><code class="flex name class">
 <span>class <span class="ident">FuncName</span></span>
 <span>(</span><span>text)</span>
 </code></dt>
@@ -492,7 +495,7 @@ errors defaults to 'strict'.</p></section>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.FuncName.children"><code class="name flex">
+<dt id="burdock.ast.tokens.FuncName.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -507,7 +510,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Identifier"><code class="flex name class">
+<dt id="burdock.ast.tokens.Identifier"><code class="flex name class">
 <span>class <span class="ident">Identifier</span></span>
 <span>(</span><span>text)</span>
 </code></dt>
@@ -545,7 +548,7 @@ errors defaults to 'strict'.</p></section>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Identifier.children"><code class="name flex">
+<dt id="burdock.ast.tokens.Identifier.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -560,7 +563,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Literal"><code class="flex name class">
+<dt id="burdock.ast.tokens.Literal"><code class="flex name class">
 <span>class <span class="ident">Literal</span></span>
 <span>(</span><span>value, text=None)</span>
 </code></dt>
@@ -610,12 +613,12 @@ errors defaults to 'strict'.</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Literal.evaluate"><code class="name flex">
+<dt id="burdock.ast.tokens.Literal.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -628,7 +631,7 @@ errors defaults to 'strict'.</p></section>
     return self.value</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Literal.symbol"><code class="name flex">
+<dt id="burdock.ast.tokens.Literal.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -641,7 +644,7 @@ errors defaults to 'strict'.</p></section>
     return self</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Literal.type"><code class="name flex">
+<dt id="burdock.ast.tokens.Literal.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -665,7 +668,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Op"><code class="flex name class">
+<dt id="burdock.ast.tokens.Op"><code class="flex name class">
 <span>class <span class="ident">Op</span></span>
 <span>(</span><span>text)</span>
 </code></dt>
@@ -703,7 +706,7 @@ errors defaults to 'strict'.</p></section>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Op.children"><code class="name flex">
+<dt id="burdock.ast.tokens.Op.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -718,7 +721,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Seq"><code class="flex name class">
+<dt id="burdock.ast.tokens.Seq"><code class="flex name class">
 <span>class <span class="ident">Seq</span></span>
 <span>(</span><span>seq)</span>
 </code></dt>
@@ -750,11 +753,11 @@ errors defaults to 'strict'.</p></section>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Seq.children"><code class="name flex">
+<dt id="burdock.ast.tokens.Seq.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -767,7 +770,7 @@ errors defaults to 'strict'.</p></section>
     return self.seq</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Seq.symbol"><code class="name flex">
+<dt id="burdock.ast.tokens.Seq.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -782,7 +785,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Sql"><code class="flex name class">
+<dt id="burdock.ast.tokens.Sql"><code class="flex name class">
 <span>class <span class="ident">Sql</span></span>
 </code></dt>
 <dd>
@@ -833,22 +836,22 @@ errors defaults to 'strict'.</p></section>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.ast.Aggregate" href="ast.html#burdock.sql.ast.ast.Aggregate">Aggregate</a></li>
-<li><a title="burdock.sql.ast.ast.Batch" href="ast.html#burdock.sql.ast.ast.Batch">Batch</a></li>
-<li><a title="burdock.sql.ast.ast.From" href="ast.html#burdock.sql.ast.ast.From">From</a></li>
-<li><a title="burdock.sql.ast.ast.Having" href="ast.html#burdock.sql.ast.ast.Having">Having</a></li>
-<li><a title="burdock.sql.ast.ast.Limit" href="ast.html#burdock.sql.ast.ast.Limit">Limit</a></li>
-<li><a title="burdock.sql.ast.ast.Order" href="ast.html#burdock.sql.ast.ast.Order">Order</a></li>
-<li><a title="burdock.sql.ast.ast.Select" href="ast.html#burdock.sql.ast.ast.Select">Select</a></li>
-<li><a title="burdock.sql.ast.ast.Top" href="ast.html#burdock.sql.ast.ast.Top">Top</a></li>
-<li><a title="burdock.sql.ast.ast.Where" href="ast.html#burdock.sql.ast.ast.Where">Where</a></li>
-<li><a title="burdock.sql.ast.tokens.Seq" href="#burdock.sql.ast.tokens.Seq">Seq</a></li>
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.SqlRel" href="#burdock.sql.ast.tokens.SqlRel">SqlRel</a></li>
+<li><a title="burdock.ast.ast.Aggregate" href="ast.html#burdock.ast.ast.Aggregate">Aggregate</a></li>
+<li><a title="burdock.ast.ast.Batch" href="ast.html#burdock.ast.ast.Batch">Batch</a></li>
+<li><a title="burdock.ast.ast.From" href="ast.html#burdock.ast.ast.From">From</a></li>
+<li><a title="burdock.ast.ast.Having" href="ast.html#burdock.ast.ast.Having">Having</a></li>
+<li><a title="burdock.ast.ast.Limit" href="ast.html#burdock.ast.ast.Limit">Limit</a></li>
+<li><a title="burdock.ast.ast.Order" href="ast.html#burdock.ast.ast.Order">Order</a></li>
+<li><a title="burdock.ast.ast.Select" href="ast.html#burdock.ast.ast.Select">Select</a></li>
+<li><a title="burdock.ast.ast.Top" href="ast.html#burdock.ast.ast.Top">Top</a></li>
+<li><a title="burdock.ast.ast.Where" href="ast.html#burdock.ast.ast.Where">Where</a></li>
+<li><a title="burdock.ast.tokens.Seq" href="#burdock.ast.tokens.Seq">Seq</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.SqlRel" href="#burdock.ast.tokens.SqlRel">SqlRel</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Sql.children"><code class="name flex">
+<dt id="burdock.ast.tokens.Sql.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -861,7 +864,7 @@ errors defaults to 'strict'.</p></section>
     return []</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Sql.find_node"><code class="name flex">
+<dt id="burdock.ast.tokens.Sql.find_node"><code class="name flex">
 <span>def <span class="ident">find_node</span></span>(<span>self, type_name)</span>
 </code></dt>
 <dd>
@@ -882,7 +885,7 @@ errors defaults to 'strict'.</p></section>
     return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Sql.find_nodes"><code class="name flex">
+<dt id="burdock.ast.tokens.Sql.find_nodes"><code class="name flex">
 <span>def <span class="ident">find_nodes</span></span>(<span>self, type_name, not_child_of=None)</span>
 </code></dt>
 <dd>
@@ -901,7 +904,7 @@ errors defaults to 'strict'.</p></section>
     return nodes + flatten(childnodes)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.Sql.symbol_name"><code class="name flex">
+<dt id="burdock.ast.tokens.Sql.symbol_name"><code class="name flex">
 <span>def <span class="ident">symbol_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -916,7 +919,7 @@ errors defaults to 'strict'.</p></section>
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlExpr"><code class="flex name class">
+<dt id="burdock.ast.tokens.SqlExpr"><code class="flex name class">
 <span>class <span class="ident">SqlExpr</span></span>
 </code></dt>
 <dd>
@@ -942,48 +945,63 @@ errors defaults to 'strict'.</p></section>
         return self
     @property
     def is_key_count(self):
+        return False
+    @property
+    def is_count(self):
         return False</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.ast.TableColumn" href="ast.html#burdock.sql.ast.ast.TableColumn">TableColumn</a></li>
-<li><a title="burdock.sql.ast.expression.Expression" href="expression.html#burdock.sql.ast.expression.Expression">Expression</a></li>
-<li><a title="burdock.sql.ast.expression.NamedExpression" href="expression.html#burdock.sql.ast.expression.NamedExpression">NamedExpression</a></li>
-<li><a title="burdock.sql.ast.expression.NestedExpression" href="expression.html#burdock.sql.ast.expression.NestedExpression">NestedExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.BetweenCondition" href="expressions/logical.html#burdock.sql.ast.expressions.logical.BetweenCondition">BetweenCondition</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.BooleanCompare" href="expressions/logical.html#burdock.sql.ast.expressions.logical.BooleanCompare">BooleanCompare</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.CaseExpression" href="expressions/logical.html#burdock.sql.ast.expressions.logical.CaseExpression">CaseExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.ChooseFunction" href="expressions/logical.html#burdock.sql.ast.expressions.logical.ChooseFunction">ChooseFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.IIFFunction" href="expressions/logical.html#burdock.sql.ast.expressions.logical.IIFFunction">IIFFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.InCondition" href="expressions/logical.html#burdock.sql.ast.expressions.logical.InCondition">InCondition</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.IsCondition" href="expressions/logical.html#burdock.sql.ast.expressions.logical.IsCondition">IsCondition</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.LogicalNot" href="expressions/logical.html#burdock.sql.ast.expressions.logical.LogicalNot">LogicalNot</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.NestedBoolean" href="expressions/logical.html#burdock.sql.ast.expressions.logical.NestedBoolean">NestedBoolean</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.PredicatedExpression" href="expressions/logical.html#burdock.sql.ast.expressions.logical.PredicatedExpression">PredicatedExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.logical.WhenExpression" href="expressions/logical.html#burdock.sql.ast.expressions.logical.WhenExpression">WhenExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression" href="expressions/numeric.html#burdock.sql.ast.expressions.numeric.ArithmeticExpression">ArithmeticExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.numeric.BareFunction" href="expressions/numeric.html#burdock.sql.ast.expressions.numeric.BareFunction">BareFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.numeric.MathFunction" href="expressions/numeric.html#burdock.sql.ast.expressions.numeric.MathFunction">MathFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.numeric.PowerFunction" href="expressions/numeric.html#burdock.sql.ast.expressions.numeric.PowerFunction">PowerFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.numeric.RoundFunction" href="expressions/numeric.html#burdock.sql.ast.expressions.numeric.RoundFunction">RoundFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.AggFunction" href="expressions/sql.html#burdock.sql.ast.expressions.sql.AggFunction">AggFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.AllColumns" href="expressions/sql.html#burdock.sql.ast.expressions.sql.AllColumns">AllColumns</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.BooleanJoinCriteria" href="expressions/sql.html#burdock.sql.ast.expressions.sql.BooleanJoinCriteria">BooleanJoinCriteria</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.GroupingExpression" href="expressions/sql.html#burdock.sql.ast.expressions.sql.GroupingExpression">GroupingExpression</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.OverClause" href="expressions/sql.html#burdock.sql.ast.expressions.sql.OverClause">OverClause</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.RankingFunction" href="expressions/sql.html#burdock.sql.ast.expressions.sql.RankingFunction">RankingFunction</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.SortItem" href="expressions/sql.html#burdock.sql.ast.expressions.sql.SortItem">SortItem</a></li>
-<li><a title="burdock.sql.ast.expressions.sql.UsingJoinCriteria" href="expressions/sql.html#burdock.sql.ast.expressions.sql.UsingJoinCriteria">UsingJoinCriteria</a></li>
-<li><a title="burdock.sql.ast.tokens.Column" href="#burdock.sql.ast.tokens.Column">Column</a></li>
-<li><a title="burdock.sql.ast.tokens.Literal" href="#burdock.sql.ast.tokens.Literal">Literal</a></li>
+<li><a title="burdock.ast.ast.TableColumn" href="ast.html#burdock.ast.ast.TableColumn">TableColumn</a></li>
+<li><a title="burdock.ast.expression.Expression" href="expression.html#burdock.ast.expression.Expression">Expression</a></li>
+<li><a title="burdock.ast.expression.NamedExpression" href="expression.html#burdock.ast.expression.NamedExpression">NamedExpression</a></li>
+<li><a title="burdock.ast.expression.NestedExpression" href="expression.html#burdock.ast.expression.NestedExpression">NestedExpression</a></li>
+<li><a title="burdock.ast.expressions.logical.BetweenCondition" href="expressions/logical.html#burdock.ast.expressions.logical.BetweenCondition">BetweenCondition</a></li>
+<li><a title="burdock.ast.expressions.logical.BooleanCompare" href="expressions/logical.html#burdock.ast.expressions.logical.BooleanCompare">BooleanCompare</a></li>
+<li><a title="burdock.ast.expressions.logical.CaseExpression" href="expressions/logical.html#burdock.ast.expressions.logical.CaseExpression">CaseExpression</a></li>
+<li><a title="burdock.ast.expressions.logical.ChooseFunction" href="expressions/logical.html#burdock.ast.expressions.logical.ChooseFunction">ChooseFunction</a></li>
+<li><a title="burdock.ast.expressions.logical.IIFFunction" href="expressions/logical.html#burdock.ast.expressions.logical.IIFFunction">IIFFunction</a></li>
+<li><a title="burdock.ast.expressions.logical.InCondition" href="expressions/logical.html#burdock.ast.expressions.logical.InCondition">InCondition</a></li>
+<li><a title="burdock.ast.expressions.logical.IsCondition" href="expressions/logical.html#burdock.ast.expressions.logical.IsCondition">IsCondition</a></li>
+<li><a title="burdock.ast.expressions.logical.LogicalNot" href="expressions/logical.html#burdock.ast.expressions.logical.LogicalNot">LogicalNot</a></li>
+<li><a title="burdock.ast.expressions.logical.NestedBoolean" href="expressions/logical.html#burdock.ast.expressions.logical.NestedBoolean">NestedBoolean</a></li>
+<li><a title="burdock.ast.expressions.logical.PredicatedExpression" href="expressions/logical.html#burdock.ast.expressions.logical.PredicatedExpression">PredicatedExpression</a></li>
+<li><a title="burdock.ast.expressions.logical.WhenExpression" href="expressions/logical.html#burdock.ast.expressions.logical.WhenExpression">WhenExpression</a></li>
+<li><a title="burdock.ast.expressions.numeric.ArithmeticExpression" href="expressions/numeric.html#burdock.ast.expressions.numeric.ArithmeticExpression">ArithmeticExpression</a></li>
+<li><a title="burdock.ast.expressions.numeric.BareFunction" href="expressions/numeric.html#burdock.ast.expressions.numeric.BareFunction">BareFunction</a></li>
+<li><a title="burdock.ast.expressions.numeric.MathFunction" href="expressions/numeric.html#burdock.ast.expressions.numeric.MathFunction">MathFunction</a></li>
+<li><a title="burdock.ast.expressions.numeric.PowerFunction" href="expressions/numeric.html#burdock.ast.expressions.numeric.PowerFunction">PowerFunction</a></li>
+<li><a title="burdock.ast.expressions.numeric.RoundFunction" href="expressions/numeric.html#burdock.ast.expressions.numeric.RoundFunction">RoundFunction</a></li>
+<li><a title="burdock.ast.expressions.sql.AggFunction" href="expressions/sql.html#burdock.ast.expressions.sql.AggFunction">AggFunction</a></li>
+<li><a title="burdock.ast.expressions.sql.AllColumns" href="expressions/sql.html#burdock.ast.expressions.sql.AllColumns">AllColumns</a></li>
+<li><a title="burdock.ast.expressions.sql.BooleanJoinCriteria" href="expressions/sql.html#burdock.ast.expressions.sql.BooleanJoinCriteria">BooleanJoinCriteria</a></li>
+<li><a title="burdock.ast.expressions.sql.GroupingExpression" href="expressions/sql.html#burdock.ast.expressions.sql.GroupingExpression">GroupingExpression</a></li>
+<li><a title="burdock.ast.expressions.sql.OverClause" href="expressions/sql.html#burdock.ast.expressions.sql.OverClause">OverClause</a></li>
+<li><a title="burdock.ast.expressions.sql.RankingFunction" href="expressions/sql.html#burdock.ast.expressions.sql.RankingFunction">RankingFunction</a></li>
+<li><a title="burdock.ast.expressions.sql.SortItem" href="expressions/sql.html#burdock.ast.expressions.sql.SortItem">SortItem</a></li>
+<li><a title="burdock.ast.expressions.sql.UsingJoinCriteria" href="expressions/sql.html#burdock.ast.expressions.sql.UsingJoinCriteria">UsingJoinCriteria</a></li>
+<li><a title="burdock.ast.tokens.Column" href="#burdock.ast.tokens.Column">Column</a></li>
+<li><a title="burdock.ast.tokens.Literal" href="#burdock.ast.tokens.Literal">Literal</a></li>
 </ul>
 <h3>Instance variables</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.SqlExpr.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
+<dt id="burdock.ast.tokens.SqlExpr.is_count"><code class="name">var <span class="ident">is_count</span></code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@property
+def is_count(self):
+    return False</code></pre>
+</details>
+</dd>
+<dt id="burdock.ast.tokens.SqlExpr.is_key_count"><code class="name">var <span class="ident">is_key_count</span></code></dt>
 <dd>
 <section class="desc"></section>
 <details class="source">
@@ -998,7 +1016,7 @@ def is_key_count(self):
 </dl>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.SqlExpr.children"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlExpr.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1011,7 +1029,7 @@ def is_key_count(self):
     return [None]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlExpr.evaluate"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlExpr.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -1024,7 +1042,7 @@ def is_key_count(self):
     raise ValueError(&#34;We don&#39;t know how to evaluate &#34; + str(self))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlExpr.sensitivity"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlExpr.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1037,7 +1055,7 @@ def is_key_count(self):
     return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlExpr.symbol"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlExpr.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -1054,7 +1072,7 @@ def is_key_count(self):
     return self</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlExpr.type"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlExpr.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1069,7 +1087,7 @@ def is_key_count(self):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel"><code class="flex name class">
+<dt id="burdock.ast.tokens.SqlRel"><code class="flex name class">
 <span>class <span class="ident">SqlRel</span></span>
 </code></dt>
 <dd>
@@ -1131,20 +1149,20 @@ def is_key_count(self):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Subclasses</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.ast.AliasedRelation" href="ast.html#burdock.sql.ast.ast.AliasedRelation">AliasedRelation</a></li>
-<li><a title="burdock.sql.ast.ast.AliasedSubquery" href="ast.html#burdock.sql.ast.ast.AliasedSubquery">AliasedSubquery</a></li>
-<li><a title="burdock.sql.ast.ast.Join" href="ast.html#burdock.sql.ast.ast.Join">Join</a></li>
-<li><a title="burdock.sql.ast.ast.Query" href="ast.html#burdock.sql.ast.ast.Query">Query</a></li>
-<li><a title="burdock.sql.ast.ast.Relation" href="ast.html#burdock.sql.ast.ast.Relation">Relation</a></li>
-<li><a title="burdock.sql.ast.ast.Table" href="ast.html#burdock.sql.ast.ast.Table">Table</a></li>
+<li><a title="burdock.ast.ast.AliasedRelation" href="ast.html#burdock.ast.ast.AliasedRelation">AliasedRelation</a></li>
+<li><a title="burdock.ast.ast.AliasedSubquery" href="ast.html#burdock.ast.ast.AliasedSubquery">AliasedSubquery</a></li>
+<li><a title="burdock.ast.ast.Join" href="ast.html#burdock.ast.ast.Join">Join</a></li>
+<li><a title="burdock.ast.ast.Query" href="ast.html#burdock.ast.ast.Query">Query</a></li>
+<li><a title="burdock.ast.ast.Relation" href="ast.html#burdock.ast.ast.Relation">Relation</a></li>
+<li><a title="burdock.ast.ast.Table" href="ast.html#burdock.ast.ast.Table">Table</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.SqlRel.alias_match"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.alias_match"><code class="name flex">
 <span>def <span class="ident">alias_match</span></span>(<span>self, name)</span>
 </code></dt>
 <dd>
@@ -1167,7 +1185,7 @@ def is_key_count(self):
         return any([r.alias_match(orig_name) for r in self.relations()])</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel.all_symbols"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.all_symbols"><code class="name flex">
 <span>def <span class="ident">all_symbols</span></span>(<span>self, expression=None)</span>
 </code></dt>
 <dd>
@@ -1183,7 +1201,7 @@ def is_key_count(self):
         return self.m_symbols</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel.has_symbols"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.has_symbols"><code class="name flex">
 <span>def <span class="ident">has_symbols</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1198,7 +1216,7 @@ def is_key_count(self):
     return any([r.has_symbols() for r in self.relations()])</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel.load_symbols"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.load_symbols"><code class="name flex">
 <span>def <span class="ident">load_symbols</span></span>(<span>self, metadata)</span>
 </code></dt>
 <dd>
@@ -1212,7 +1230,7 @@ def is_key_count(self):
         r.load_symbols(metadata)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel.relations"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.relations"><code class="name flex">
 <span>def <span class="ident">relations</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1225,7 +1243,7 @@ def is_key_count(self):
     return [r for r in self.children() if isinstance(r, SqlRel)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.tokens.SqlRel.split_alias"><code class="name flex">
+<dt id="burdock.ast.tokens.SqlRel.split_alias"><code class="name flex">
 <span>def <span class="ident">split_alias</span></span>(<span>self, name)</span>
 </code></dt>
 <dd>
@@ -1246,7 +1264,7 @@ def is_key_count(self):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.tokens.Token"><code class="flex name class">
+<dt id="burdock.ast.tokens.Token"><code class="flex name class">
 <span>class <span class="ident">Token</span></span>
 <span>(</span><span>text)</span>
 </code></dt>
@@ -1284,7 +1302,7 @@ errors defaults to 'strict'.</p></section>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.tokens.Token.children"><code class="name flex">
+<dt id="burdock.ast.tokens.Token.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1310,94 +1328,95 @@ errors defaults to 'strict'.</p></section>
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.sql.ast" href="index.html">burdock.sql.ast</a></code></li>
+<li><code><a title="burdock.ast" href="index.html">burdock.ast</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.flatten" href="#burdock.sql.ast.tokens.flatten">flatten</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.unique" href="#burdock.sql.ast.tokens.unique">unique</a></code></li>
+<li><code><a title="burdock.ast.tokens.flatten" href="#burdock.ast.tokens.flatten">flatten</a></code></li>
+<li><code><a title="burdock.ast.tokens.unique" href="#burdock.ast.tokens.unique">unique</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Column" href="#burdock.sql.ast.tokens.Column">Column</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Column" href="#burdock.ast.tokens.Column">Column</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Column.escaped" href="#burdock.sql.ast.tokens.Column.escaped">escaped</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Column.evaluate" href="#burdock.sql.ast.tokens.Column.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Column.symbol" href="#burdock.sql.ast.tokens.Column.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Column.symbol_name" href="#burdock.sql.ast.tokens.Column.symbol_name">symbol_name</a></code></li>
+<li><code><a title="burdock.ast.tokens.Column.escaped" href="#burdock.ast.tokens.Column.escaped">escaped</a></code></li>
+<li><code><a title="burdock.ast.tokens.Column.evaluate" href="#burdock.ast.tokens.Column.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.tokens.Column.symbol" href="#burdock.ast.tokens.Column.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.tokens.Column.symbol_name" href="#burdock.ast.tokens.Column.symbol_name">symbol_name</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.FuncName" href="#burdock.sql.ast.tokens.FuncName">FuncName</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.FuncName" href="#burdock.ast.tokens.FuncName">FuncName</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.FuncName.children" href="#burdock.sql.ast.tokens.FuncName.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.FuncName.children" href="#burdock.ast.tokens.FuncName.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Identifier" href="#burdock.sql.ast.tokens.Identifier">Identifier</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Identifier" href="#burdock.ast.tokens.Identifier">Identifier</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Identifier.children" href="#burdock.sql.ast.tokens.Identifier.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.Identifier.children" href="#burdock.ast.tokens.Identifier.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Literal" href="#burdock.sql.ast.tokens.Literal">Literal</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Literal" href="#burdock.ast.tokens.Literal">Literal</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Literal.evaluate" href="#burdock.sql.ast.tokens.Literal.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Literal.symbol" href="#burdock.sql.ast.tokens.Literal.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Literal.type" href="#burdock.sql.ast.tokens.Literal.type">type</a></code></li>
+<li><code><a title="burdock.ast.tokens.Literal.evaluate" href="#burdock.ast.tokens.Literal.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.tokens.Literal.symbol" href="#burdock.ast.tokens.Literal.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.tokens.Literal.type" href="#burdock.ast.tokens.Literal.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Op" href="#burdock.sql.ast.tokens.Op">Op</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Op" href="#burdock.ast.tokens.Op">Op</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Op.children" href="#burdock.sql.ast.tokens.Op.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.Op.children" href="#burdock.ast.tokens.Op.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Seq" href="#burdock.sql.ast.tokens.Seq">Seq</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Seq" href="#burdock.ast.tokens.Seq">Seq</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Seq.children" href="#burdock.sql.ast.tokens.Seq.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Seq.symbol" href="#burdock.sql.ast.tokens.Seq.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.tokens.Seq.children" href="#burdock.ast.tokens.Seq.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.Seq.symbol" href="#burdock.ast.tokens.Seq.symbol">symbol</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Sql" href="#burdock.sql.ast.tokens.Sql">Sql</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Sql" href="#burdock.ast.tokens.Sql">Sql</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Sql.children" href="#burdock.sql.ast.tokens.Sql.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Sql.find_node" href="#burdock.sql.ast.tokens.Sql.find_node">find_node</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Sql.find_nodes" href="#burdock.sql.ast.tokens.Sql.find_nodes">find_nodes</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.Sql.symbol_name" href="#burdock.sql.ast.tokens.Sql.symbol_name">symbol_name</a></code></li>
+<li><code><a title="burdock.ast.tokens.Sql.children" href="#burdock.ast.tokens.Sql.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.Sql.find_node" href="#burdock.ast.tokens.Sql.find_node">find_node</a></code></li>
+<li><code><a title="burdock.ast.tokens.Sql.find_nodes" href="#burdock.ast.tokens.Sql.find_nodes">find_nodes</a></code></li>
+<li><code><a title="burdock.ast.tokens.Sql.symbol_name" href="#burdock.ast.tokens.Sql.symbol_name">symbol_name</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.SqlExpr" href="#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.SqlExpr" href="#burdock.ast.tokens.SqlExpr">SqlExpr</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.children" href="#burdock.sql.ast.tokens.SqlExpr.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.evaluate" href="#burdock.sql.ast.tokens.SqlExpr.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.is_key_count" href="#burdock.sql.ast.tokens.SqlExpr.is_key_count">is_key_count</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.sensitivity" href="#burdock.sql.ast.tokens.SqlExpr.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.symbol" href="#burdock.sql.ast.tokens.SqlExpr.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlExpr.type" href="#burdock.sql.ast.tokens.SqlExpr.type">type</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.children" href="#burdock.ast.tokens.SqlExpr.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.evaluate" href="#burdock.ast.tokens.SqlExpr.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.is_count" href="#burdock.ast.tokens.SqlExpr.is_count">is_count</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.is_key_count" href="#burdock.ast.tokens.SqlExpr.is_key_count">is_key_count</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.sensitivity" href="#burdock.ast.tokens.SqlExpr.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.symbol" href="#burdock.ast.tokens.SqlExpr.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlExpr.type" href="#burdock.ast.tokens.SqlExpr.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.SqlRel" href="#burdock.sql.ast.tokens.SqlRel">SqlRel</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.SqlRel" href="#burdock.ast.tokens.SqlRel">SqlRel</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.alias_match" href="#burdock.sql.ast.tokens.SqlRel.alias_match">alias_match</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.all_symbols" href="#burdock.sql.ast.tokens.SqlRel.all_symbols">all_symbols</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.has_symbols" href="#burdock.sql.ast.tokens.SqlRel.has_symbols">has_symbols</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.load_symbols" href="#burdock.sql.ast.tokens.SqlRel.load_symbols">load_symbols</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.relations" href="#burdock.sql.ast.tokens.SqlRel.relations">relations</a></code></li>
-<li><code><a title="burdock.sql.ast.tokens.SqlRel.split_alias" href="#burdock.sql.ast.tokens.SqlRel.split_alias">split_alias</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.alias_match" href="#burdock.ast.tokens.SqlRel.alias_match">alias_match</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.all_symbols" href="#burdock.ast.tokens.SqlRel.all_symbols">all_symbols</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.has_symbols" href="#burdock.ast.tokens.SqlRel.has_symbols">has_symbols</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.load_symbols" href="#burdock.ast.tokens.SqlRel.load_symbols">load_symbols</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.relations" href="#burdock.ast.tokens.SqlRel.relations">relations</a></code></li>
+<li><code><a title="burdock.ast.tokens.SqlRel.split_alias" href="#burdock.ast.tokens.SqlRel.split_alias">split_alias</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.tokens.Token" href="#burdock.sql.ast.tokens.Token">Token</a></code></h4>
+<h4><code><a title="burdock.ast.tokens.Token" href="#burdock.ast.tokens.Token">Token</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.tokens.Token.children" href="#burdock.sql.ast.tokens.Token.children">children</a></code></li>
+<li><code><a title="burdock.ast.tokens.Token.children" href="#burdock.ast.tokens.Token.children">children</a></code></li>
 </ul>
 </li>
 </ul>

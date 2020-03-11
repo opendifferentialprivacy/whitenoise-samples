@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.sql.ast.expressions.logical API documentation</title>
+<title>burdock.ast.expressions.logical API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,14 +17,14 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.sql.ast.expressions.logical</code></h1>
+<h1 class="title">Module <code>burdock.ast.expressions.logical</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from burdock.sql.ast.tokens import *
+<pre><code class="python">from burdock.ast.tokens import *
 
 import numpy as np
 
@@ -215,7 +215,7 @@ class IIFFunction(SqlExpr):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.BetweenCondition"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.BetweenCondition"><code class="flex name class">
 <span>class <span class="ident">BetweenCondition</span></span>
 <span>(</span><span>lower, upper, is_not=False)</span>
 </code></dt>
@@ -236,12 +236,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.BetweenCondition.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BetweenCondition.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -257,7 +257,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.BooleanCompare"><code class="flex name class">
 <span>class <span class="ident">BooleanCompare</span></span>
 <span>(</span><span>left, op, right)</span>
 </code></dt>
@@ -288,12 +288,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BooleanCompare.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -306,7 +306,7 @@ class IIFFunction(SqlExpr):
     return [self.left, self.op, self.right]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BooleanCompare.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -321,7 +321,7 @@ class IIFFunction(SqlExpr):
     return ops[self.op.lower()](l, r)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BooleanCompare.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -334,7 +334,7 @@ class IIFFunction(SqlExpr):
     return 1</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BooleanCompare.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -347,7 +347,7 @@ class IIFFunction(SqlExpr):
     return BooleanCompare(self.left.symbol(relations), self.op, self.right.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.BooleanCompare.type"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.BooleanCompare.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -362,7 +362,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.CaseExpression"><code class="flex name class">
 <span>class <span class="ident">CaseExpression</span></span>
 <span>(</span><span>expression, when_exprs, else_expr)</span>
 </code></dt>
@@ -421,12 +421,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.CaseExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -439,7 +439,7 @@ class IIFFunction(SqlExpr):
     return [Token(&#34;CASE&#34;), self.expression] + self.when_exprs + ([Token(&#34;ELSE &#34;), self.else_expr] if self.else_expr is not None else []) + [Token(&#34;END&#34;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.CaseExpression.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -464,7 +464,7 @@ class IIFFunction(SqlExpr):
     return res</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.CaseExpression.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -483,7 +483,7 @@ class IIFFunction(SqlExpr):
         return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.CaseExpression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -499,7 +499,7 @@ class IIFFunction(SqlExpr):
         self.else_expr.symbol(relations) if self.else_expr is not None else None)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.CaseExpression.type"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.CaseExpression.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -523,7 +523,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.ChooseFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.ChooseFunction"><code class="flex name class">
 <span>class <span class="ident">ChooseFunction</span></span>
 <span>(</span><span>expression, choices)</span>
 </code></dt>
@@ -542,12 +542,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.ChooseFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.ChooseFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -562,7 +562,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.IIFFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.IIFFunction"><code class="flex name class">
 <span>class <span class="ident">IIFFunction</span></span>
 <span>(</span><span>test, yes, no)</span>
 </code></dt>
@@ -582,12 +582,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.IIFFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.IIFFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -602,7 +602,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.InCondition"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.InCondition"><code class="flex name class">
 <span>class <span class="ident">InCondition</span></span>
 <span>(</span><span>expressions, is_not=False)</span>
 </code></dt>
@@ -623,12 +623,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.InCondition.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.InCondition.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -645,7 +645,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.IsCondition"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.IsCondition"><code class="flex name class">
 <span>class <span class="ident">IsCondition</span></span>
 <span>(</span><span>value, is_not=False)</span>
 </code></dt>
@@ -665,12 +665,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.IsCondition.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.IsCondition.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -686,7 +686,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.LogicalNot"><code class="flex name class">
 <span>class <span class="ident">LogicalNot</span></span>
 <span>(</span><span>expression)</span>
 </code></dt>
@@ -713,12 +713,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.LogicalNot.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -731,7 +731,7 @@ class IIFFunction(SqlExpr):
     return [Token(&#34;NOT&#34;), self.expression]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.LogicalNot.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -744,7 +744,7 @@ class IIFFunction(SqlExpr):
     return np.logical_not(self.expression.evaluate(bindings))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.LogicalNot.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -757,7 +757,7 @@ class IIFFunction(SqlExpr):
     return 1</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.LogicalNot.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -770,7 +770,7 @@ class IIFFunction(SqlExpr):
     return LogicalNot(self.expression.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.LogicalNot.type"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.LogicalNot.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -785,7 +785,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.NestedBoolean"><code class="flex name class">
 <span>class <span class="ident">NestedBoolean</span></span>
 <span>(</span><span>expression)</span>
 </code></dt>
@@ -812,12 +812,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.NestedBoolean.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -830,7 +830,7 @@ class IIFFunction(SqlExpr):
     return [Token(&#34;(&#34;), self.expression, Token(&#34;)&#34;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.NestedBoolean.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -843,7 +843,7 @@ class IIFFunction(SqlExpr):
     return self.expression.evaluate(bindings)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.NestedBoolean.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -856,7 +856,7 @@ class IIFFunction(SqlExpr):
     return self.expression.sensitivity()</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.NestedBoolean.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -869,7 +869,7 @@ class IIFFunction(SqlExpr):
     return NestedBoolean(self.expression.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.NestedBoolean.type"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.NestedBoolean.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -884,7 +884,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.PredicatedExpression"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.PredicatedExpression"><code class="flex name class">
 <span>class <span class="ident">PredicatedExpression</span></span>
 <span>(</span><span>expression, predicate)</span>
 </code></dt>
@@ -905,12 +905,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.PredicatedExpression.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.PredicatedExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -923,7 +923,7 @@ class IIFFunction(SqlExpr):
     return [self.expression, self.predicate]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.PredicatedExpression.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.PredicatedExpression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -938,7 +938,7 @@ class IIFFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression"><code class="flex name class">
+<dt id="burdock.ast.expressions.logical.WhenExpression"><code class="flex name class">
 <span>class <span class="ident">WhenExpression</span></span>
 <span>(</span><span>expression, then)</span>
 </code></dt>
@@ -969,12 +969,12 @@ class IIFFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression.children"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.WhenExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -987,7 +987,7 @@ class IIFFunction(SqlExpr):
     return [Token(&#34;WHEN&#34;), self.expression, Token(&#34;THEN&#34;), self.then]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.WhenExpression.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -1003,7 +1003,7 @@ class IIFFunction(SqlExpr):
         return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.WhenExpression.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1016,7 +1016,7 @@ class IIFFunction(SqlExpr):
     return self.then.sensitivity()</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.WhenExpression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -1029,7 +1029,7 @@ class IIFFunction(SqlExpr):
     return WhenExpression(self.expression.symbol(relations), self.then.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.logical.WhenExpression.type"><code class="name flex">
+<dt id="burdock.ast.expressions.logical.WhenExpression.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -1055,96 +1055,96 @@ class IIFFunction(SqlExpr):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.sql.ast.expressions" href="index.html">burdock.sql.ast.expressions</a></code></li>
+<li><code><a title="burdock.ast.expressions" href="index.html">burdock.ast.expressions</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.BetweenCondition" href="#burdock.sql.ast.expressions.logical.BetweenCondition">BetweenCondition</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.BetweenCondition" href="#burdock.ast.expressions.logical.BetweenCondition">BetweenCondition</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.BetweenCondition.children" href="#burdock.sql.ast.expressions.logical.BetweenCondition.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BetweenCondition.children" href="#burdock.ast.expressions.logical.BetweenCondition.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare" href="#burdock.sql.ast.expressions.logical.BooleanCompare">BooleanCompare</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.BooleanCompare" href="#burdock.ast.expressions.logical.BooleanCompare">BooleanCompare</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare.children" href="#burdock.sql.ast.expressions.logical.BooleanCompare.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare.evaluate" href="#burdock.sql.ast.expressions.logical.BooleanCompare.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare.sensitivity" href="#burdock.sql.ast.expressions.logical.BooleanCompare.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare.symbol" href="#burdock.sql.ast.expressions.logical.BooleanCompare.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.BooleanCompare.type" href="#burdock.sql.ast.expressions.logical.BooleanCompare.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BooleanCompare.children" href="#burdock.ast.expressions.logical.BooleanCompare.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BooleanCompare.evaluate" href="#burdock.ast.expressions.logical.BooleanCompare.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BooleanCompare.sensitivity" href="#burdock.ast.expressions.logical.BooleanCompare.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BooleanCompare.symbol" href="#burdock.ast.expressions.logical.BooleanCompare.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.BooleanCompare.type" href="#burdock.ast.expressions.logical.BooleanCompare.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.CaseExpression" href="#burdock.sql.ast.expressions.logical.CaseExpression">CaseExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.CaseExpression" href="#burdock.ast.expressions.logical.CaseExpression">CaseExpression</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.CaseExpression.children" href="#burdock.sql.ast.expressions.logical.CaseExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.CaseExpression.evaluate" href="#burdock.sql.ast.expressions.logical.CaseExpression.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.CaseExpression.sensitivity" href="#burdock.sql.ast.expressions.logical.CaseExpression.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.CaseExpression.symbol" href="#burdock.sql.ast.expressions.logical.CaseExpression.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.CaseExpression.type" href="#burdock.sql.ast.expressions.logical.CaseExpression.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.CaseExpression.children" href="#burdock.ast.expressions.logical.CaseExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.CaseExpression.evaluate" href="#burdock.ast.expressions.logical.CaseExpression.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.CaseExpression.sensitivity" href="#burdock.ast.expressions.logical.CaseExpression.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.CaseExpression.symbol" href="#burdock.ast.expressions.logical.CaseExpression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.CaseExpression.type" href="#burdock.ast.expressions.logical.CaseExpression.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.ChooseFunction" href="#burdock.sql.ast.expressions.logical.ChooseFunction">ChooseFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.ChooseFunction" href="#burdock.ast.expressions.logical.ChooseFunction">ChooseFunction</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.ChooseFunction.children" href="#burdock.sql.ast.expressions.logical.ChooseFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.ChooseFunction.children" href="#burdock.ast.expressions.logical.ChooseFunction.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.IIFFunction" href="#burdock.sql.ast.expressions.logical.IIFFunction">IIFFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.IIFFunction" href="#burdock.ast.expressions.logical.IIFFunction">IIFFunction</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.IIFFunction.children" href="#burdock.sql.ast.expressions.logical.IIFFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.IIFFunction.children" href="#burdock.ast.expressions.logical.IIFFunction.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.InCondition" href="#burdock.sql.ast.expressions.logical.InCondition">InCondition</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.InCondition" href="#burdock.ast.expressions.logical.InCondition">InCondition</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.InCondition.children" href="#burdock.sql.ast.expressions.logical.InCondition.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.InCondition.children" href="#burdock.ast.expressions.logical.InCondition.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.IsCondition" href="#burdock.sql.ast.expressions.logical.IsCondition">IsCondition</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.IsCondition" href="#burdock.ast.expressions.logical.IsCondition">IsCondition</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.IsCondition.children" href="#burdock.sql.ast.expressions.logical.IsCondition.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.IsCondition.children" href="#burdock.ast.expressions.logical.IsCondition.children">children</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.LogicalNot" href="#burdock.sql.ast.expressions.logical.LogicalNot">LogicalNot</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.LogicalNot" href="#burdock.ast.expressions.logical.LogicalNot">LogicalNot</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.LogicalNot.children" href="#burdock.sql.ast.expressions.logical.LogicalNot.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.LogicalNot.evaluate" href="#burdock.sql.ast.expressions.logical.LogicalNot.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.LogicalNot.sensitivity" href="#burdock.sql.ast.expressions.logical.LogicalNot.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.LogicalNot.symbol" href="#burdock.sql.ast.expressions.logical.LogicalNot.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.LogicalNot.type" href="#burdock.sql.ast.expressions.logical.LogicalNot.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.LogicalNot.children" href="#burdock.ast.expressions.logical.LogicalNot.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.LogicalNot.evaluate" href="#burdock.ast.expressions.logical.LogicalNot.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.LogicalNot.sensitivity" href="#burdock.ast.expressions.logical.LogicalNot.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.LogicalNot.symbol" href="#burdock.ast.expressions.logical.LogicalNot.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.LogicalNot.type" href="#burdock.ast.expressions.logical.LogicalNot.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean" href="#burdock.sql.ast.expressions.logical.NestedBoolean">NestedBoolean</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.NestedBoolean" href="#burdock.ast.expressions.logical.NestedBoolean">NestedBoolean</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean.children" href="#burdock.sql.ast.expressions.logical.NestedBoolean.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean.evaluate" href="#burdock.sql.ast.expressions.logical.NestedBoolean.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean.sensitivity" href="#burdock.sql.ast.expressions.logical.NestedBoolean.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean.symbol" href="#burdock.sql.ast.expressions.logical.NestedBoolean.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.NestedBoolean.type" href="#burdock.sql.ast.expressions.logical.NestedBoolean.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.NestedBoolean.children" href="#burdock.ast.expressions.logical.NestedBoolean.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.NestedBoolean.evaluate" href="#burdock.ast.expressions.logical.NestedBoolean.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.NestedBoolean.sensitivity" href="#burdock.ast.expressions.logical.NestedBoolean.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.NestedBoolean.symbol" href="#burdock.ast.expressions.logical.NestedBoolean.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.NestedBoolean.type" href="#burdock.ast.expressions.logical.NestedBoolean.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.PredicatedExpression" href="#burdock.sql.ast.expressions.logical.PredicatedExpression">PredicatedExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.PredicatedExpression" href="#burdock.ast.expressions.logical.PredicatedExpression">PredicatedExpression</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.PredicatedExpression.children" href="#burdock.sql.ast.expressions.logical.PredicatedExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.PredicatedExpression.symbol" href="#burdock.sql.ast.expressions.logical.PredicatedExpression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.PredicatedExpression.children" href="#burdock.ast.expressions.logical.PredicatedExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.PredicatedExpression.symbol" href="#burdock.ast.expressions.logical.PredicatedExpression.symbol">symbol</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.logical.WhenExpression" href="#burdock.sql.ast.expressions.logical.WhenExpression">WhenExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.logical.WhenExpression" href="#burdock.ast.expressions.logical.WhenExpression">WhenExpression</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.logical.WhenExpression.children" href="#burdock.sql.ast.expressions.logical.WhenExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.WhenExpression.evaluate" href="#burdock.sql.ast.expressions.logical.WhenExpression.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.WhenExpression.sensitivity" href="#burdock.sql.ast.expressions.logical.WhenExpression.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.WhenExpression.symbol" href="#burdock.sql.ast.expressions.logical.WhenExpression.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.logical.WhenExpression.type" href="#burdock.sql.ast.expressions.logical.WhenExpression.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.WhenExpression.children" href="#burdock.ast.expressions.logical.WhenExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.WhenExpression.evaluate" href="#burdock.ast.expressions.logical.WhenExpression.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.WhenExpression.sensitivity" href="#burdock.ast.expressions.logical.WhenExpression.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.WhenExpression.symbol" href="#burdock.ast.expressions.logical.WhenExpression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.logical.WhenExpression.type" href="#burdock.ast.expressions.logical.WhenExpression.type">type</a></code></li>
 </ul>
 </li>
 </ul>

@@ -20,15 +20,20 @@
 <h1 class="title">Module <code>burdock.metadata</code></h1>
 </header>
 <section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from .collection import CollectionMetadata
+
+
+__all__ = [&#34;CollectionMetadata&#34;]</code></pre>
+</details>
 </section>
 <section>
 <h2 class="section-title" id="header-submodules">Sub-modules</h2>
 <dl>
 <dt><code class="name"><a title="burdock.metadata.collection" href="collection.html">burdock.metadata.collection</a></code></dt>
-<dd>
-<section class="desc"></section>
-</dd>
-<dt><code class="name"><a title="burdock.metadata.report" href="report.html">burdock.metadata.report</a></code></dt>
 <dd>
 <section class="desc"></section>
 </dd>
@@ -45,6 +50,138 @@ This is used for metadata inference, but may be incorporated in the DataReader
 <section>
 </section>
 <section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="burdock.metadata.CollectionMetadata"><code class="flex name class">
+<span>class <span class="ident">CollectionMetadata</span></span>
+<span>(</span><span>tables, engine)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Information about a collection of tabular data sources</p>
+<p>Instantiate a metadata object with information about tabular data sources</p>
+<p>:param tables: A list of Table descriptions
+:param engine: The name of the database engine used to query these tables.
+Used for engine-
+specific name escaping and comparison.
+Set to None to use default semantics.</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CollectionMetadata:
+    &#34;&#34;&#34;Information about a collection of tabular data sources&#34;&#34;&#34;
+    def __init__(self, tables, engine):
+        &#34;&#34;&#34;Instantiate a metadata object with information about tabular data sources
+
+        :param tables: A list of Table descriptions
+        :param engine: The name of the database engine used to query these tables.  Used for engine-
+            specific name escaping and comparison.  Set to None to use default semantics.
+        &#34;&#34;&#34;
+        self.m_tables = dict([(t.table_name(), t) for t in tables])
+        self.engine = engine if engine is not None else &#34;Unknown&#34;
+        self.compare = NameCompare.get_name_compare(engine) if compare is None else compare
+
+    def __getitem__(self, tablename):
+        schema_name = &#39;&#39;
+        parts = tablename.split(&#39;.&#39;)
+        if len(parts) == 2:
+            schema_name, tablename = parts
+        for tname in self.m_tables.keys():
+            table = self.m_tables[tname]
+            if self.compare.schema_match(schema_name, table.schema) and self.compare.identifier_match(tablename, table.name):
+                table.compare = self.compare
+                return table
+        return None
+    def __str__(self):
+        return &#34;\n\n&#34;.join([str(self.m_tables[table]) for table in self.m_tables.keys()])
+    def tables(self):
+        return [self.m_tables[tname] for tname in self.m_tables.keys()]
+
+    @staticmethod
+    def from_file(filename):
+        &#34;&#34;&#34;Load the metadata about this collection from a YAML file&#34;&#34;&#34;
+        ys = CollectionYamlLoader(filename)
+        return ys.read_file()
+
+    @staticmethod
+    def from_dict(schema_dict):
+        &#34;&#34;&#34;Load the metadata from a dict object&#34;&#34;&#34;
+        ys = CollectionYamlLoader(&#34;dummy&#34;)
+        return ys._create_metadata_object(schema_dict)
+
+    def to_file(self, filename, collection_name):
+        &#34;&#34;&#34;Save collection metadata to a YAML file&#34;&#34;&#34;
+        ys = CollectionYamlLoader(filename)
+        ys.write_file(self, collection_name)</code></pre>
+</details>
+<h3>Static methods</h3>
+<dl>
+<dt id="burdock.metadata.CollectionMetadata.from_dict"><code class="name flex">
+<span>def <span class="ident">from_dict</span></span>(<span>schema_dict)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Load the metadata from a dict object</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def from_dict(schema_dict):
+    &#34;&#34;&#34;Load the metadata from a dict object&#34;&#34;&#34;
+    ys = CollectionYamlLoader(&#34;dummy&#34;)
+    return ys._create_metadata_object(schema_dict)</code></pre>
+</details>
+</dd>
+<dt id="burdock.metadata.CollectionMetadata.from_file"><code class="name flex">
+<span>def <span class="ident">from_file</span></span>(<span>filename)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Load the metadata about this collection from a YAML file</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@staticmethod
+def from_file(filename):
+    &#34;&#34;&#34;Load the metadata about this collection from a YAML file&#34;&#34;&#34;
+    ys = CollectionYamlLoader(filename)
+    return ys.read_file()</code></pre>
+</details>
+</dd>
+</dl>
+<h3>Methods</h3>
+<dl>
+<dt id="burdock.metadata.CollectionMetadata.tables"><code class="name flex">
+<span>def <span class="ident">tables</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def tables(self):
+    return [self.m_tables[tname] for tname in self.m_tables.keys()]</code></pre>
+</details>
+</dd>
+<dt id="burdock.metadata.CollectionMetadata.to_file"><code class="name flex">
+<span>def <span class="ident">to_file</span></span>(<span>self, filename, collection_name)</span>
+</code></dt>
+<dd>
+<section class="desc"><p>Save collection metadata to a YAML file</p></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def to_file(self, filename, collection_name):
+    &#34;&#34;&#34;Save collection metadata to a YAML file&#34;&#34;&#34;
+    ys = CollectionYamlLoader(filename)
+    ys.write_file(self, collection_name)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
 </section>
 </article>
 <nav id="sidebar">
@@ -61,8 +198,20 @@ This is used for metadata inference, but may be incorporated in the DataReader
 <li><h3><a href="#header-submodules">Sub-modules</a></h3>
 <ul>
 <li><code><a title="burdock.metadata.collection" href="collection.html">burdock.metadata.collection</a></code></li>
-<li><code><a title="burdock.metadata.report" href="report.html">burdock.metadata.report</a></code></li>
 <li><code><a title="burdock.metadata.sql_reserved" href="sql_reserved.html">burdock.metadata.sql_reserved</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="burdock.metadata.CollectionMetadata" href="#burdock.metadata.CollectionMetadata">CollectionMetadata</a></code></h4>
+<ul class="">
+<li><code><a title="burdock.metadata.CollectionMetadata.from_dict" href="#burdock.metadata.CollectionMetadata.from_dict">from_dict</a></code></li>
+<li><code><a title="burdock.metadata.CollectionMetadata.from_file" href="#burdock.metadata.CollectionMetadata.from_file">from_file</a></code></li>
+<li><code><a title="burdock.metadata.CollectionMetadata.tables" href="#burdock.metadata.CollectionMetadata.tables">tables</a></code></li>
+<li><code><a title="burdock.metadata.CollectionMetadata.to_file" href="#burdock.metadata.CollectionMetadata.to_file">to_file</a></code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

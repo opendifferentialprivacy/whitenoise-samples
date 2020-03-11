@@ -1,0 +1,704 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>burdock.evaluation.aggregation API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>burdock.evaluation.aggregation</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># Implement different aggregation functions that can be passed through the verification tests
+import random
+import math
+import numpy as np
+import pandas as pd
+
+import mlflow
+import json
+import sys
+import os
+# import yarrow
+
+from burdock.reader.sql import PandasReader
+from burdock.sql.private_reader import PrivateReader
+from burdock.reader.rowset import TypedRowset
+from burdock.mechanisms.laplace import Laplace
+from burdock.mechanisms.gaussian import Gaussian
+from pandasql import sqldf
+
+class Aggregation:
+    def __init__(self, epsilon=1.0, t=1, repeat_count=10000, mechanism=&#34;Laplace&#34;):
+        self.epsilon = epsilon
+        self.t = t
+        self.repeat_count = repeat_count
+        self.mechanism = mechanism
+
+    # Taking df as a parameter it shall be passed both d1 and d2 that differ by 1 record
+    def exact_count(self, df, colname):
+        return np.zeros(self.repeat_count) + df[colname].count()
+
+    def buggy_count(self, df, colname):
+        return df[colname].count() + np.random.random_sample((self.repeat_count,))*10
+
+    def dp_count(self, df, colname):
+        delta = 1/(len(df) * math.sqrt(len(df)))
+        sigmacnt = math.sqrt(self.t)*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+        dp_noise = np.random.normal(0, sigmacnt, self.repeat_count)
+        return df[colname].count() + dp_noise
+
+    def dp_sum(self, df, colname):
+        delta = 1/(len(df) * math.sqrt(len(df)))
+        M = abs(max(df[colname]) - min(df[colname]))
+        sigmasum = math.sqrt(self.t)*M*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+        dp_noise = np.random.normal(0, sigmasum, self.repeat_count)
+        return df[colname].sum() + dp_noise
+
+    def dp_mean(self, df, colname):
+        return np.divide(self.dp_sum(df, colname), self.dp_count(df, colname))
+
+    def dp_var(self, df, colname):
+        cnt = self.dp_count(df, colname)
+        sum = self.dp_sum(df, colname)
+        df[colname + &#34;squared&#34;] = df[colname] ** 2
+        sumsq = self.dp_sum(df, colname + &#34;squared&#34;)
+        return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))
+
+    def dp_mechanism_count(self, df, colname):
+        exact_count = df[colname].count()
+        mech = Laplace(self.epsilon)
+        if(self.mechanism == &#34;Gaussian&#34;):
+            mech = Gaussian(self.epsilon)
+        return np.array([mech.release([exact_count]).values[0] for i in range(self.repeat_count)])
+
+    def dp_mechanism_sum(self, df, colname):
+        exact_sum = df[colname].sum()
+        M = float(abs(max(df[colname]) - min(df[colname])))
+        mech = Laplace(self.epsilon, sensitivity = M)
+        if(self.mechanism == &#34;Gaussian&#34;):
+            mech = Gaussian(self.epsilon)
+        return np.array([mech.release([exact_sum]).values[0] for i in range(self.repeat_count)])
+
+    def dp_mechanism_mean(self, df, colname):
+        return np.divide(self.dp_mechanism_sum(df, colname), self.dp_mechanism_count(df, colname))
+
+    def dp_mechanism_var(self, df, colname):
+        cnt = self.dp_mechanism_count(df, colname)
+        sum = self.dp_mechanism_sum(df, colname)
+        df[colname + &#34;squared&#34;] = df[colname] ** 2
+        sumsq = self.dp_mechanism_sum(df, colname + &#34;squared&#34;)
+        return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))
+
+    # # Apply noise to input aggregation function using Yarrow library
+    # def yarrow_dp_agg(self, f, dataset_path, args, kwargs):
+    #     with yarrow.Analysis() as analysis:
+    #         df = yarrow.Dataset(&#39;df&#39;, dataset_path)
+    #         agg = f(df[args], **kwargs)
+    #     noisy_values = []
+    #     for x in range(self.repeat_count):
+    #         analysis.release()
+    #         noisy_values.append(analysis.release_proto.values[6].values[&#39;data&#39;].f64.data[0])
+    #     return np.array(noisy_values)
+    
+    # # Apply noise to functions like covariance using Yarrow library that work on multiple columns
+    # def yarrow_dp_multi_agg(self, f, dataset_path, args, kwargs):
+    #     with yarrow.Analysis() as analysis:
+    #         df = yarrow.Dataset(&#39;df&#39;, dataset_path)
+    #         agg = f(df[(args[0], args[1])], df[(args[2], args[3])], **kwargs)
+    #     noisy_values = []
+    #     for x in range(self.repeat_count):
+    #         analysis.release()
+    #         noisy_values.append(analysis.release_proto.values[10].values[&#39;data&#39;].f64.data[0])
+    #     return np.array(noisy_values)
+
+    # Run the query using the private reader and input query
+    # Get query response back
+    def run_agg_query(self, df, metadata, query, confidence, get_exact=True):
+        reader = PandasReader(metadata, df)
+        actual = 0.0
+        # VAR not supported in Pandas Reader. So not needed to fetch actual on every aggregation
+        if(get_exact):
+            actual = reader.execute_typed(query).rows()[1:][0][0]
+        private_reader = PrivateReader(reader, metadata, self.epsilon)
+        query_ast = private_reader.parse_query_string(query)
+        
+        srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+        
+        noisy_values = []
+        low_bounds = []
+        high_bounds = []
+        for idx in range(self.repeat_count):
+            srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+            res = private_reader._execute_ast(query_ast, True)
+            interval = res.report[res.colnames[0]].intervals[confidence]
+            low_bounds.append(interval[0].low)
+            high_bounds.append(interval[0].high)
+            noisy_values.append(res.rows()[1:][0][0])
+        return np.array(noisy_values), actual, low_bounds, high_bounds
+        
+    # Run the query using the private reader and input query
+    # Get query response back for multiple dimensions and aggregations
+    def run_agg_query_df(self, df, metadata, query, confidence, file_name = &#34;d1&#34;):
+        # Getting exact result
+        reader = PandasReader(metadata, df)
+        exact = reader.execute_typed(query).rows()[1:]
+        exact_res = []
+        for row in exact:
+            exact_res.append(row)
+
+        private_reader = PrivateReader(reader, metadata, self.epsilon)
+        query_ast = private_reader.parse_query_string(query)
+
+        # Distinguishing dimension and measure columns
+        srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+        srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+
+        sample_res = private_reader._execute_ast(query_ast, True)
+        headers = sample_res.colnames
+
+        dim_cols = []
+        num_cols = []
+
+        for col in headers:
+            if(sample_res.types[col] == &#34;string&#34;):
+                dim_cols.append(col)
+            else:
+                num_cols.append(col)
+                
+        # Repeated query and store results along with intervals
+        res = []
+        for idx in range(self.repeat_count):
+            dim_rows = []
+            num_rows = []
+            srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+            singleres = private_reader._execute_ast(query_ast, True)
+            for col in dim_cols:
+                dim_rows.append(singleres.report[col].values)
+            for col in num_cols:
+                values = singleres.report[col].values
+                low = singleres.report[col].intervals[confidence].low
+                high = singleres.report[col].intervals[confidence].high
+                num_rows.append(list(zip(values, low, high)))
+
+            res.extend(list(zip(*dim_rows, *num_rows)))
+
+        exact_df = pd.DataFrame(exact_res, columns=headers)
+        noisy_df = pd.DataFrame(res, columns=headers)
+        
+        # Add a dummy dimension column for cases where no dimensions available for merging D1 and D2
+        if(len(dim_cols) == 0):
+            dim_cols.append(&#34;__dim__&#34;)
+
+        if(dim_cols[0] == &#34;__dim__&#34;):
+            exact_df[dim_cols[0]] = [&#34;key&#34;]*len(exact_df)
+            noisy_df[dim_cols[0]] = [&#34;key&#34;]*len(noisy_df)
+
+        return noisy_df, exact_df, dim_cols, num_cols</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="burdock.evaluation.aggregation.Aggregation"><code class="flex name class">
+<span>class <span class="ident">Aggregation</span></span>
+<span>(</span><span>epsilon=1.0, t=1, repeat_count=10000, mechanism='Laplace')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Aggregation:
+    def __init__(self, epsilon=1.0, t=1, repeat_count=10000, mechanism=&#34;Laplace&#34;):
+        self.epsilon = epsilon
+        self.t = t
+        self.repeat_count = repeat_count
+        self.mechanism = mechanism
+
+    # Taking df as a parameter it shall be passed both d1 and d2 that differ by 1 record
+    def exact_count(self, df, colname):
+        return np.zeros(self.repeat_count) + df[colname].count()
+
+    def buggy_count(self, df, colname):
+        return df[colname].count() + np.random.random_sample((self.repeat_count,))*10
+
+    def dp_count(self, df, colname):
+        delta = 1/(len(df) * math.sqrt(len(df)))
+        sigmacnt = math.sqrt(self.t)*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+        dp_noise = np.random.normal(0, sigmacnt, self.repeat_count)
+        return df[colname].count() + dp_noise
+
+    def dp_sum(self, df, colname):
+        delta = 1/(len(df) * math.sqrt(len(df)))
+        M = abs(max(df[colname]) - min(df[colname]))
+        sigmasum = math.sqrt(self.t)*M*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+        dp_noise = np.random.normal(0, sigmasum, self.repeat_count)
+        return df[colname].sum() + dp_noise
+
+    def dp_mean(self, df, colname):
+        return np.divide(self.dp_sum(df, colname), self.dp_count(df, colname))
+
+    def dp_var(self, df, colname):
+        cnt = self.dp_count(df, colname)
+        sum = self.dp_sum(df, colname)
+        df[colname + &#34;squared&#34;] = df[colname] ** 2
+        sumsq = self.dp_sum(df, colname + &#34;squared&#34;)
+        return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))
+
+    def dp_mechanism_count(self, df, colname):
+        exact_count = df[colname].count()
+        mech = Laplace(self.epsilon)
+        if(self.mechanism == &#34;Gaussian&#34;):
+            mech = Gaussian(self.epsilon)
+        return np.array([mech.release([exact_count]).values[0] for i in range(self.repeat_count)])
+
+    def dp_mechanism_sum(self, df, colname):
+        exact_sum = df[colname].sum()
+        M = float(abs(max(df[colname]) - min(df[colname])))
+        mech = Laplace(self.epsilon, sensitivity = M)
+        if(self.mechanism == &#34;Gaussian&#34;):
+            mech = Gaussian(self.epsilon)
+        return np.array([mech.release([exact_sum]).values[0] for i in range(self.repeat_count)])
+
+    def dp_mechanism_mean(self, df, colname):
+        return np.divide(self.dp_mechanism_sum(df, colname), self.dp_mechanism_count(df, colname))
+
+    def dp_mechanism_var(self, df, colname):
+        cnt = self.dp_mechanism_count(df, colname)
+        sum = self.dp_mechanism_sum(df, colname)
+        df[colname + &#34;squared&#34;] = df[colname] ** 2
+        sumsq = self.dp_mechanism_sum(df, colname + &#34;squared&#34;)
+        return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))
+
+    # # Apply noise to input aggregation function using Yarrow library
+    # def yarrow_dp_agg(self, f, dataset_path, args, kwargs):
+    #     with yarrow.Analysis() as analysis:
+    #         df = yarrow.Dataset(&#39;df&#39;, dataset_path)
+    #         agg = f(df[args], **kwargs)
+    #     noisy_values = []
+    #     for x in range(self.repeat_count):
+    #         analysis.release()
+    #         noisy_values.append(analysis.release_proto.values[6].values[&#39;data&#39;].f64.data[0])
+    #     return np.array(noisy_values)
+    
+    # # Apply noise to functions like covariance using Yarrow library that work on multiple columns
+    # def yarrow_dp_multi_agg(self, f, dataset_path, args, kwargs):
+    #     with yarrow.Analysis() as analysis:
+    #         df = yarrow.Dataset(&#39;df&#39;, dataset_path)
+    #         agg = f(df[(args[0], args[1])], df[(args[2], args[3])], **kwargs)
+    #     noisy_values = []
+    #     for x in range(self.repeat_count):
+    #         analysis.release()
+    #         noisy_values.append(analysis.release_proto.values[10].values[&#39;data&#39;].f64.data[0])
+    #     return np.array(noisy_values)
+
+    # Run the query using the private reader and input query
+    # Get query response back
+    def run_agg_query(self, df, metadata, query, confidence, get_exact=True):
+        reader = PandasReader(metadata, df)
+        actual = 0.0
+        # VAR not supported in Pandas Reader. So not needed to fetch actual on every aggregation
+        if(get_exact):
+            actual = reader.execute_typed(query).rows()[1:][0][0]
+        private_reader = PrivateReader(reader, metadata, self.epsilon)
+        query_ast = private_reader.parse_query_string(query)
+        
+        srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+        
+        noisy_values = []
+        low_bounds = []
+        high_bounds = []
+        for idx in range(self.repeat_count):
+            srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+            res = private_reader._execute_ast(query_ast, True)
+            interval = res.report[res.colnames[0]].intervals[confidence]
+            low_bounds.append(interval[0].low)
+            high_bounds.append(interval[0].high)
+            noisy_values.append(res.rows()[1:][0][0])
+        return np.array(noisy_values), actual, low_bounds, high_bounds
+        
+    # Run the query using the private reader and input query
+    # Get query response back for multiple dimensions and aggregations
+    def run_agg_query_df(self, df, metadata, query, confidence, file_name = &#34;d1&#34;):
+        # Getting exact result
+        reader = PandasReader(metadata, df)
+        exact = reader.execute_typed(query).rows()[1:]
+        exact_res = []
+        for row in exact:
+            exact_res.append(row)
+
+        private_reader = PrivateReader(reader, metadata, self.epsilon)
+        query_ast = private_reader.parse_query_string(query)
+
+        # Distinguishing dimension and measure columns
+        srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+        srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+
+        sample_res = private_reader._execute_ast(query_ast, True)
+        headers = sample_res.colnames
+
+        dim_cols = []
+        num_cols = []
+
+        for col in headers:
+            if(sample_res.types[col] == &#34;string&#34;):
+                dim_cols.append(col)
+            else:
+                num_cols.append(col)
+                
+        # Repeated query and store results along with intervals
+        res = []
+        for idx in range(self.repeat_count):
+            dim_rows = []
+            num_rows = []
+            srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+            singleres = private_reader._execute_ast(query_ast, True)
+            for col in dim_cols:
+                dim_rows.append(singleres.report[col].values)
+            for col in num_cols:
+                values = singleres.report[col].values
+                low = singleres.report[col].intervals[confidence].low
+                high = singleres.report[col].intervals[confidence].high
+                num_rows.append(list(zip(values, low, high)))
+
+            res.extend(list(zip(*dim_rows, *num_rows)))
+
+        exact_df = pd.DataFrame(exact_res, columns=headers)
+        noisy_df = pd.DataFrame(res, columns=headers)
+        
+        # Add a dummy dimension column for cases where no dimensions available for merging D1 and D2
+        if(len(dim_cols) == 0):
+            dim_cols.append(&#34;__dim__&#34;)
+
+        if(dim_cols[0] == &#34;__dim__&#34;):
+            exact_df[dim_cols[0]] = [&#34;key&#34;]*len(exact_df)
+            noisy_df[dim_cols[0]] = [&#34;key&#34;]*len(noisy_df)
+
+        return noisy_df, exact_df, dim_cols, num_cols</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="burdock.evaluation.aggregation.Aggregation.buggy_count"><code class="name flex">
+<span>def <span class="ident">buggy_count</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def buggy_count(self, df, colname):
+    return df[colname].count() + np.random.random_sample((self.repeat_count,))*10</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_count"><code class="name flex">
+<span>def <span class="ident">dp_count</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_count(self, df, colname):
+    delta = 1/(len(df) * math.sqrt(len(df)))
+    sigmacnt = math.sqrt(self.t)*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+    dp_noise = np.random.normal(0, sigmacnt, self.repeat_count)
+    return df[colname].count() + dp_noise</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_mean"><code class="name flex">
+<span>def <span class="ident">dp_mean</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_mean(self, df, colname):
+    return np.divide(self.dp_sum(df, colname), self.dp_count(df, colname))</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_mechanism_count"><code class="name flex">
+<span>def <span class="ident">dp_mechanism_count</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_mechanism_count(self, df, colname):
+    exact_count = df[colname].count()
+    mech = Laplace(self.epsilon)
+    if(self.mechanism == &#34;Gaussian&#34;):
+        mech = Gaussian(self.epsilon)
+    return np.array([mech.release([exact_count]).values[0] for i in range(self.repeat_count)])</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_mechanism_mean"><code class="name flex">
+<span>def <span class="ident">dp_mechanism_mean</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_mechanism_mean(self, df, colname):
+    return np.divide(self.dp_mechanism_sum(df, colname), self.dp_mechanism_count(df, colname))</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_mechanism_sum"><code class="name flex">
+<span>def <span class="ident">dp_mechanism_sum</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_mechanism_sum(self, df, colname):
+    exact_sum = df[colname].sum()
+    M = float(abs(max(df[colname]) - min(df[colname])))
+    mech = Laplace(self.epsilon, sensitivity = M)
+    if(self.mechanism == &#34;Gaussian&#34;):
+        mech = Gaussian(self.epsilon)
+    return np.array([mech.release([exact_sum]).values[0] for i in range(self.repeat_count)])</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_mechanism_var"><code class="name flex">
+<span>def <span class="ident">dp_mechanism_var</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_mechanism_var(self, df, colname):
+    cnt = self.dp_mechanism_count(df, colname)
+    sum = self.dp_mechanism_sum(df, colname)
+    df[colname + &#34;squared&#34;] = df[colname] ** 2
+    sumsq = self.dp_mechanism_sum(df, colname + &#34;squared&#34;)
+    return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_sum"><code class="name flex">
+<span>def <span class="ident">dp_sum</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_sum(self, df, colname):
+    delta = 1/(len(df) * math.sqrt(len(df)))
+    M = abs(max(df[colname]) - min(df[colname]))
+    sigmasum = math.sqrt(self.t)*M*((math.sqrt(math.log(1/delta)) + math.sqrt(math.log((1/delta)) + self.epsilon)) / (math.sqrt(2)*self.epsilon))
+    dp_noise = np.random.normal(0, sigmasum, self.repeat_count)
+    return df[colname].sum() + dp_noise</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.dp_var"><code class="name flex">
+<span>def <span class="ident">dp_var</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_var(self, df, colname):
+    cnt = self.dp_count(df, colname)
+    sum = self.dp_sum(df, colname)
+    df[colname + &#34;squared&#34;] = df[colname] ** 2
+    sumsq = self.dp_sum(df, colname + &#34;squared&#34;)
+    return np.subtract(np.divide(sumsq, cnt), np.power(np.divide(sum, cnt), 2))</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.exact_count"><code class="name flex">
+<span>def <span class="ident">exact_count</span></span>(<span>self, df, colname)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def exact_count(self, df, colname):
+    return np.zeros(self.repeat_count) + df[colname].count()</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.run_agg_query"><code class="name flex">
+<span>def <span class="ident">run_agg_query</span></span>(<span>self, df, metadata, query, confidence, get_exact=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_agg_query(self, df, metadata, query, confidence, get_exact=True):
+    reader = PandasReader(metadata, df)
+    actual = 0.0
+    # VAR not supported in Pandas Reader. So not needed to fetch actual on every aggregation
+    if(get_exact):
+        actual = reader.execute_typed(query).rows()[1:][0][0]
+    private_reader = PrivateReader(reader, metadata, self.epsilon)
+    query_ast = private_reader.parse_query_string(query)
+    
+    srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+    
+    noisy_values = []
+    low_bounds = []
+    high_bounds = []
+    for idx in range(self.repeat_count):
+        srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+        res = private_reader._execute_ast(query_ast, True)
+        interval = res.report[res.colnames[0]].intervals[confidence]
+        low_bounds.append(interval[0].low)
+        high_bounds.append(interval[0].high)
+        noisy_values.append(res.rows()[1:][0][0])
+    return np.array(noisy_values), actual, low_bounds, high_bounds</code></pre>
+</details>
+</dd>
+<dt id="burdock.evaluation.aggregation.Aggregation.run_agg_query_df"><code class="name flex">
+<span>def <span class="ident">run_agg_query_df</span></span>(<span>self, df, metadata, query, confidence, file_name='d1')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def run_agg_query_df(self, df, metadata, query, confidence, file_name = &#34;d1&#34;):
+    # Getting exact result
+    reader = PandasReader(metadata, df)
+    exact = reader.execute_typed(query).rows()[1:]
+    exact_res = []
+    for row in exact:
+        exact_res.append(row)
+
+    private_reader = PrivateReader(reader, metadata, self.epsilon)
+    query_ast = private_reader.parse_query_string(query)
+
+    # Distinguishing dimension and measure columns
+    srs_orig = private_reader.reader.execute_ast_typed(query_ast)
+    srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+
+    sample_res = private_reader._execute_ast(query_ast, True)
+    headers = sample_res.colnames
+
+    dim_cols = []
+    num_cols = []
+
+    for col in headers:
+        if(sample_res.types[col] == &#34;string&#34;):
+            dim_cols.append(col)
+        else:
+            num_cols.append(col)
+            
+    # Repeated query and store results along with intervals
+    res = []
+    for idx in range(self.repeat_count):
+        dim_rows = []
+        num_rows = []
+        srs = TypedRowset(srs_orig.rows(), list(srs_orig.types.values()))
+        singleres = private_reader._execute_ast(query_ast, True)
+        for col in dim_cols:
+            dim_rows.append(singleres.report[col].values)
+        for col in num_cols:
+            values = singleres.report[col].values
+            low = singleres.report[col].intervals[confidence].low
+            high = singleres.report[col].intervals[confidence].high
+            num_rows.append(list(zip(values, low, high)))
+
+        res.extend(list(zip(*dim_rows, *num_rows)))
+
+    exact_df = pd.DataFrame(exact_res, columns=headers)
+    noisy_df = pd.DataFrame(res, columns=headers)
+    
+    # Add a dummy dimension column for cases where no dimensions available for merging D1 and D2
+    if(len(dim_cols) == 0):
+        dim_cols.append(&#34;__dim__&#34;)
+
+    if(dim_cols[0] == &#34;__dim__&#34;):
+        exact_df[dim_cols[0]] = [&#34;key&#34;]*len(exact_df)
+        noisy_df[dim_cols[0]] = [&#34;key&#34;]*len(noisy_df)
+
+    return noisy_df, exact_df, dim_cols, num_cols</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="burdock.evaluation" href="index.html">burdock.evaluation</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="burdock.evaluation.aggregation.Aggregation" href="#burdock.evaluation.aggregation.Aggregation">Aggregation</a></code></h4>
+<ul class="two-column">
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.buggy_count" href="#burdock.evaluation.aggregation.Aggregation.buggy_count">buggy_count</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_count" href="#burdock.evaluation.aggregation.Aggregation.dp_count">dp_count</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_mean" href="#burdock.evaluation.aggregation.Aggregation.dp_mean">dp_mean</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_mechanism_count" href="#burdock.evaluation.aggregation.Aggregation.dp_mechanism_count">dp_mechanism_count</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_mechanism_mean" href="#burdock.evaluation.aggregation.Aggregation.dp_mechanism_mean">dp_mechanism_mean</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_mechanism_sum" href="#burdock.evaluation.aggregation.Aggregation.dp_mechanism_sum">dp_mechanism_sum</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_mechanism_var" href="#burdock.evaluation.aggregation.Aggregation.dp_mechanism_var">dp_mechanism_var</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_sum" href="#burdock.evaluation.aggregation.Aggregation.dp_sum">dp_sum</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.dp_var" href="#burdock.evaluation.aggregation.Aggregation.dp_var">dp_var</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.exact_count" href="#burdock.evaluation.aggregation.Aggregation.exact_count">exact_count</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.run_agg_query" href="#burdock.evaluation.aggregation.Aggregation.run_agg_query">run_agg_query</a></code></li>
+<li><code><a title="burdock.evaluation.aggregation.Aggregation.run_agg_query_df" href="#burdock.evaluation.aggregation.Aggregation.run_agg_query_df">run_agg_query_df</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

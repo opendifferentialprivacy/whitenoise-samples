@@ -24,8 +24,12 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from .local_csv_adapter import LocalCSVAdapter
+<pre><code class="python">import logging
+import pkg_resources
+from .local_csv_adapter import LocalCSVAdapter
 from .dataverse_adapter import DataverseAdapter
+
+module_logger = logging.getLogger(__name__)
 
 
 class DatasetAdapterLoader(object):
@@ -97,7 +101,18 @@ def load_reader(dataset_document):
 
 
 register_adapter(LocalCSVAdapter)
-register_adapter(DataverseAdapter)</code></pre>
+register_adapter(DataverseAdapter)
+
+
+for entrypoint in pkg_resources.iter_entry_points(&#34;opendp_whitenoise_adapter&#34;):
+    try:
+        extension_class = entrypoint.load()
+        register_adapter(extension_class)
+    except Exception as e:  # pragma: no cover
+            msg = &#34;Failure while loading {} with exception {}.&#34;.format(
+                entrypoint, e
+            )
+            module_logger.warning(msg)</code></pre>
 </details>
 </section>
 <section>

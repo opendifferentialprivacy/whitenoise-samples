@@ -27,46 +27,40 @@
 <pre><code class="python">import os
 import re
 
-from .base import Reader, NameCompare
-from burdock.sql.ast.tokens import Literal
-from burdock.sql.ast.expressions.numeric import BareFunction
+from .sql_base import SqlReader, NameCompare
+from .engine import Engine
 
-class SparkReader(Reader):
-    def __init__(self, host, session, user, password=None, port=None):
-        super().__init__()
+from burdock.ast.tokens import Literal
+from burdock.ast.expressions.numeric import BareFunction
+
+
+class SparkReader(SqlReader):
+    ENGINE = Engine.SPARK
+
+    def __init__(self, session):
+        super().__init__(SparkNameCompare(), SparkSerializer())
         from pyspark.sql import SparkSession
         self.api = session
-        self.engine = &#34;Spark&#34;
         self.database = &#34;Spark Session&#34;
-        self.serializer = SparkSerializer()
-        self.compare = SparkNameCompare()  
-        self.update_connection_string()      
 
     def execute(self, query):
         if not isinstance(query, str):
             raise ValueError(&#34;Please pass strings to execute.  To execute ASTs, use execute_typed.&#34;)
-        
-        df = self.api.sql(query)
 
-        if df.columns is None:
-            return []
-        else:
-            col_names = [tuple(c.lower() for c in df.columns)]
-            import pyspark
-            body = [c for c in df.collect() if type(c) is pyspark.sql.types.Row and c is not None] 
-            return col_names + body
+        df = self.api.sql(query)
+        return df
+
+    def execute_typed(self, query):
+        return self.execute(query)
+
     def db_name(self):
         return self.database
-
-    def update_connection_string(self):
-        self.connection_string = None
-        pass
 
 class SparkSerializer:
     def serialize(self, query):
         for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
             re.name = &#39;rand&#39;
-        
+
         for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
             b.text = &#34;&#39;True&#39;&#34; if b.value else &#34;&#39;False&#39;&#34;
 
@@ -106,7 +100,7 @@ class SparkNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.NameCompare" href="base.html#burdock.reader.sql.base.NameCompare">NameCompare</a></li>
+<li><a title="burdock.reader.sql.sql_base.NameCompare" href="sql_base.html#burdock.reader.sql.sql_base.NameCompare">NameCompare</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -127,7 +121,7 @@ class SparkNameCompare(NameCompare):
 </dd>
 <dt id="burdock.reader.sql.spark.SparkReader"><code class="flex name class">
 <span>class <span class="ident">SparkReader</span></span>
-<span>(</span><span>host, session, user, password=None, port=None)</span>
+<span>(</span><span>session)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -135,41 +129,40 @@ class SparkNameCompare(NameCompare):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class SparkReader(Reader):
-    def __init__(self, host, session, user, password=None, port=None):
-        super().__init__()
+<pre><code class="python">class SparkReader(SqlReader):
+    ENGINE = Engine.SPARK
+
+    def __init__(self, session):
+        super().__init__(SparkNameCompare(), SparkSerializer())
         from pyspark.sql import SparkSession
         self.api = session
-        self.engine = &#34;Spark&#34;
         self.database = &#34;Spark Session&#34;
-        self.serializer = SparkSerializer()
-        self.compare = SparkNameCompare()  
-        self.update_connection_string()      
 
     def execute(self, query):
         if not isinstance(query, str):
             raise ValueError(&#34;Please pass strings to execute.  To execute ASTs, use execute_typed.&#34;)
-        
+
         df = self.api.sql(query)
+        return df
 
-        if df.columns is None:
-            return []
-        else:
-            col_names = [tuple(c.lower() for c in df.columns)]
-            import pyspark
-            body = [c for c in df.collect() if type(c) is pyspark.sql.types.Row and c is not None] 
-            return col_names + body
+    def execute_typed(self, query):
+        return self.execute(query)
+
     def db_name(self):
-        return self.database
-
-    def update_connection_string(self):
-        self.connection_string = None
-        pass</code></pre>
+        return self.database</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="base.html#burdock.reader.sql.base.Reader">Reader</a></li>
+<li><a title="burdock.reader.sql.sql_base.SqlReader" href="sql_base.html#burdock.reader.sql.sql_base.SqlReader">SqlReader</a></li>
+<li><a title="burdock.reader.base.Reader" href="../base.html#burdock.reader.base.Reader">Reader</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="burdock.reader.sql.spark.SparkReader.ENGINE"><code class="name">var <span class="ident">ENGINE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="burdock.reader.sql.spark.SparkReader.db_name"><code class="name flex">
@@ -197,20 +190,13 @@ class SparkNameCompare(NameCompare):
 <pre><code class="python">def execute(self, query):
     if not isinstance(query, str):
         raise ValueError(&#34;Please pass strings to execute.  To execute ASTs, use execute_typed.&#34;)
-    
-    df = self.api.sql(query)
 
-    if df.columns is None:
-        return []
-    else:
-        col_names = [tuple(c.lower() for c in df.columns)]
-        import pyspark
-        body = [c for c in df.collect() if type(c) is pyspark.sql.types.Row and c is not None] 
-        return col_names + body</code></pre>
+    df = self.api.sql(query)
+    return df</code></pre>
 </details>
 </dd>
-<dt id="burdock.reader.sql.spark.SparkReader.update_connection_string"><code class="name flex">
-<span>def <span class="ident">update_connection_string</span></span>(<span>self)</span>
+<dt id="burdock.reader.sql.spark.SparkReader.execute_typed"><code class="name flex">
+<span>def <span class="ident">execute_typed</span></span>(<span>self, query)</span>
 </code></dt>
 <dd>
 <section class="desc"></section>
@@ -218,9 +204,8 @@ class SparkNameCompare(NameCompare):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def update_connection_string(self):
-    self.connection_string = None
-    pass</code></pre>
+<pre><code class="python">def execute_typed(self, query):
+    return self.execute(query)</code></pre>
 </details>
 </dd>
 </dl>
@@ -238,7 +223,7 @@ class SparkNameCompare(NameCompare):
     def serialize(self, query):
         for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
             re.name = &#39;rand&#39;
-        
+
         for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
             b.text = &#34;&#39;True&#39;&#34; if b.value else &#34;&#39;False&#39;&#34;
 
@@ -258,7 +243,7 @@ class SparkNameCompare(NameCompare):
 <pre><code class="python">def serialize(self, query):
     for re in [n for n in query.find_nodes(BareFunction) if n.name == &#39;RANDOM&#39;]:
         re.name = &#39;rand&#39;
-    
+
     for b in [n for n in query.find_nodes(Literal) if isinstance(n.value, bool)]:
         b.text = &#34;&#39;True&#39;&#34; if b.value else &#34;&#39;False&#39;&#34;
 
@@ -292,9 +277,10 @@ class SparkNameCompare(NameCompare):
 <li>
 <h4><code><a title="burdock.reader.sql.spark.SparkReader" href="#burdock.reader.sql.spark.SparkReader">SparkReader</a></code></h4>
 <ul class="">
+<li><code><a title="burdock.reader.sql.spark.SparkReader.ENGINE" href="#burdock.reader.sql.spark.SparkReader.ENGINE">ENGINE</a></code></li>
 <li><code><a title="burdock.reader.sql.spark.SparkReader.db_name" href="#burdock.reader.sql.spark.SparkReader.db_name">db_name</a></code></li>
 <li><code><a title="burdock.reader.sql.spark.SparkReader.execute" href="#burdock.reader.sql.spark.SparkReader.execute">execute</a></code></li>
-<li><code><a title="burdock.reader.sql.spark.SparkReader.update_connection_string" href="#burdock.reader.sql.spark.SparkReader.update_connection_string">update_connection_string</a></code></li>
+<li><code><a title="burdock.reader.sql.spark.SparkReader.execute_typed" href="#burdock.reader.sql.spark.SparkReader.execute_typed">execute_typed</a></code></li>
 </ul>
 </li>
 <li>

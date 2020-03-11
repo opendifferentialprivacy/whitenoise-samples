@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.7.5" />
-<title>burdock.sql.ast.expressions.numeric API documentation</title>
+<title>burdock.ast.expressions.numeric API documentation</title>
 <meta name="description" content="" />
 <link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
@@ -17,14 +17,14 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>burdock.sql.ast.expressions.numeric</code></h1>
+<h1 class="title">Module <code>burdock.ast.expressions.numeric</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from burdock.sql.ast.tokens import *
+<pre><code class="python">from burdock.ast.tokens import *
 import numpy as np
 
 ops = {
@@ -192,7 +192,7 @@ class RoundFunction(SqlExpr):
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression"><code class="flex name class">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression"><code class="flex name class">
 <span>class <span class="ident">ArithmeticExpression</span></span>
 <span>(</span><span>left, op, right)</span>
 </code></dt>
@@ -256,12 +256,12 @@ class RoundFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression.children"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -274,7 +274,7 @@ class RoundFunction(SqlExpr):
     return [self.left, self.op, self.right]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -289,7 +289,7 @@ class RoundFunction(SqlExpr):
     return ops[self.op](l, r)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression.sensitivity"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression.sensitivity"><code class="name flex">
 <span>def <span class="ident">sensitivity</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -330,7 +330,7 @@ class RoundFunction(SqlExpr):
             return None</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -343,7 +343,7 @@ class RoundFunction(SqlExpr):
     return ArithmeticExpression(self.left.symbol(relations), self.op, self.right.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.ArithmeticExpression.type"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.ArithmeticExpression.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -363,7 +363,7 @@ class RoundFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.BareFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.numeric.BareFunction"><code class="flex name class">
 <span>class <span class="ident">BareFunction</span></span>
 <span>(</span><span>name)</span>
 </code></dt>
@@ -384,12 +384,12 @@ class RoundFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.BareFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.BareFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -402,7 +402,7 @@ class RoundFunction(SqlExpr):
     return [self.name, Token(&#39;(&#39;), Token(&#39;)&#39;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.BareFunction.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.BareFunction.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -418,7 +418,7 @@ class RoundFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.numeric.MathFunction"><code class="flex name class">
 <span>class <span class="ident">MathFunction</span></span>
 <span>(</span><span>name, expression)</span>
 </code></dt>
@@ -457,12 +457,12 @@ class RoundFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -475,7 +475,7 @@ class RoundFunction(SqlExpr):
     return [self.name, Token(&#34;(&#34;), self.expression, Token(&#34;)&#34;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -489,7 +489,7 @@ class RoundFunction(SqlExpr):
     return funcs[self.name.lower()](exp)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.prepend"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.prepend"><code class="name flex">
 <span>def <span class="ident">prepend</span></span>(<span>self, prefix, value)</span>
 </code></dt>
 <dd>
@@ -510,7 +510,7 @@ class RoundFunction(SqlExpr):
         return prefix + &#34;_x_&#34; + value.replace(&#39;&#34;&#39;,&#39;&#39;).replace(&#39; &#39;, &#39;&#39;)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -523,7 +523,7 @@ class RoundFunction(SqlExpr):
     return MathFunction(self.name, self.expression.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.symbol_name"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.symbol_name"><code class="name flex">
 <span>def <span class="ident">symbol_name</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -537,7 +537,7 @@ class RoundFunction(SqlExpr):
     return  self.prepend(prefix, self.expression.symbol_name())</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.MathFunction.type"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.MathFunction.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -552,7 +552,7 @@ class RoundFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.PowerFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.numeric.PowerFunction"><code class="flex name class">
 <span>class <span class="ident">PowerFunction</span></span>
 <span>(</span><span>expression, power)</span>
 </code></dt>
@@ -578,12 +578,12 @@ class RoundFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.PowerFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.PowerFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -596,7 +596,7 @@ class RoundFunction(SqlExpr):
     return [Token(&#39;POWER&#39;), Token(&#39;(&#39;), self.expression, Token(&#39;,&#39;), self.power, Token(&#39;)&#39;) ]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.PowerFunction.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.PowerFunction.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -610,7 +610,7 @@ class RoundFunction(SqlExpr):
     return np.power(exp, self.power.value)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.PowerFunction.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.PowerFunction.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -623,7 +623,7 @@ class RoundFunction(SqlExpr):
     return PowerFunction(self.expression.symbol(relations), self.power.symbol(relations))</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.PowerFunction.type"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.PowerFunction.type"><code class="name flex">
 <span>def <span class="ident">type</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -638,7 +638,7 @@ class RoundFunction(SqlExpr):
 </dd>
 </dl>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.RoundFunction"><code class="flex name class">
+<dt id="burdock.ast.expressions.numeric.RoundFunction"><code class="flex name class">
 <span>class <span class="ident">RoundFunction</span></span>
 <span>(</span><span>expression, decimals)</span>
 </code></dt>
@@ -662,12 +662,12 @@ class RoundFunction(SqlExpr):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.sql.ast.tokens.SqlExpr" href="../tokens.html#burdock.sql.ast.tokens.SqlExpr">SqlExpr</a></li>
-<li><a title="burdock.sql.ast.tokens.Sql" href="../tokens.html#burdock.sql.ast.tokens.Sql">Sql</a></li>
+<li><a title="burdock.ast.tokens.SqlExpr" href="../tokens.html#burdock.ast.tokens.SqlExpr">SqlExpr</a></li>
+<li><a title="burdock.ast.tokens.Sql" href="../tokens.html#burdock.ast.tokens.Sql">Sql</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
-<dt id="burdock.sql.ast.expressions.numeric.RoundFunction.children"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.RoundFunction.children"><code class="name flex">
 <span>def <span class="ident">children</span></span>(<span>self)</span>
 </code></dt>
 <dd>
@@ -680,7 +680,7 @@ class RoundFunction(SqlExpr):
     return [Token(&#39;ROUND&#39;), Token(&#39;(&#39;), self.expression, Token(&#39;,&#39;), self.decimals, Token(&#39;)&#39;)]</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.RoundFunction.evaluate"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.RoundFunction.evaluate"><code class="name flex">
 <span>def <span class="ident">evaluate</span></span>(<span>self, bindings)</span>
 </code></dt>
 <dd>
@@ -694,7 +694,7 @@ class RoundFunction(SqlExpr):
     return np.round(exp, self.decimals.value)</code></pre>
 </details>
 </dd>
-<dt id="burdock.sql.ast.expressions.numeric.RoundFunction.symbol"><code class="name flex">
+<dt id="burdock.ast.expressions.numeric.RoundFunction.symbol"><code class="name flex">
 <span>def <span class="ident">symbol</span></span>(<span>self, relations)</span>
 </code></dt>
 <dd>
@@ -720,54 +720,54 @@ class RoundFunction(SqlExpr):
 <ul id="index">
 <li><h3>Super-module</h3>
 <ul>
-<li><code><a title="burdock.sql.ast.expressions" href="index.html">burdock.sql.ast.expressions</a></code></li>
+<li><code><a title="burdock.ast.expressions" href="index.html">burdock.ast.expressions</a></code></li>
 </ul>
 </li>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression">ArithmeticExpression</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression" href="#burdock.ast.expressions.numeric.ArithmeticExpression">ArithmeticExpression</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression.children" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression.evaluate" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression.sensitivity" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression.sensitivity">sensitivity</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression.symbol" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.ArithmeticExpression.type" href="#burdock.sql.ast.expressions.numeric.ArithmeticExpression.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression.children" href="#burdock.ast.expressions.numeric.ArithmeticExpression.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression.evaluate" href="#burdock.ast.expressions.numeric.ArithmeticExpression.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression.sensitivity" href="#burdock.ast.expressions.numeric.ArithmeticExpression.sensitivity">sensitivity</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression.symbol" href="#burdock.ast.expressions.numeric.ArithmeticExpression.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.ArithmeticExpression.type" href="#burdock.ast.expressions.numeric.ArithmeticExpression.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.numeric.BareFunction" href="#burdock.sql.ast.expressions.numeric.BareFunction">BareFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.numeric.BareFunction" href="#burdock.ast.expressions.numeric.BareFunction">BareFunction</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.numeric.BareFunction.children" href="#burdock.sql.ast.expressions.numeric.BareFunction.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.BareFunction.evaluate" href="#burdock.sql.ast.expressions.numeric.BareFunction.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.BareFunction.children" href="#burdock.ast.expressions.numeric.BareFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.BareFunction.evaluate" href="#burdock.ast.expressions.numeric.BareFunction.evaluate">evaluate</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.numeric.MathFunction" href="#burdock.sql.ast.expressions.numeric.MathFunction">MathFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.numeric.MathFunction" href="#burdock.ast.expressions.numeric.MathFunction">MathFunction</a></code></h4>
 <ul class="two-column">
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.children" href="#burdock.sql.ast.expressions.numeric.MathFunction.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.evaluate" href="#burdock.sql.ast.expressions.numeric.MathFunction.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.prepend" href="#burdock.sql.ast.expressions.numeric.MathFunction.prepend">prepend</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.symbol" href="#burdock.sql.ast.expressions.numeric.MathFunction.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.symbol_name" href="#burdock.sql.ast.expressions.numeric.MathFunction.symbol_name">symbol_name</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.MathFunction.type" href="#burdock.sql.ast.expressions.numeric.MathFunction.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.children" href="#burdock.ast.expressions.numeric.MathFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.evaluate" href="#burdock.ast.expressions.numeric.MathFunction.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.prepend" href="#burdock.ast.expressions.numeric.MathFunction.prepend">prepend</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.symbol" href="#burdock.ast.expressions.numeric.MathFunction.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.symbol_name" href="#burdock.ast.expressions.numeric.MathFunction.symbol_name">symbol_name</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.MathFunction.type" href="#burdock.ast.expressions.numeric.MathFunction.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.numeric.PowerFunction" href="#burdock.sql.ast.expressions.numeric.PowerFunction">PowerFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.numeric.PowerFunction" href="#burdock.ast.expressions.numeric.PowerFunction">PowerFunction</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.numeric.PowerFunction.children" href="#burdock.sql.ast.expressions.numeric.PowerFunction.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.PowerFunction.evaluate" href="#burdock.sql.ast.expressions.numeric.PowerFunction.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.PowerFunction.symbol" href="#burdock.sql.ast.expressions.numeric.PowerFunction.symbol">symbol</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.PowerFunction.type" href="#burdock.sql.ast.expressions.numeric.PowerFunction.type">type</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.PowerFunction.children" href="#burdock.ast.expressions.numeric.PowerFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.PowerFunction.evaluate" href="#burdock.ast.expressions.numeric.PowerFunction.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.PowerFunction.symbol" href="#burdock.ast.expressions.numeric.PowerFunction.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.PowerFunction.type" href="#burdock.ast.expressions.numeric.PowerFunction.type">type</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="burdock.sql.ast.expressions.numeric.RoundFunction" href="#burdock.sql.ast.expressions.numeric.RoundFunction">RoundFunction</a></code></h4>
+<h4><code><a title="burdock.ast.expressions.numeric.RoundFunction" href="#burdock.ast.expressions.numeric.RoundFunction">RoundFunction</a></code></h4>
 <ul class="">
-<li><code><a title="burdock.sql.ast.expressions.numeric.RoundFunction.children" href="#burdock.sql.ast.expressions.numeric.RoundFunction.children">children</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.RoundFunction.evaluate" href="#burdock.sql.ast.expressions.numeric.RoundFunction.evaluate">evaluate</a></code></li>
-<li><code><a title="burdock.sql.ast.expressions.numeric.RoundFunction.symbol" href="#burdock.sql.ast.expressions.numeric.RoundFunction.symbol">symbol</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.RoundFunction.children" href="#burdock.ast.expressions.numeric.RoundFunction.children">children</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.RoundFunction.evaluate" href="#burdock.ast.expressions.numeric.RoundFunction.evaluate">evaluate</a></code></li>
+<li><code><a title="burdock.ast.expressions.numeric.RoundFunction.symbol" href="#burdock.ast.expressions.numeric.RoundFunction.symbol">symbol</a></code></li>
 </ul>
 </li>
 </ul>

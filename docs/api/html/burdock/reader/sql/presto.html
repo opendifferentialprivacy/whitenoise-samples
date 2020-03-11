@@ -26,23 +26,26 @@
 </summary>
 <pre><code class="python">import os
 
-from burdock.sql.ast.ast import Relation
-from burdock.sql.ast.tokens import Literal
-from burdock.sql.ast.expression import Expression
-from burdock.sql.ast.expressions.numeric import BareFunction
-from burdock.sql.ast.expressions.sql import BooleanJoinCriteria, UsingJoinCriteria
-from .base import Reader, NameCompare
+from burdock.ast.ast import Relation
+from burdock.ast.tokens import Literal
+from burdock.ast.expression import Expression
+from burdock.ast.expressions.numeric import BareFunction
+from burdock.ast.expressions.sql import BooleanJoinCriteria, UsingJoinCriteria
+from .sql_base import SqlReader, NameCompare
+from .engine import Engine
+
 
 &#34;&#34;&#34;
-    A dumb pipe that gets a rowset back from a database using 
+    A dumb pipe that gets a rowset back from a database using
     a SQL string, and converts types to some useful subset
 &#34;&#34;&#34;
-class PrestoReader(Reader):
+class PrestoReader(SqlReader):
+    ENGINE = Engine.PRESTO
+
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(PrestoNameCompare())
         import prestodb
         self.api = prestodb.dbapi
-        self.engine = &#34;Presto&#34;
 
         self.host = host
         self.database = database
@@ -55,8 +58,6 @@ class PrestoReader(Reader):
         self.password = password
 
         self.update_connection_string()
-        self.serializer = None
-        self.compare = PrestoNameCompare()
     &#34;&#34;&#34;
         Executes a raw SQL string against the database and returns
         tuples for rows.  This will NOT fix the query to target the
@@ -93,9 +94,11 @@ class PrestoReader(Reader):
     def db_name(self):
         return self.database
 
+
 class PrestoNameCompare(NameCompare):
     def __init__(self, search_path=None):
         self.search_path = search_path if search_path is not None else [&#34;dbo&#34;]
+
     def identifier_match(self, query, meta):
         return self.strip_escapes(query).lower() == self.strip_escapes(meta).lower()</code></pre>
 </details>
@@ -122,12 +125,13 @@ class PrestoNameCompare(NameCompare):
 <pre><code class="python">class PrestoNameCompare(NameCompare):
     def __init__(self, search_path=None):
         self.search_path = search_path if search_path is not None else [&#34;dbo&#34;]
+
     def identifier_match(self, query, meta):
         return self.strip_escapes(query).lower() == self.strip_escapes(meta).lower()</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.NameCompare" href="base.html#burdock.reader.sql.base.NameCompare">NameCompare</a></li>
+<li><a title="burdock.reader.sql.sql_base.NameCompare" href="sql_base.html#burdock.reader.sql.sql_base.NameCompare">NameCompare</a></li>
 </ul>
 <h3>Methods</h3>
 <dl>
@@ -156,12 +160,13 @@ class PrestoNameCompare(NameCompare):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class PrestoReader(Reader):
+<pre><code class="python">class PrestoReader(SqlReader):
+    ENGINE = Engine.PRESTO
+
     def __init__(self, host, database, user, password=None, port=None):
-        super().__init__()
+        super().__init__(PrestoNameCompare())
         import prestodb
         self.api = prestodb.dbapi
-        self.engine = &#34;Presto&#34;
 
         self.host = host
         self.database = database
@@ -174,8 +179,6 @@ class PrestoNameCompare(NameCompare):
         self.password = password
 
         self.update_connection_string()
-        self.serializer = None
-        self.compare = PrestoNameCompare()
     &#34;&#34;&#34;
         Executes a raw SQL string against the database and returns
         tuples for rows.  This will NOT fix the query to target the
@@ -214,8 +217,16 @@ class PrestoNameCompare(NameCompare):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="burdock.reader.sql.base.Reader" href="base.html#burdock.reader.sql.base.Reader">Reader</a></li>
+<li><a title="burdock.reader.sql.sql_base.SqlReader" href="sql_base.html#burdock.reader.sql.sql_base.SqlReader">SqlReader</a></li>
+<li><a title="burdock.reader.base.Reader" href="../base.html#burdock.reader.base.Reader">Reader</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="burdock.reader.sql.presto.PrestoReader.ENGINE"><code class="name">var <span class="ident">ENGINE</span></code></dt>
+<dd>
+<section class="desc"></section>
+</dd>
+</dl>
 <h3>Methods</h3>
 <dl>
 <dt id="burdock.reader.sql.presto.PrestoReader.db_name"><code class="name flex">
@@ -316,6 +327,7 @@ class PrestoNameCompare(NameCompare):
 <li>
 <h4><code><a title="burdock.reader.sql.presto.PrestoReader" href="#burdock.reader.sql.presto.PrestoReader">PrestoReader</a></code></h4>
 <ul class="">
+<li><code><a title="burdock.reader.sql.presto.PrestoReader.ENGINE" href="#burdock.reader.sql.presto.PrestoReader.ENGINE">ENGINE</a></code></li>
 <li><code><a title="burdock.reader.sql.presto.PrestoReader.db_name" href="#burdock.reader.sql.presto.PrestoReader.db_name">db_name</a></code></li>
 <li><code><a title="burdock.reader.sql.presto.PrestoReader.execute" href="#burdock.reader.sql.presto.PrestoReader.execute">execute</a></code></li>
 <li><code><a title="burdock.reader.sql.presto.PrestoReader.switch_database" href="#burdock.reader.sql.presto.PrestoReader.switch_database">switch_database</a></code></li>

@@ -26,12 +26,19 @@
 </summary>
 <pre><code class="python">import importlib
 import yaml
-from burdock.reader.sql.base import NameCompare
+from burdock.reader.sql.sql_base import NameCompare
 
 # implements spec at https://docs.google.com/document/d/1Q4lUKyEu2W9qQKq6A0dbo0dohgSUxitbdGhX97sUNOM/
 
 class CollectionMetadata:
-    def __init__(self, tables, engine, compare=None):
+    &#34;&#34;&#34;Information about a collection of tabular data sources&#34;&#34;&#34;
+    def __init__(self, tables, engine):
+        &#34;&#34;&#34;Instantiate a metadata object with information about tabular data sources
+
+        :param tables: A list of Table descriptions
+        :param engine: The name of the database engine used to query these tables.  Used for engine-
+            specific name escaping and comparison.  Set to None to use default semantics.
+        &#34;&#34;&#34;
         self.m_tables = dict([(t.table_name(), t) for t in tables])
         self.engine = engine if engine is not None else &#34;Unknown&#34;
         self.compare = NameCompare.get_name_compare(engine) if compare is None else compare
@@ -54,15 +61,18 @@ class CollectionMetadata:
 
     @staticmethod
     def from_file(filename):
+        &#34;&#34;&#34;Load the metadata about this collection from a YAML file&#34;&#34;&#34;
         ys = CollectionYamlLoader(filename)
         return ys.read_file()
 
     @staticmethod
     def from_dict(schema_dict):
+        &#34;&#34;&#34;Load the metadata from a dict object&#34;&#34;&#34;
         ys = CollectionYamlLoader(&#34;dummy&#34;)
         return ys._create_metadata_object(schema_dict)
 
     def to_file(self, filename, collection_name):
+        &#34;&#34;&#34;Save collection metadata to a YAML file&#34;&#34;&#34;
         ys = CollectionYamlLoader(filename)
         ys.write_file(self, collection_name)
 
@@ -70,7 +80,17 @@ class CollectionMetadata:
     Common attributes for a table or a view
 &#34;&#34;&#34;
 class Table:
+    &#34;&#34;&#34;Information about a single tabular data source&#34;&#34;&#34;
     def __init__(self, schema, name, rowcount, columns, row_privacy=False, max_ids=1, sample_max_ids=True, rows_exact=None):
+        &#34;&#34;&#34;Instantiate information about a tabular data source.
+
+        :param schema: The schema is the SQL-92 schema used for disambiguating table names.  See
+            documentation for more information about schema search path and resolution.
+        :param name: The table name that will be used by SQL queries to reference data
+            in this table.
+        :param rowcount: The rough number of rows in this table.  Should not be the exact number, and does not need to be accurate
+        :param columns: A list of Column objects with information about each column in the table.
+        &#34;&#34;&#34;
         self.schema = schema
         self.name = name
         self.rowcount = rowcount
@@ -99,6 +119,7 @@ class Table:
         return (self.schema + &#34;.&#34; if len(self.schema.strip()) &gt; 0 else &#34;&#34;) + self.name
 
 class String:
+    &#34;&#34;&#34;A column with string data&#34;&#34;&#34;
     def __init__(self, name, card, is_key = False, bounded = False):
         self.name = name
         self.card = card
@@ -110,6 +131,7 @@ class String:
         return &#34;string&#34;
 
 class Boolean:
+    &#34;&#34;&#34;A column with True/False data&#34;&#34;&#34;
     def __init__(self, name, is_key = False, bounded = False):
         self.name = name
         self.is_key = is_key
@@ -120,6 +142,7 @@ class Boolean:
         return &#34;boolean&#34;
 
 class DateTime:
+    &#34;&#34;&#34;A date/time column&#34;&#34;&#34;
     def __init__(self, name, is_key = False, bounded = False):
         self.name = name
         self.is_key = is_key
@@ -130,6 +153,7 @@ class DateTime:
         return &#34;datetime&#34;
 
 class Int:
+    &#34;&#34;&#34;A column with integer data&#34;&#34;&#34;
     def __init__(self, name, minval = None, maxval = None, is_key = False, bounded = False):
         self.name = name
         self.minval = minval
@@ -144,6 +168,7 @@ class Int:
         return &#34;int&#34;
 
 class Float:
+    &#34;&#34;&#34;A floating point column&#34;&#34;&#34;
     def __init__(self, name, minval = None, maxval = None, is_key = False, bounded = False):
         self.name = name
         self.minval = minval
@@ -158,6 +183,7 @@ class Float:
         return &#34;float&#34;
 
 class Unknown:
+    &#34;&#34;&#34;Column is unknown type.  Will be ignored.  May not be used in queries.&#34;&#34;&#34;
     def __init__(self, name):
         self.name = name
         self.is_key = False
@@ -216,7 +242,7 @@ class CollectionYamlLoader:
         sample_max_ids = bool(t[&#34;sample_max_ids&#34;]) if &#34;sample_max_ids&#34; in t else None
 
         columns = []
-        colnames = [cn for cn in t.keys() if cn != &#34;rows&#34;]
+        colnames = [cn for cn in t.keys() if cn not in [&#34;rows&#34;, &#34;rows_exact&#34;, &#34;row_privacy&#34;, &#34;max_ids&#34;, &#34;sample_max_ids&#34;]]
         for column in colnames:
             columns.append(self.load_column(column, t[column]))
 
@@ -319,12 +345,13 @@ class CollectionYamlLoader:
 <span>(</span><span>name, is_key=False, bounded=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A column with True/False data</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Boolean:
+    &#34;&#34;&#34;A column with True/False data&#34;&#34;&#34;
     def __init__(self, name, is_key = False, bounded = False):
         self.name = name
         self.is_key = is_key
@@ -353,16 +380,29 @@ class CollectionYamlLoader:
 </dd>
 <dt id="burdock.metadata.collection.CollectionMetadata"><code class="flex name class">
 <span>class <span class="ident">CollectionMetadata</span></span>
-<span>(</span><span>tables, engine, compare=None)</span>
+<span>(</span><span>tables, engine)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Information about a collection of tabular data sources</p>
+<p>Instantiate a metadata object with information about tabular data sources</p>
+<p>:param tables: A list of Table descriptions
+:param engine: The name of the database engine used to query these tables.
+Used for engine-
+specific name escaping and comparison.
+Set to None to use default semantics.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class CollectionMetadata:
-    def __init__(self, tables, engine, compare=None):
+    &#34;&#34;&#34;Information about a collection of tabular data sources&#34;&#34;&#34;
+    def __init__(self, tables, engine):
+        &#34;&#34;&#34;Instantiate a metadata object with information about tabular data sources
+
+        :param tables: A list of Table descriptions
+        :param engine: The name of the database engine used to query these tables.  Used for engine-
+            specific name escaping and comparison.  Set to None to use default semantics.
+        &#34;&#34;&#34;
         self.m_tables = dict([(t.table_name(), t) for t in tables])
         self.engine = engine if engine is not None else &#34;Unknown&#34;
         self.compare = NameCompare.get_name_compare(engine) if compare is None else compare
@@ -385,15 +425,18 @@ class CollectionYamlLoader:
 
     @staticmethod
     def from_file(filename):
+        &#34;&#34;&#34;Load the metadata about this collection from a YAML file&#34;&#34;&#34;
         ys = CollectionYamlLoader(filename)
         return ys.read_file()
 
     @staticmethod
     def from_dict(schema_dict):
+        &#34;&#34;&#34;Load the metadata from a dict object&#34;&#34;&#34;
         ys = CollectionYamlLoader(&#34;dummy&#34;)
         return ys._create_metadata_object(schema_dict)
 
     def to_file(self, filename, collection_name):
+        &#34;&#34;&#34;Save collection metadata to a YAML file&#34;&#34;&#34;
         ys = CollectionYamlLoader(filename)
         ys.write_file(self, collection_name)</code></pre>
 </details>
@@ -403,13 +446,14 @@ class CollectionYamlLoader:
 <span>def <span class="ident">from_dict</span></span>(<span>schema_dict)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Load the metadata from a dict object</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
 def from_dict(schema_dict):
+    &#34;&#34;&#34;Load the metadata from a dict object&#34;&#34;&#34;
     ys = CollectionYamlLoader(&#34;dummy&#34;)
     return ys._create_metadata_object(schema_dict)</code></pre>
 </details>
@@ -418,13 +462,14 @@ def from_dict(schema_dict):
 <span>def <span class="ident">from_file</span></span>(<span>filename)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Load the metadata about this collection from a YAML file</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@staticmethod
 def from_file(filename):
+    &#34;&#34;&#34;Load the metadata about this collection from a YAML file&#34;&#34;&#34;
     ys = CollectionYamlLoader(filename)
     return ys.read_file()</code></pre>
 </details>
@@ -449,12 +494,13 @@ def from_file(filename):
 <span>def <span class="ident">to_file</span></span>(<span>self, filename, collection_name)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Save collection metadata to a YAML file</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def to_file(self, filename, collection_name):
+    &#34;&#34;&#34;Save collection metadata to a YAML file&#34;&#34;&#34;
     ys = CollectionYamlLoader(filename)
     ys.write_file(self, collection_name)</code></pre>
 </details>
@@ -520,7 +566,7 @@ def from_file(filename):
         sample_max_ids = bool(t[&#34;sample_max_ids&#34;]) if &#34;sample_max_ids&#34; in t else None
 
         columns = []
-        colnames = [cn for cn in t.keys() if cn != &#34;rows&#34;]
+        colnames = [cn for cn in t.keys() if cn not in [&#34;rows&#34;, &#34;rows_exact&#34;, &#34;row_privacy&#34;, &#34;max_ids&#34;, &#34;sample_max_ids&#34;]]
         for column in colnames:
             columns.append(self.load_column(column, t[column]))
 
@@ -659,7 +705,7 @@ def from_file(filename):
     sample_max_ids = bool(t[&#34;sample_max_ids&#34;]) if &#34;sample_max_ids&#34; in t else None
 
     columns = []
-    colnames = [cn for cn in t.keys() if cn != &#34;rows&#34;]
+    colnames = [cn for cn in t.keys() if cn not in [&#34;rows&#34;, &#34;rows_exact&#34;, &#34;row_privacy&#34;, &#34;max_ids&#34;, &#34;sample_max_ids&#34;]]
     for column in colnames:
         columns.append(self.load_column(column, t[column]))
 
@@ -761,12 +807,13 @@ def from_file(filename):
 <span>(</span><span>name, is_key=False, bounded=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A date/time column</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class DateTime:
+    &#34;&#34;&#34;A date/time column&#34;&#34;&#34;
     def __init__(self, name, is_key = False, bounded = False):
         self.name = name
         self.is_key = is_key
@@ -798,12 +845,13 @@ def from_file(filename):
 <span>(</span><span>name, minval=None, maxval=None, is_key=False, bounded=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A floating point column</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Float:
+    &#34;&#34;&#34;A floating point column&#34;&#34;&#34;
     def __init__(self, name, minval = None, maxval = None, is_key = False, bounded = False):
         self.name = name
         self.minval = minval
@@ -839,12 +887,13 @@ def from_file(filename):
 <span>(</span><span>name, minval=None, maxval=None, is_key=False, bounded=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A column with integer data</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Int:
+    &#34;&#34;&#34;A column with integer data&#34;&#34;&#34;
     def __init__(self, name, minval = None, maxval = None, is_key = False, bounded = False):
         self.name = name
         self.minval = minval
@@ -880,12 +929,13 @@ def from_file(filename):
 <span>(</span><span>name, card, is_key=False, bounded=False)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>A column with string data</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class String:
+    &#34;&#34;&#34;A column with string data&#34;&#34;&#34;
     def __init__(self, name, card, is_key = False, bounded = False):
         self.name = name
         self.card = card
@@ -918,13 +968,32 @@ def from_file(filename):
 <span>(</span><span>schema, name, rowcount, columns, row_privacy=False, max_ids=1, sample_max_ids=True, rows_exact=None)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Information about a single tabular data source</p>
+<p>Instantiate information about a tabular data source.</p>
+<p>:param schema: The schema is the SQL-92 schema used for disambiguating table names.
+See
+documentation for more information about schema search path and resolution.
+:param name: The table name that will be used by SQL queries to reference data
+in this table.
+:param rowcount: The rough number of rows in this table.
+Should not be the exact number, and does not need to be accurate
+:param columns: A list of Column objects with information about each column in the table.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Table:
+    &#34;&#34;&#34;Information about a single tabular data source&#34;&#34;&#34;
     def __init__(self, schema, name, rowcount, columns, row_privacy=False, max_ids=1, sample_max_ids=True, rows_exact=None):
+        &#34;&#34;&#34;Instantiate information about a tabular data source.
+
+        :param schema: The schema is the SQL-92 schema used for disambiguating table names.  See
+            documentation for more information about schema search path and resolution.
+        :param name: The table name that will be used by SQL queries to reference data
+            in this table.
+        :param rowcount: The rough number of rows in this table.  Should not be the exact number, and does not need to be accurate
+        :param columns: A list of Column objects with information about each column in the table.
+        &#34;&#34;&#34;
         self.schema = schema
         self.name = name
         self.rowcount = rowcount
@@ -1000,12 +1069,15 @@ def from_file(filename):
 <span>(</span><span>name)</span>
 </code></dt>
 <dd>
-<section class="desc"></section>
+<section class="desc"><p>Column is unknown type.
+Will be ignored.
+May not be used in queries.</p></section>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class Unknown:
+    &#34;&#34;&#34;Column is unknown type.  Will be ignored.  May not be used in queries.&#34;&#34;&#34;
     def __init__(self, name):
         self.name = name
         self.is_key = False
