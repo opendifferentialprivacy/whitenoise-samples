@@ -1,0 +1,1590 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>opendp.whitenoise.evaluation.dp_verification API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>opendp.whitenoise.evaluation.dp_verification</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># This file contains a list of tests that can be passed actual aggregates or result aggregates from a DP implementation
+# It tries to use a sample dataset S and splits it randomly into two neighboring datasets D1 and D2
+# Using these neighboring datasets, it applies the aggregate query repeatedly
+# It tests the DP condition to let the DP implementer know whether repeated aggregate query results are not enough to re-identify D1 or D2 which differ by single individual
+# i.e. passing (epsilon, delta) - DP condition
+# If the definition is not passed, there is a bug or it is a by-design bug in case of passing actual aggregates
+
+import sys
+import os
+import pandas as pd
+import numpy as np
+import math
+import matplotlib.pyplot as plt
+import opendp.whitenoise.evaluation.aggregation as agg
+import opendp.whitenoise.evaluation.exploration as exp
+import copy
+
+# import yarrow
+from opendp.whitenoise.metadata.collection import *
+from scipy import stats
+
+class DPVerification:
+    # Set the epsilon parameter of differential privacy
+    def __init__(self, epsilon=1.0, dataset_size=10000, csv_path=&#34;.&#34;):
+        self.epsilon = epsilon
+        self.dataset_size = dataset_size
+        self.file_dir = os.path.dirname(os.path.abspath(__file__))
+        self.csv_path = csv_path
+        self.df, self.dataset_path, self.file_name, self.metadata = self.create_simulated_dataset()
+        print(&#34;Loaded &#34; + str(len(self.df)) + &#34; records&#34;)
+        self.N = len(self.df)
+        self.delta = 1/(self.N * math.sqrt(self.N))
+
+    def create_simulated_dataset(self, file_name = &#34;simulation&#34;):
+        np.random.seed(1)
+        userids = list(range(1, self.dataset_size+1))
+        userids = [&#34;A&#34; + str(user) for user in userids]
+        segment = [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]
+        role = [&#39;R1&#39;, &#39;R2&#39;]
+        roles = np.random.choice(role, size=self.dataset_size, p=[0.7, 0.3]).tolist()
+        segments = np.random.choice(segment, size=self.dataset_size, p=[0.5, 0.3, 0.2]).tolist()
+        usage = np.random.geometric(p=0.5, size=self.dataset_size).tolist()
+        df = pd.DataFrame(list(zip(userids, segments, roles, usage)), columns=[&#39;UserId&#39;, &#39;Segment&#39;, &#39;Role&#39;, &#39;Usage&#39;])
+
+        # Storing the data as a CSV
+        file_path = os.path.join(self.file_dir, self.csv_path, file_name + &#34;.csv&#34;)
+        df.to_csv(file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+        metadata = Table(file_name, file_name, self.dataset_size, \
+            [\
+                String(&#34;UserId&#34;, self.dataset_size, True), \
+                String(&#34;Segment&#34;, 3, False), \
+                String(&#34;Role&#34;, 2, False), \
+                Int(&#34;Usage&#34;, 0, 25)
+            ])
+
+        return df, file_path, file_name, metadata
+
+    # Generate dataframes that differ by a single record that is randomly chosen
+    def generate_neighbors(self, load_csv = False):
+        if(load_csv):
+            self.df = pd.read_csv(self.dataset_path)
+
+        if(self.N == 0):
+            print(&#34;No records in dataframe to run the test&#34;)
+            return None, None
+
+        d1 = self.df
+        drop_idx = np.random.choice(self.df.index, 1, replace=False)
+        d2 = self.df.drop(drop_idx)
+        print(&#34;Length of D1: &#34;, len(d1), &#34; Length of D2: &#34;, len(d2))
+
+        if(load_csv):
+            # Storing the data as a CSV for applying queries via Burdock querying system
+            d1_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d1.csv&#34;)
+            d2_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d2.csv&#34;)
+
+            d1.to_csv(d1_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+            d2.to_csv(d2_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+
+        d1_table = self.metadata
+        d2_table = copy.copy(d1_table)
+        d1_table.schema, d2_table.schema = &#34;d1&#34;, &#34;d2&#34;
+        d1_table.name, d2_table.name = &#34;d1&#34;, &#34;d2&#34;
+        d2_table.rowcount = d1_table.rowcount - 1
+        d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+        return d1, d2, d1_metadata, d2_metadata
+
+    # If there is an aggregation function that we need to test, we need to apply it on neighboring datasets
+    # This function applies the aggregation repeatedly to log results in two vectors that are then used for generating histogram
+    # The histogram is then passed through the DP test
+    def apply_aggregation_neighbors(self, f, args1, args2):
+        fD1 = f(*args1)
+        fD2 = f(*args2)
+
+        print(&#34;Mean fD1: &#34;, np.mean(fD1), &#34; Stdev fD1: &#34;, np.std(fD1), &#34; Mean fD2: &#34;, np.mean(fD2), &#34; Stdev fD2: &#34;, np.std(fD2))
+        return fD1, fD2
+
+    # Generate histograms given the vectors of repeated aggregation results applied on neighboring datasets
+    def generate_histogram_neighbors(self, fD1, fD2, numbins=0, binsize=&#34;auto&#34;, exact=False):
+        d1 = fD1
+        d2 = fD2
+        d = np.concatenate((d1, d2), axis=None)
+        n = d.size
+        binlist = []
+        minval = min(min(d1), min(d2))
+        maxval = max(max(d1), max(d2))
+        if(exact):
+            binlist = np.linspace(minval, maxval, 2)
+        elif(numbins &gt; 0):
+            binlist = np.linspace(minval, maxval, numbins)
+        elif(binsize == &#34;auto&#34;):
+            iqr = np.subtract(*np.percentile(d, [75, 25]))
+            numerator = 2 * iqr if iqr &gt; 0 else maxval - minval
+            denominator = n ** (1. / 3)
+            binwidth = numerator / denominator # Freedman–Diaconis&#39; choice
+            numbins = int(math.ceil((maxval - minval) / binwidth)) if maxval &gt; minval else 20
+            binlist = np.linspace(minval, maxval, numbins)
+        else:
+            # Choose bin size of unity
+            binlist = np.arange(np.floor(minval),np.ceil(maxval))
+
+        # Calculating histograms of fD1 and fD2
+        d1hist, bin_edges = np.histogram(d1, bins = binlist, density = False)
+        d2hist, bin_edges = np.histogram(d2, bins = binlist, density = False)
+
+        return d1hist, d2hist, bin_edges
+
+    # Plot histograms given the vectors of repeated aggregation results applied on neighboring datasets
+    def plot_histogram_neighbors(self, fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, binlist, bound=True, exact=False):
+        plt.figure(figsize=(15,5))
+        if(exact):
+            ax = plt.subplot(1, 1, 1)
+            ax.ticklabel_format(useOffset=False)
+            plt.xlabel(&#39;Bin&#39;)
+            plt.ylabel(&#39;Probability&#39;)
+            plt.hist(fD1, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+            plt.hist(fD2, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+            ax.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+            return
+
+        ax = plt.subplot(1, 2, 1)
+        ax.ticklabel_format(useOffset=False)
+        plt.xlabel(&#39;Bin&#39;)
+        plt.ylabel(&#39;Probability&#39;)
+        if(bound):
+            plt.bar(binlist[:-1], d2histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d1lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+        else:
+            plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+
+        ax = plt.subplot(1, 2, 2)
+        ax.ticklabel_format(useOffset=False)
+        plt.xlabel(&#39;Bin&#39;)
+        plt.ylabel(&#39;Probability&#39;)
+        if(bound):
+            plt.bar(binlist[:-1], d1histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d2lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+        else:
+            plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+        plt.show()
+
+    # Check if histogram of fD1 values multiplied by e^epsilon and summed by delta is bounding fD2 and vice versa
+    # Use the histogram results and create bounded histograms to compare in DP test
+    def get_bounded_histogram(self, d1hist, d2hist, binlist, d1size, d2size, exact, alpha=0.05):
+        d1_error_interval = 0.0
+        d2_error_interval = 0.0
+        # Lower and Upper bound
+        if(not exact):
+            num_buckets = binlist.size - 1
+            critical_value = stats.norm.ppf(1-(alpha / 2 / num_buckets), loc=0.0, scale=1.0)
+            d1_error_interval = critical_value * math.sqrt(num_buckets / d1size) / 2
+            d2_error_interval = critical_value * math.sqrt(num_buckets / d2size) / 2
+
+        num_buckets = binlist.size - 1
+        px = np.divide(d1hist, d1size)
+        py = np.divide(d2hist, d2size)
+
+        d1histbound = px * math.exp(self.epsilon) + self.delta
+        d2histbound = py * math.exp(self.epsilon) + self.delta
+
+        d1upper = np.power(np.sqrt(px * num_buckets) + d1_error_interval, 2) / num_buckets
+        d2upper = np.power(np.sqrt(py * num_buckets) + d2_error_interval, 2) / num_buckets
+        d1lower = np.power(np.sqrt(px * num_buckets) - d1_error_interval, 2) / num_buckets
+        d2lower = np.power(np.sqrt(py * num_buckets) - d2_error_interval, 2) / num_buckets
+
+        np.maximum(d1lower, 0.0, d1lower)
+        np.maximum(d2lower, 0.0, d1lower)
+
+        d1histupperbound = d1upper * math.exp(self.epsilon) + self.delta
+        d2histupperbound = d2upper * math.exp(self.epsilon) + self.delta
+
+        return px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower
+
+    # Differentially Private Predicate Test
+    def dp_test(self, d1hist, d2hist, binlist, d1size, d2size, debug=False, exact=False):
+        px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower = \
+            self.get_bounded_histogram(d1hist, d2hist, binlist, d1size, d2size, exact)
+        if(debug):
+            print(&#34;Parameters&#34;)
+            print(&#34;epsilon: &#34;, self.epsilon, &#34; delta: &#34;, self.delta)
+            print(&#34;Bins\n&#34;, binlist)
+            print(&#34;Original D1 Histogram\n&#34;, d1hist)
+            print(&#34;Probability of D1 Histogram\n&#34;, px)
+            print(&#34;D1 Lower\n&#34;, d1lower)
+            print(&#34;D1 Upper\n&#34;, d1histupperbound)
+            print(&#34;D1 Histogram to bound D2\n&#34;, d1histbound)
+            print(&#34;Original D2 Histogram\n&#34;, d2hist)
+            print(&#34;Probability of D2 Histogram\n&#34;, py)
+            print(&#34;D2 Lower\n&#34;, d2lower)
+            print(&#34;D2 Upper\n&#34;, d2histupperbound)
+            print(&#34;D2 Histogram to bound D1\n&#34;, d2histbound)
+            print(&#34;Comparison - D2 bound to D1\n&#34;, np.greater(d1hist, np.zeros(d1hist.size)), np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound)))
+            print(&#34;Comparison - D1 bound to D2\n&#34;, np.greater(d2hist, np.zeros(d2hist.size)), np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+
+        # Check if any of the bounds across the bins violate the relaxed DP condition
+        bound_exceeded = np.any(np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound))) or \
+        np.any(np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+        return not bound_exceeded, d1histupperbound, d2histupperbound, d1lower, d2lower
+
+    # K-S Two sample test between the repeated query results on neighboring datasets
+    def ks_test(self, fD1, fD2):
+        return stats.ks_2samp(fD1, fD2)
+
+    # Anderson Darling Test
+    def anderson_ksamp(self, fD1, fD2):
+        return stats.anderson_ksamp([fD1, fD2])
+
+    # Kullback-Leibler divergence D(P || Q) for discrete distributions
+    def kl_divergence(self, p, q):
+        return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+
+    # Wasserstein Distance
+    def wasserstein_distance(self, d1hist, d2hist):
+        return stats.wasserstein_distance(d1hist, d2hist)
+
+    # Verification of SQL aggregation mechanisms
+    def aggtest(self, f, colname, numbins=0, binsize=&#34;auto&#34;, debug=False, plot=True, bound=True, exact=False):
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors()
+
+        fD1, fD2 = self.apply_aggregation_neighbors(f, (d1, colname), (d2, colname))
+        d1size, d2size = fD1.size, fD2.size
+
+        ks_res = self.ks_test(fD1, fD2)
+        print(&#34;\nKS 2-sample Test Result: &#34;, ks_res, &#34;\n&#34;)
+
+        #andderson_res = self.anderson_ksamp(fD1, fD2)
+        #print(&#34;Anderson 2-sample Test Result: &#34;, andderson_res, &#34;\n&#34;)
+
+        d1hist, d2hist, bin_edges = \
+            self.generate_histogram_neighbors(fD1, fD2, numbins, binsize, exact=exact)
+
+        ws_res = 0.0
+        #kl_res = 0.0
+        dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug, exact=exact)
+        if(exact):
+            dp_res = False
+            print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+            #print(&#34;KL Divergence Distance: &#34;, kl_res, &#34;\n&#34;)
+        else:
+            ws_res = self.wasserstein_distance(d1hist, d2hist)
+            print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+            #kl_res = self.kl_divergence(d1histupperbound, d2lower)
+            #print(&#34;KL-Divergence: &#34;, kl_res, &#34;\n&#34;)
+        print(&#34;DP Predicate Test:&#34;, dp_res, &#34;\n&#34;)
+
+        if(plot):
+            self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+        return dp_res, ks_res, ws_res
+
+    # # Verification of aggregation mechanisms implemented in Yarrow
+    # # Creating a new function to take in non-keyworded args and keyworded kwargs
+    # # This makes it generic to take in any Yarrow aggregate function with any set of parameters
+    # # DP-SQL queries in Burdock use other aggregation functions in Aggregation class
+    # def yarrow_test(self, dataset_path, f, *args, numbins=0, binsize=&#34;auto&#34;, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, **kwargs):
+    #     ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+    #     self.dataset_path = dataset_path
+    #     d1, d2 = self.generate_neighbors(load_csv=True)
+
+    #     d1_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d1.csv&#34;)
+    #     d2_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d2.csv&#34;)
+
+    #     if(len(args) == 4):
+    #         fD1 = ag.yarrow_dp_multi_agg(f, d1_file_path, args, kwargs)
+    #         fD2 = ag.yarrow_dp_multi_agg(f, d2_file_path, args, kwargs)
+    #     else:
+    #         fD1 = ag.yarrow_dp_agg(f, d1_file_path, args, kwargs)
+    #         fD2 = ag.yarrow_dp_agg(f, d2_file_path, args, kwargs)
+
+    #     d1size, d2size = fD1.size, fD2.size
+    #     d1hist, d2hist, bin_edges = \
+    #         self.generate_histogram_neighbors(fD1, fD2, numbins, binsize, exact=exact)
+    #     dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+    #     print(&#34;DP Predicate Test:&#34;, dp_res, &#34;\n&#34;)
+
+    #     if(plot):
+    #         self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound)
+    #     return dp_res
+
+    def accuracy_test(self, actual, low, high, confidence=0.95):
+        # Actual mean of aggregation function f on D1 is equal to sample mean
+        n = len(low)
+        actual = [actual] * n
+        error_interval = 0.05*confidence
+        relaxed_low = confidence - error_interval
+        relaxed_high = 1 - (confidence + error_interval)
+        within_bounds = np.sum(np.logical_and(np.greater_equal(actual, low), np.greater_equal(high, actual)))
+        outside_bounds = n - within_bounds
+        print(&#34;Count of times noisy result within bounds:&#34;, within_bounds, &#34;/&#34;, n)
+        print(&#34;Count of times noisy result outside bounds:&#34;, outside_bounds, &#34;/&#34;, n)
+        acc_res = (within_bounds / n &gt;= relaxed_low)
+        utility_res = (outside_bounds / n &gt;= relaxed_high)
+        return acc_res, utility_res, float(&#39;%.2f&#39;%((within_bounds / n) * 100))
+
+    # Calculates mean signed deviation from noisy results sample as a ratio of actual value
+    def bias_test(self, actual, fD, sig_level = 0.05):
+        # Mean signed deviation
+        n = len(fD)
+        actual = [actual] * n
+        diff = fD - actual
+        msd = (np.sum(diff) / n) / actual[0]
+        print(&#34;Mean signed deviation ratio to actual: &#34;, msd)
+        # Checking if mean of (difference of noisy response to actual) is zero i.e. unbiased result
+        tset, pval = stats.ttest_1samp(diff, 0.0)
+        return (pval &lt; sig_level), msd
+
+    # Applying queries repeatedly against SQL-92 implementation of Differential Privacy by Burdock
+    def dp_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, get_exact=True):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+        fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence, get_exact)
+        fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence, get_exact)
+        d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+        d1size, d2size = fD1.size, fD2.size
+        dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+        acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+        bias_res, msd = self.bias_test(fD1_actual, fD1)
+        if(plot):
+            self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Allows DP Predicate test on both singleton and GROUP BY queries
+    def dp_groupby_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+        d1_res, d1_exact, dim_cols, num_cols = ag.run_agg_query_df(d1, d1_metadata, d1_query, confidence, file_name = &#34;d1&#34;)
+        d2_res, d2_exact, dim_cols, num_cols = ag.run_agg_query_df(d2, d2_metadata, d2_query, confidence, file_name = &#34;d2&#34;)
+
+        res_list = []
+        for col in num_cols:
+            d1_gp = d1_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            d2_gp = d2_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            exact_gp = d1_exact.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            # Full outer join after flattening the results above to one row per dimension key
+            # We cannot be sure if every dimension key has a response in every repeated query run because of tau thresholding
+            # That&#39;s why we do a full outer join and flatten whatever vector of results we get for the numerical column across repeat runs
+            # This is what we use for generating the histogram of results for that dimension key
+            d1_d2 = d1_gp.merge(d2_gp, on=dim_cols, how=&#39;outer&#39;)
+            d1_d2 = d1_d2.merge(exact_gp, on=dim_cols, how=&#39;left&#39;)
+            n_cols = len(d1_d2.columns)
+            for index, row in d1_d2.iterrows():
+                print(d1_d2.iloc[index, :n_cols - 3])
+                print(&#34;Column: &#34;, col)
+                # fD1 and fD2 will have the results of the K repeated query results that can be passed through histogram test
+                # These results are for that particular numerical column and the specific dimension key of d1_d2
+                fD1 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 3]])
+                fD2 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 2]])
+                exact_val = d1_d2.iloc[index, n_cols - 1][0]
+                d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+                d1size, d2size = fD1.size, fD2.size
+                dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+                print(&#34;DP Predicate Test Result: &#34;, dp_res)
+
+                # Accuracy Test
+                low = np.array([val[1] for val in d1_d2.iloc[index, n_cols - 2]])
+                high = np.array([val[2] for val in d1_d2.iloc[index, n_cols - 2]])
+                acc_res, utility_res, within_bounds = self.accuracy_test(exact_val, low, high, confidence)
+                bias_res, msd = self.bias_test(exact_val, fD1)
+                res_list.append([dp_res, acc_res, utility_res, within_bounds, bias_res, msd])
+                if(plot):
+                    self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+
+        for res in res_list:
+            print(res)
+
+        res_list = res_list.values() if hasattr(res_list, &#34;values&#34;) else res_list  # TODO why is this needed?
+        dp_res = np.all(np.array([res[0] for res in res_list]))
+        acc_res = np.all(np.array([res[1] for res in res_list]))
+        utility_res = np.all(np.array([res[2] for res in res_list]))
+        bias_res = np.all(np.array([res[4] for res in res_list]))
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Use the powerset based neighboring datasets to scan through all edges of database search graph
+    def dp_powerset_test(self, query_str, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, test_cases=5):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        ex = exp.Exploration()
+        res_list = {}
+        halton_samples = ex.generate_halton_samples(bounds = ex.corners, dims = ex.N, n_sample=test_cases)
+        # Iterate through each sample generated by halton sequence
+        for sample in halton_samples:
+            df, metadata = ex.create_small_dataset(sample)
+            ex.generate_powerset(df)
+            print(&#34;Test case: &#34;, list(sample))
+            for filename in ex.visited:
+                print(&#34;Testing: &#34;, filename)
+                d1_query = query_str + &#34;d1_&#34; + filename + &#34;.&#34; + &#34;d1_&#34; + filename
+                d2_query = query_str + &#34;d2_&#34; + filename + &#34;.&#34; + &#34;d2_&#34; + filename
+                [d1, d2, d1_metadata, d2_metadata] = ex.neighbor_pair[filename]
+                fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence)
+                fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence)
+
+                acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+                bias_res, msd = self.bias_test(fD1_actual, fD1)
+                d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+                d1size, d2size = fD1.size, fD2.size
+                dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+                print(&#34;DP Predicate Test Result: &#34;, dp_res)
+                if(plot):
+                    self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+                key = &#34;[&#34; + &#39;,&#39;.join(str(e) for e in list(sample)) + &#34;] - &#34; + filename
+                res_list[key] = [dp_res, acc_res, utility_res, within_bounds, bias_res, msd]
+
+        print(&#34;Halton sequence based Powerset Test Result&#34;)
+        for data, res in res_list.items():
+            print(data, &#34;-&#34;, res)
+
+        dp_res = np.all(np.array([res[0] for res in res_list]))
+        acc_res = np.all(np.array([res[1] for res in res_list]))
+        utility_res = np.all(np.array([res[2] for res in res_list]))
+        bias_res = np.all(np.array([res[4] for res in res_list]))
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Main method listing all the DP verification steps
+    def main(self):
+        # COUNT Example
+        d1_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d1.d1&#34;
+        d2_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d2.d2&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        d1_query = &#34;SELECT SUM(Usage) AS Usage FROM d1.d1&#34;
+        d2_query = &#34;SELECT SUM(Usage) AS Usage FROM d2.d2&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        d1_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d1.d1 GROUP BY Role, Segment&#34;
+        d2_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d2.d2 GROUP BY Role, Segment&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_groupby_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        # Powerset Test on SUM query
+        query_str = &#34;SELECT SUM(Usage) AS TotalUsage FROM &#34;
+        dp_res, acc_res, utility_res, bias_res = self.dp_powerset_test(query_str, plot=False, repeat_count=1000)
+
+        # Yarrow Test
+        # dataset_root = os.getenv(&#39;DATASET_ROOT&#39;, &#39;/home/ankit/Documents/github/datasets/&#39;)
+        # test_csv_path = dataset_root + &#39;data/PUMS_california_demographics_1000/data.csv&#39;
+
+        # dp_yarrow_mean_res = self.yarrow_test(test_csv_path, yarrow.dp_mean, &#39;income&#39;, float, epsilon=self.epsilon, minimum=0, maximum=100, num_records=1000)
+        # dp_yarrow_var_res = self.yarrow_test(test_csv_path, yarrow.dp_variance, &#39;educ&#39;, int, epsilon=self.epsilon, minimum=0, maximum=12, num_records=1000)
+        # dp_yarrow_moment_res = self.yarrow_test(test_csv_path, yarrow.dp_moment_raw, &#39;married&#39;, float, epsilon=.15, minimum=0, maximum=12, num_records=1000000, order = 3)
+        # dp_yarrow_covariance_res = self.yarrow_test(test_csv_path, yarrow.dp_covariance, &#39;married&#39;, int, &#39;sex&#39;, int, epsilon=.15, minimum_x=0, maximum_x=1, minimum_y=0, maximum_y=1, num_records=1000)
+        return dp_res, acc_res, utility_res, bias_res
+
+if __name__ == &#34;__main__&#34;:
+    dv = DPVerification(dataset_size=1000)
+    print(dv.main())</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification"><code class="flex name class">
+<span>class <span class="ident">DPVerification</span></span>
+<span>(</span><span>epsilon=1.0, dataset_size=10000, csv_path='.')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DPVerification:
+    # Set the epsilon parameter of differential privacy
+    def __init__(self, epsilon=1.0, dataset_size=10000, csv_path=&#34;.&#34;):
+        self.epsilon = epsilon
+        self.dataset_size = dataset_size
+        self.file_dir = os.path.dirname(os.path.abspath(__file__))
+        self.csv_path = csv_path
+        self.df, self.dataset_path, self.file_name, self.metadata = self.create_simulated_dataset()
+        print(&#34;Loaded &#34; + str(len(self.df)) + &#34; records&#34;)
+        self.N = len(self.df)
+        self.delta = 1/(self.N * math.sqrt(self.N))
+
+    def create_simulated_dataset(self, file_name = &#34;simulation&#34;):
+        np.random.seed(1)
+        userids = list(range(1, self.dataset_size+1))
+        userids = [&#34;A&#34; + str(user) for user in userids]
+        segment = [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]
+        role = [&#39;R1&#39;, &#39;R2&#39;]
+        roles = np.random.choice(role, size=self.dataset_size, p=[0.7, 0.3]).tolist()
+        segments = np.random.choice(segment, size=self.dataset_size, p=[0.5, 0.3, 0.2]).tolist()
+        usage = np.random.geometric(p=0.5, size=self.dataset_size).tolist()
+        df = pd.DataFrame(list(zip(userids, segments, roles, usage)), columns=[&#39;UserId&#39;, &#39;Segment&#39;, &#39;Role&#39;, &#39;Usage&#39;])
+
+        # Storing the data as a CSV
+        file_path = os.path.join(self.file_dir, self.csv_path, file_name + &#34;.csv&#34;)
+        df.to_csv(file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+        metadata = Table(file_name, file_name, self.dataset_size, \
+            [\
+                String(&#34;UserId&#34;, self.dataset_size, True), \
+                String(&#34;Segment&#34;, 3, False), \
+                String(&#34;Role&#34;, 2, False), \
+                Int(&#34;Usage&#34;, 0, 25)
+            ])
+
+        return df, file_path, file_name, metadata
+
+    # Generate dataframes that differ by a single record that is randomly chosen
+    def generate_neighbors(self, load_csv = False):
+        if(load_csv):
+            self.df = pd.read_csv(self.dataset_path)
+
+        if(self.N == 0):
+            print(&#34;No records in dataframe to run the test&#34;)
+            return None, None
+
+        d1 = self.df
+        drop_idx = np.random.choice(self.df.index, 1, replace=False)
+        d2 = self.df.drop(drop_idx)
+        print(&#34;Length of D1: &#34;, len(d1), &#34; Length of D2: &#34;, len(d2))
+
+        if(load_csv):
+            # Storing the data as a CSV for applying queries via Burdock querying system
+            d1_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d1.csv&#34;)
+            d2_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d2.csv&#34;)
+
+            d1.to_csv(d1_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+            d2.to_csv(d2_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+
+        d1_table = self.metadata
+        d2_table = copy.copy(d1_table)
+        d1_table.schema, d2_table.schema = &#34;d1&#34;, &#34;d2&#34;
+        d1_table.name, d2_table.name = &#34;d1&#34;, &#34;d2&#34;
+        d2_table.rowcount = d1_table.rowcount - 1
+        d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+        return d1, d2, d1_metadata, d2_metadata
+
+    # If there is an aggregation function that we need to test, we need to apply it on neighboring datasets
+    # This function applies the aggregation repeatedly to log results in two vectors that are then used for generating histogram
+    # The histogram is then passed through the DP test
+    def apply_aggregation_neighbors(self, f, args1, args2):
+        fD1 = f(*args1)
+        fD2 = f(*args2)
+
+        print(&#34;Mean fD1: &#34;, np.mean(fD1), &#34; Stdev fD1: &#34;, np.std(fD1), &#34; Mean fD2: &#34;, np.mean(fD2), &#34; Stdev fD2: &#34;, np.std(fD2))
+        return fD1, fD2
+
+    # Generate histograms given the vectors of repeated aggregation results applied on neighboring datasets
+    def generate_histogram_neighbors(self, fD1, fD2, numbins=0, binsize=&#34;auto&#34;, exact=False):
+        d1 = fD1
+        d2 = fD2
+        d = np.concatenate((d1, d2), axis=None)
+        n = d.size
+        binlist = []
+        minval = min(min(d1), min(d2))
+        maxval = max(max(d1), max(d2))
+        if(exact):
+            binlist = np.linspace(minval, maxval, 2)
+        elif(numbins &gt; 0):
+            binlist = np.linspace(minval, maxval, numbins)
+        elif(binsize == &#34;auto&#34;):
+            iqr = np.subtract(*np.percentile(d, [75, 25]))
+            numerator = 2 * iqr if iqr &gt; 0 else maxval - minval
+            denominator = n ** (1. / 3)
+            binwidth = numerator / denominator # Freedman–Diaconis&#39; choice
+            numbins = int(math.ceil((maxval - minval) / binwidth)) if maxval &gt; minval else 20
+            binlist = np.linspace(minval, maxval, numbins)
+        else:
+            # Choose bin size of unity
+            binlist = np.arange(np.floor(minval),np.ceil(maxval))
+
+        # Calculating histograms of fD1 and fD2
+        d1hist, bin_edges = np.histogram(d1, bins = binlist, density = False)
+        d2hist, bin_edges = np.histogram(d2, bins = binlist, density = False)
+
+        return d1hist, d2hist, bin_edges
+
+    # Plot histograms given the vectors of repeated aggregation results applied on neighboring datasets
+    def plot_histogram_neighbors(self, fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, binlist, bound=True, exact=False):
+        plt.figure(figsize=(15,5))
+        if(exact):
+            ax = plt.subplot(1, 1, 1)
+            ax.ticklabel_format(useOffset=False)
+            plt.xlabel(&#39;Bin&#39;)
+            plt.ylabel(&#39;Probability&#39;)
+            plt.hist(fD1, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+            plt.hist(fD2, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+            ax.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+            return
+
+        ax = plt.subplot(1, 2, 1)
+        ax.ticklabel_format(useOffset=False)
+        plt.xlabel(&#39;Bin&#39;)
+        plt.ylabel(&#39;Probability&#39;)
+        if(bound):
+            plt.bar(binlist[:-1], d2histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d1lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+        else:
+            plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+
+        ax = plt.subplot(1, 2, 2)
+        ax.ticklabel_format(useOffset=False)
+        plt.xlabel(&#39;Bin&#39;)
+        plt.ylabel(&#39;Probability&#39;)
+        if(bound):
+            plt.bar(binlist[:-1], d1histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d2lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+        else:
+            plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+            plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+        plt.show()
+
+    # Check if histogram of fD1 values multiplied by e^epsilon and summed by delta is bounding fD2 and vice versa
+    # Use the histogram results and create bounded histograms to compare in DP test
+    def get_bounded_histogram(self, d1hist, d2hist, binlist, d1size, d2size, exact, alpha=0.05):
+        d1_error_interval = 0.0
+        d2_error_interval = 0.0
+        # Lower and Upper bound
+        if(not exact):
+            num_buckets = binlist.size - 1
+            critical_value = stats.norm.ppf(1-(alpha / 2 / num_buckets), loc=0.0, scale=1.0)
+            d1_error_interval = critical_value * math.sqrt(num_buckets / d1size) / 2
+            d2_error_interval = critical_value * math.sqrt(num_buckets / d2size) / 2
+
+        num_buckets = binlist.size - 1
+        px = np.divide(d1hist, d1size)
+        py = np.divide(d2hist, d2size)
+
+        d1histbound = px * math.exp(self.epsilon) + self.delta
+        d2histbound = py * math.exp(self.epsilon) + self.delta
+
+        d1upper = np.power(np.sqrt(px * num_buckets) + d1_error_interval, 2) / num_buckets
+        d2upper = np.power(np.sqrt(py * num_buckets) + d2_error_interval, 2) / num_buckets
+        d1lower = np.power(np.sqrt(px * num_buckets) - d1_error_interval, 2) / num_buckets
+        d2lower = np.power(np.sqrt(py * num_buckets) - d2_error_interval, 2) / num_buckets
+
+        np.maximum(d1lower, 0.0, d1lower)
+        np.maximum(d2lower, 0.0, d1lower)
+
+        d1histupperbound = d1upper * math.exp(self.epsilon) + self.delta
+        d2histupperbound = d2upper * math.exp(self.epsilon) + self.delta
+
+        return px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower
+
+    # Differentially Private Predicate Test
+    def dp_test(self, d1hist, d2hist, binlist, d1size, d2size, debug=False, exact=False):
+        px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower = \
+            self.get_bounded_histogram(d1hist, d2hist, binlist, d1size, d2size, exact)
+        if(debug):
+            print(&#34;Parameters&#34;)
+            print(&#34;epsilon: &#34;, self.epsilon, &#34; delta: &#34;, self.delta)
+            print(&#34;Bins\n&#34;, binlist)
+            print(&#34;Original D1 Histogram\n&#34;, d1hist)
+            print(&#34;Probability of D1 Histogram\n&#34;, px)
+            print(&#34;D1 Lower\n&#34;, d1lower)
+            print(&#34;D1 Upper\n&#34;, d1histupperbound)
+            print(&#34;D1 Histogram to bound D2\n&#34;, d1histbound)
+            print(&#34;Original D2 Histogram\n&#34;, d2hist)
+            print(&#34;Probability of D2 Histogram\n&#34;, py)
+            print(&#34;D2 Lower\n&#34;, d2lower)
+            print(&#34;D2 Upper\n&#34;, d2histupperbound)
+            print(&#34;D2 Histogram to bound D1\n&#34;, d2histbound)
+            print(&#34;Comparison - D2 bound to D1\n&#34;, np.greater(d1hist, np.zeros(d1hist.size)), np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound)))
+            print(&#34;Comparison - D1 bound to D2\n&#34;, np.greater(d2hist, np.zeros(d2hist.size)), np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+
+        # Check if any of the bounds across the bins violate the relaxed DP condition
+        bound_exceeded = np.any(np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound))) or \
+        np.any(np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+        return not bound_exceeded, d1histupperbound, d2histupperbound, d1lower, d2lower
+
+    # K-S Two sample test between the repeated query results on neighboring datasets
+    def ks_test(self, fD1, fD2):
+        return stats.ks_2samp(fD1, fD2)
+
+    # Anderson Darling Test
+    def anderson_ksamp(self, fD1, fD2):
+        return stats.anderson_ksamp([fD1, fD2])
+
+    # Kullback-Leibler divergence D(P || Q) for discrete distributions
+    def kl_divergence(self, p, q):
+        return np.sum(np.where(p != 0, p * np.log(p / q), 0))
+
+    # Wasserstein Distance
+    def wasserstein_distance(self, d1hist, d2hist):
+        return stats.wasserstein_distance(d1hist, d2hist)
+
+    # Verification of SQL aggregation mechanisms
+    def aggtest(self, f, colname, numbins=0, binsize=&#34;auto&#34;, debug=False, plot=True, bound=True, exact=False):
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors()
+
+        fD1, fD2 = self.apply_aggregation_neighbors(f, (d1, colname), (d2, colname))
+        d1size, d2size = fD1.size, fD2.size
+
+        ks_res = self.ks_test(fD1, fD2)
+        print(&#34;\nKS 2-sample Test Result: &#34;, ks_res, &#34;\n&#34;)
+
+        #andderson_res = self.anderson_ksamp(fD1, fD2)
+        #print(&#34;Anderson 2-sample Test Result: &#34;, andderson_res, &#34;\n&#34;)
+
+        d1hist, d2hist, bin_edges = \
+            self.generate_histogram_neighbors(fD1, fD2, numbins, binsize, exact=exact)
+
+        ws_res = 0.0
+        #kl_res = 0.0
+        dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug, exact=exact)
+        if(exact):
+            dp_res = False
+            print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+            #print(&#34;KL Divergence Distance: &#34;, kl_res, &#34;\n&#34;)
+        else:
+            ws_res = self.wasserstein_distance(d1hist, d2hist)
+            print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+            #kl_res = self.kl_divergence(d1histupperbound, d2lower)
+            #print(&#34;KL-Divergence: &#34;, kl_res, &#34;\n&#34;)
+        print(&#34;DP Predicate Test:&#34;, dp_res, &#34;\n&#34;)
+
+        if(plot):
+            self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+        return dp_res, ks_res, ws_res
+
+    # # Verification of aggregation mechanisms implemented in Yarrow
+    # # Creating a new function to take in non-keyworded args and keyworded kwargs
+    # # This makes it generic to take in any Yarrow aggregate function with any set of parameters
+    # # DP-SQL queries in Burdock use other aggregation functions in Aggregation class
+    # def yarrow_test(self, dataset_path, f, *args, numbins=0, binsize=&#34;auto&#34;, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, **kwargs):
+    #     ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+    #     self.dataset_path = dataset_path
+    #     d1, d2 = self.generate_neighbors(load_csv=True)
+
+    #     d1_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d1.csv&#34;)
+    #     d2_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d2.csv&#34;)
+
+    #     if(len(args) == 4):
+    #         fD1 = ag.yarrow_dp_multi_agg(f, d1_file_path, args, kwargs)
+    #         fD2 = ag.yarrow_dp_multi_agg(f, d2_file_path, args, kwargs)
+    #     else:
+    #         fD1 = ag.yarrow_dp_agg(f, d1_file_path, args, kwargs)
+    #         fD2 = ag.yarrow_dp_agg(f, d2_file_path, args, kwargs)
+
+    #     d1size, d2size = fD1.size, fD2.size
+    #     d1hist, d2hist, bin_edges = \
+    #         self.generate_histogram_neighbors(fD1, fD2, numbins, binsize, exact=exact)
+    #     dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+    #     print(&#34;DP Predicate Test:&#34;, dp_res, &#34;\n&#34;)
+
+    #     if(plot):
+    #         self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound)
+    #     return dp_res
+
+    def accuracy_test(self, actual, low, high, confidence=0.95):
+        # Actual mean of aggregation function f on D1 is equal to sample mean
+        n = len(low)
+        actual = [actual] * n
+        error_interval = 0.05*confidence
+        relaxed_low = confidence - error_interval
+        relaxed_high = 1 - (confidence + error_interval)
+        within_bounds = np.sum(np.logical_and(np.greater_equal(actual, low), np.greater_equal(high, actual)))
+        outside_bounds = n - within_bounds
+        print(&#34;Count of times noisy result within bounds:&#34;, within_bounds, &#34;/&#34;, n)
+        print(&#34;Count of times noisy result outside bounds:&#34;, outside_bounds, &#34;/&#34;, n)
+        acc_res = (within_bounds / n &gt;= relaxed_low)
+        utility_res = (outside_bounds / n &gt;= relaxed_high)
+        return acc_res, utility_res, float(&#39;%.2f&#39;%((within_bounds / n) * 100))
+
+    # Calculates mean signed deviation from noisy results sample as a ratio of actual value
+    def bias_test(self, actual, fD, sig_level = 0.05):
+        # Mean signed deviation
+        n = len(fD)
+        actual = [actual] * n
+        diff = fD - actual
+        msd = (np.sum(diff) / n) / actual[0]
+        print(&#34;Mean signed deviation ratio to actual: &#34;, msd)
+        # Checking if mean of (difference of noisy response to actual) is zero i.e. unbiased result
+        tset, pval = stats.ttest_1samp(diff, 0.0)
+        return (pval &lt; sig_level), msd
+
+    # Applying queries repeatedly against SQL-92 implementation of Differential Privacy by Burdock
+    def dp_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, get_exact=True):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+        fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence, get_exact)
+        fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence, get_exact)
+        d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+        d1size, d2size = fD1.size, fD2.size
+        dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+        acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+        bias_res, msd = self.bias_test(fD1_actual, fD1)
+        if(plot):
+            self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Allows DP Predicate test on both singleton and GROUP BY queries
+    def dp_groupby_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+        d1_res, d1_exact, dim_cols, num_cols = ag.run_agg_query_df(d1, d1_metadata, d1_query, confidence, file_name = &#34;d1&#34;)
+        d2_res, d2_exact, dim_cols, num_cols = ag.run_agg_query_df(d2, d2_metadata, d2_query, confidence, file_name = &#34;d2&#34;)
+
+        res_list = []
+        for col in num_cols:
+            d1_gp = d1_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            d2_gp = d2_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            exact_gp = d1_exact.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+            # Full outer join after flattening the results above to one row per dimension key
+            # We cannot be sure if every dimension key has a response in every repeated query run because of tau thresholding
+            # That&#39;s why we do a full outer join and flatten whatever vector of results we get for the numerical column across repeat runs
+            # This is what we use for generating the histogram of results for that dimension key
+            d1_d2 = d1_gp.merge(d2_gp, on=dim_cols, how=&#39;outer&#39;)
+            d1_d2 = d1_d2.merge(exact_gp, on=dim_cols, how=&#39;left&#39;)
+            n_cols = len(d1_d2.columns)
+            for index, row in d1_d2.iterrows():
+                print(d1_d2.iloc[index, :n_cols - 3])
+                print(&#34;Column: &#34;, col)
+                # fD1 and fD2 will have the results of the K repeated query results that can be passed through histogram test
+                # These results are for that particular numerical column and the specific dimension key of d1_d2
+                fD1 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 3]])
+                fD2 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 2]])
+                exact_val = d1_d2.iloc[index, n_cols - 1][0]
+                d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+                d1size, d2size = fD1.size, fD2.size
+                dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+                print(&#34;DP Predicate Test Result: &#34;, dp_res)
+
+                # Accuracy Test
+                low = np.array([val[1] for val in d1_d2.iloc[index, n_cols - 2]])
+                high = np.array([val[2] for val in d1_d2.iloc[index, n_cols - 2]])
+                acc_res, utility_res, within_bounds = self.accuracy_test(exact_val, low, high, confidence)
+                bias_res, msd = self.bias_test(exact_val, fD1)
+                res_list.append([dp_res, acc_res, utility_res, within_bounds, bias_res, msd])
+                if(plot):
+                    self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+
+        for res in res_list:
+            print(res)
+
+        res_list = res_list.values() if hasattr(res_list, &#34;values&#34;) else res_list  # TODO why is this needed?
+        dp_res = np.all(np.array([res[0] for res in res_list]))
+        acc_res = np.all(np.array([res[1] for res in res_list]))
+        utility_res = np.all(np.array([res[2] for res in res_list]))
+        bias_res = np.all(np.array([res[4] for res in res_list]))
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Use the powerset based neighboring datasets to scan through all edges of database search graph
+    def dp_powerset_test(self, query_str, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, test_cases=5):
+        ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+        ex = exp.Exploration()
+        res_list = {}
+        halton_samples = ex.generate_halton_samples(bounds = ex.corners, dims = ex.N, n_sample=test_cases)
+        # Iterate through each sample generated by halton sequence
+        for sample in halton_samples:
+            df, metadata = ex.create_small_dataset(sample)
+            ex.generate_powerset(df)
+            print(&#34;Test case: &#34;, list(sample))
+            for filename in ex.visited:
+                print(&#34;Testing: &#34;, filename)
+                d1_query = query_str + &#34;d1_&#34; + filename + &#34;.&#34; + &#34;d1_&#34; + filename
+                d2_query = query_str + &#34;d2_&#34; + filename + &#34;.&#34; + &#34;d2_&#34; + filename
+                [d1, d2, d1_metadata, d2_metadata] = ex.neighbor_pair[filename]
+                fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence)
+                fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence)
+
+                acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+                bias_res, msd = self.bias_test(fD1_actual, fD1)
+                d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+                d1size, d2size = fD1.size, fD2.size
+                dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+                print(&#34;DP Predicate Test Result: &#34;, dp_res)
+                if(plot):
+                    self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+                key = &#34;[&#34; + &#39;,&#39;.join(str(e) for e in list(sample)) + &#34;] - &#34; + filename
+                res_list[key] = [dp_res, acc_res, utility_res, within_bounds, bias_res, msd]
+
+        print(&#34;Halton sequence based Powerset Test Result&#34;)
+        for data, res in res_list.items():
+            print(data, &#34;-&#34;, res)
+
+        dp_res = np.all(np.array([res[0] for res in res_list]))
+        acc_res = np.all(np.array([res[1] for res in res_list]))
+        utility_res = np.all(np.array([res[2] for res in res_list]))
+        bias_res = np.all(np.array([res[4] for res in res_list]))
+        return dp_res, acc_res, utility_res, bias_res
+
+    # Main method listing all the DP verification steps
+    def main(self):
+        # COUNT Example
+        d1_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d1.d1&#34;
+        d2_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d2.d2&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        d1_query = &#34;SELECT SUM(Usage) AS Usage FROM d1.d1&#34;
+        d2_query = &#34;SELECT SUM(Usage) AS Usage FROM d2.d2&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        d1_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d1.d1 GROUP BY Role, Segment&#34;
+        d2_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d2.d2 GROUP BY Role, Segment&#34;
+        dp_res, acc_res, utility_res, bias_res = dv.dp_groupby_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+        # Powerset Test on SUM query
+        query_str = &#34;SELECT SUM(Usage) AS TotalUsage FROM &#34;
+        dp_res, acc_res, utility_res, bias_res = self.dp_powerset_test(query_str, plot=False, repeat_count=1000)
+
+        # Yarrow Test
+        # dataset_root = os.getenv(&#39;DATASET_ROOT&#39;, &#39;/home/ankit/Documents/github/datasets/&#39;)
+        # test_csv_path = dataset_root + &#39;data/PUMS_california_demographics_1000/data.csv&#39;
+
+        # dp_yarrow_mean_res = self.yarrow_test(test_csv_path, yarrow.dp_mean, &#39;income&#39;, float, epsilon=self.epsilon, minimum=0, maximum=100, num_records=1000)
+        # dp_yarrow_var_res = self.yarrow_test(test_csv_path, yarrow.dp_variance, &#39;educ&#39;, int, epsilon=self.epsilon, minimum=0, maximum=12, num_records=1000)
+        # dp_yarrow_moment_res = self.yarrow_test(test_csv_path, yarrow.dp_moment_raw, &#39;married&#39;, float, epsilon=.15, minimum=0, maximum=12, num_records=1000000, order = 3)
+        # dp_yarrow_covariance_res = self.yarrow_test(test_csv_path, yarrow.dp_covariance, &#39;married&#39;, int, &#39;sex&#39;, int, epsilon=.15, minimum_x=0, maximum_x=1, minimum_y=0, maximum_y=1, num_records=1000)
+        return dp_res, acc_res, utility_res, bias_res</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.accuracy_test"><code class="name flex">
+<span>def <span class="ident">accuracy_test</span></span>(<span>self, actual, low, high, confidence=0.95)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def accuracy_test(self, actual, low, high, confidence=0.95):
+    # Actual mean of aggregation function f on D1 is equal to sample mean
+    n = len(low)
+    actual = [actual] * n
+    error_interval = 0.05*confidence
+    relaxed_low = confidence - error_interval
+    relaxed_high = 1 - (confidence + error_interval)
+    within_bounds = np.sum(np.logical_and(np.greater_equal(actual, low), np.greater_equal(high, actual)))
+    outside_bounds = n - within_bounds
+    print(&#34;Count of times noisy result within bounds:&#34;, within_bounds, &#34;/&#34;, n)
+    print(&#34;Count of times noisy result outside bounds:&#34;, outside_bounds, &#34;/&#34;, n)
+    acc_res = (within_bounds / n &gt;= relaxed_low)
+    utility_res = (outside_bounds / n &gt;= relaxed_high)
+    return acc_res, utility_res, float(&#39;%.2f&#39;%((within_bounds / n) * 100))</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.aggtest"><code class="name flex">
+<span>def <span class="ident">aggtest</span></span>(<span>self, f, colname, numbins=0, binsize='auto', debug=False, plot=True, bound=True, exact=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def aggtest(self, f, colname, numbins=0, binsize=&#34;auto&#34;, debug=False, plot=True, bound=True, exact=False):
+    d1, d2, d1_metadata, d2_metadata = self.generate_neighbors()
+
+    fD1, fD2 = self.apply_aggregation_neighbors(f, (d1, colname), (d2, colname))
+    d1size, d2size = fD1.size, fD2.size
+
+    ks_res = self.ks_test(fD1, fD2)
+    print(&#34;\nKS 2-sample Test Result: &#34;, ks_res, &#34;\n&#34;)
+
+    #andderson_res = self.anderson_ksamp(fD1, fD2)
+    #print(&#34;Anderson 2-sample Test Result: &#34;, andderson_res, &#34;\n&#34;)
+
+    d1hist, d2hist, bin_edges = \
+        self.generate_histogram_neighbors(fD1, fD2, numbins, binsize, exact=exact)
+
+    ws_res = 0.0
+    #kl_res = 0.0
+    dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug, exact=exact)
+    if(exact):
+        dp_res = False
+        print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+        #print(&#34;KL Divergence Distance: &#34;, kl_res, &#34;\n&#34;)
+    else:
+        ws_res = self.wasserstein_distance(d1hist, d2hist)
+        print(&#34;Wasserstein Distance: &#34;, ws_res, &#34;\n&#34;)
+        #kl_res = self.kl_divergence(d1histupperbound, d2lower)
+        #print(&#34;KL-Divergence: &#34;, kl_res, &#34;\n&#34;)
+    print(&#34;DP Predicate Test:&#34;, dp_res, &#34;\n&#34;)
+
+    if(plot):
+        self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+    return dp_res, ks_res, ws_res</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.anderson_ksamp"><code class="name flex">
+<span>def <span class="ident">anderson_ksamp</span></span>(<span>self, fD1, fD2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def anderson_ksamp(self, fD1, fD2):
+    return stats.anderson_ksamp([fD1, fD2])</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.apply_aggregation_neighbors"><code class="name flex">
+<span>def <span class="ident">apply_aggregation_neighbors</span></span>(<span>self, f, args1, args2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def apply_aggregation_neighbors(self, f, args1, args2):
+    fD1 = f(*args1)
+    fD2 = f(*args2)
+
+    print(&#34;Mean fD1: &#34;, np.mean(fD1), &#34; Stdev fD1: &#34;, np.std(fD1), &#34; Mean fD2: &#34;, np.mean(fD2), &#34; Stdev fD2: &#34;, np.std(fD2))
+    return fD1, fD2</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.bias_test"><code class="name flex">
+<span>def <span class="ident">bias_test</span></span>(<span>self, actual, fD, sig_level=0.05)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bias_test(self, actual, fD, sig_level = 0.05):
+    # Mean signed deviation
+    n = len(fD)
+    actual = [actual] * n
+    diff = fD - actual
+    msd = (np.sum(diff) / n) / actual[0]
+    print(&#34;Mean signed deviation ratio to actual: &#34;, msd)
+    # Checking if mean of (difference of noisy response to actual) is zero i.e. unbiased result
+    tset, pval = stats.ttest_1samp(diff, 0.0)
+    return (pval &lt; sig_level), msd</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.create_simulated_dataset"><code class="name flex">
+<span>def <span class="ident">create_simulated_dataset</span></span>(<span>self, file_name='simulation')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_simulated_dataset(self, file_name = &#34;simulation&#34;):
+    np.random.seed(1)
+    userids = list(range(1, self.dataset_size+1))
+    userids = [&#34;A&#34; + str(user) for user in userids]
+    segment = [&#39;A&#39;, &#39;B&#39;, &#39;C&#39;]
+    role = [&#39;R1&#39;, &#39;R2&#39;]
+    roles = np.random.choice(role, size=self.dataset_size, p=[0.7, 0.3]).tolist()
+    segments = np.random.choice(segment, size=self.dataset_size, p=[0.5, 0.3, 0.2]).tolist()
+    usage = np.random.geometric(p=0.5, size=self.dataset_size).tolist()
+    df = pd.DataFrame(list(zip(userids, segments, roles, usage)), columns=[&#39;UserId&#39;, &#39;Segment&#39;, &#39;Role&#39;, &#39;Usage&#39;])
+
+    # Storing the data as a CSV
+    file_path = os.path.join(self.file_dir, self.csv_path, file_name + &#34;.csv&#34;)
+    df.to_csv(file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+    metadata = Table(file_name, file_name, self.dataset_size, \
+        [\
+            String(&#34;UserId&#34;, self.dataset_size, True), \
+            String(&#34;Segment&#34;, 3, False), \
+            String(&#34;Role&#34;, 2, False), \
+            Int(&#34;Usage&#34;, 0, 25)
+        ])
+
+    return df, file_path, file_name, metadata</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_groupby_query_test"><code class="name flex">
+<span>def <span class="ident">dp_groupby_query_test</span></span>(<span>self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_groupby_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95):
+    ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+    d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+    d1_res, d1_exact, dim_cols, num_cols = ag.run_agg_query_df(d1, d1_metadata, d1_query, confidence, file_name = &#34;d1&#34;)
+    d2_res, d2_exact, dim_cols, num_cols = ag.run_agg_query_df(d2, d2_metadata, d2_query, confidence, file_name = &#34;d2&#34;)
+
+    res_list = []
+    for col in num_cols:
+        d1_gp = d1_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+        d2_gp = d2_res.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+        exact_gp = d1_exact.groupby(dim_cols)[col].apply(list).reset_index(name=col)
+        # Full outer join after flattening the results above to one row per dimension key
+        # We cannot be sure if every dimension key has a response in every repeated query run because of tau thresholding
+        # That&#39;s why we do a full outer join and flatten whatever vector of results we get for the numerical column across repeat runs
+        # This is what we use for generating the histogram of results for that dimension key
+        d1_d2 = d1_gp.merge(d2_gp, on=dim_cols, how=&#39;outer&#39;)
+        d1_d2 = d1_d2.merge(exact_gp, on=dim_cols, how=&#39;left&#39;)
+        n_cols = len(d1_d2.columns)
+        for index, row in d1_d2.iterrows():
+            print(d1_d2.iloc[index, :n_cols - 3])
+            print(&#34;Column: &#34;, col)
+            # fD1 and fD2 will have the results of the K repeated query results that can be passed through histogram test
+            # These results are for that particular numerical column and the specific dimension key of d1_d2
+            fD1 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 3]])
+            fD2 = np.array([val[0] for val in d1_d2.iloc[index, n_cols - 2]])
+            exact_val = d1_d2.iloc[index, n_cols - 1][0]
+            d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+            d1size, d2size = fD1.size, fD2.size
+            dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+            print(&#34;DP Predicate Test Result: &#34;, dp_res)
+
+            # Accuracy Test
+            low = np.array([val[1] for val in d1_d2.iloc[index, n_cols - 2]])
+            high = np.array([val[2] for val in d1_d2.iloc[index, n_cols - 2]])
+            acc_res, utility_res, within_bounds = self.accuracy_test(exact_val, low, high, confidence)
+            bias_res, msd = self.bias_test(exact_val, fD1)
+            res_list.append([dp_res, acc_res, utility_res, within_bounds, bias_res, msd])
+            if(plot):
+                self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+
+    for res in res_list:
+        print(res)
+
+    res_list = res_list.values() if hasattr(res_list, &#34;values&#34;) else res_list  # TODO why is this needed?
+    dp_res = np.all(np.array([res[0] for res in res_list]))
+    acc_res = np.all(np.array([res[1] for res in res_list]))
+    utility_res = np.all(np.array([res[2] for res in res_list]))
+    bias_res = np.all(np.array([res[4] for res in res_list]))
+    return dp_res, acc_res, utility_res, bias_res</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_powerset_test"><code class="name flex">
+<span>def <span class="ident">dp_powerset_test</span></span>(<span>self, query_str, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, test_cases=5)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_powerset_test(self, query_str, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, test_cases=5):
+    ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+    ex = exp.Exploration()
+    res_list = {}
+    halton_samples = ex.generate_halton_samples(bounds = ex.corners, dims = ex.N, n_sample=test_cases)
+    # Iterate through each sample generated by halton sequence
+    for sample in halton_samples:
+        df, metadata = ex.create_small_dataset(sample)
+        ex.generate_powerset(df)
+        print(&#34;Test case: &#34;, list(sample))
+        for filename in ex.visited:
+            print(&#34;Testing: &#34;, filename)
+            d1_query = query_str + &#34;d1_&#34; + filename + &#34;.&#34; + &#34;d1_&#34; + filename
+            d2_query = query_str + &#34;d2_&#34; + filename + &#34;.&#34; + &#34;d2_&#34; + filename
+            [d1, d2, d1_metadata, d2_metadata] = ex.neighbor_pair[filename]
+            fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence)
+            fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence)
+
+            acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+            bias_res, msd = self.bias_test(fD1_actual, fD1)
+            d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+            d1size, d2size = fD1.size, fD2.size
+            dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+            print(&#34;DP Predicate Test Result: &#34;, dp_res)
+            if(plot):
+                self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+            key = &#34;[&#34; + &#39;,&#39;.join(str(e) for e in list(sample)) + &#34;] - &#34; + filename
+            res_list[key] = [dp_res, acc_res, utility_res, within_bounds, bias_res, msd]
+
+    print(&#34;Halton sequence based Powerset Test Result&#34;)
+    for data, res in res_list.items():
+        print(data, &#34;-&#34;, res)
+
+    dp_res = np.all(np.array([res[0] for res in res_list]))
+    acc_res = np.all(np.array([res[1] for res in res_list]))
+    utility_res = np.all(np.array([res[2] for res in res_list]))
+    bias_res = np.all(np.array([res[4] for res in res_list]))
+    return dp_res, acc_res, utility_res, bias_res</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_query_test"><code class="name flex">
+<span>def <span class="ident">dp_query_test</span></span>(<span>self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, get_exact=True)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_query_test(self, d1_query, d2_query, debug=False, plot=True, bound=True, exact=False, repeat_count=10000, confidence=0.95, get_exact=True):
+    ag = agg.Aggregation(t=1, repeat_count=repeat_count)
+    d1, d2, d1_metadata, d2_metadata = self.generate_neighbors(load_csv=True)
+
+    fD1, fD1_actual, fD1_low, fD1_high = ag.run_agg_query(d1, d1_metadata, d1_query, confidence, get_exact)
+    fD2, fD2_actual, fD2_low, fD2_high = ag.run_agg_query(d2, d2_metadata, d2_query, confidence, get_exact)
+    d1hist, d2hist, bin_edges = self.generate_histogram_neighbors(fD1, fD2, binsize=&#34;auto&#34;)
+    d1size, d2size = fD1.size, fD2.size
+    dp_res, d1histupperbound, d2histupperbound, d1lower, d2lower = self.dp_test(d1hist, d2hist, bin_edges, d1size, d2size, debug)
+    acc_res, utility_res, within_bounds = self.accuracy_test(fD1_actual, fD1_low, fD1_high, confidence)
+    bias_res, msd = self.bias_test(fD1_actual, fD1)
+    if(plot):
+        self.plot_histogram_neighbors(fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, bin_edges, bound, exact)
+    return dp_res, acc_res, utility_res, bias_res</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_test"><code class="name flex">
+<span>def <span class="ident">dp_test</span></span>(<span>self, d1hist, d2hist, binlist, d1size, d2size, debug=False, exact=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def dp_test(self, d1hist, d2hist, binlist, d1size, d2size, debug=False, exact=False):
+    px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower = \
+        self.get_bounded_histogram(d1hist, d2hist, binlist, d1size, d2size, exact)
+    if(debug):
+        print(&#34;Parameters&#34;)
+        print(&#34;epsilon: &#34;, self.epsilon, &#34; delta: &#34;, self.delta)
+        print(&#34;Bins\n&#34;, binlist)
+        print(&#34;Original D1 Histogram\n&#34;, d1hist)
+        print(&#34;Probability of D1 Histogram\n&#34;, px)
+        print(&#34;D1 Lower\n&#34;, d1lower)
+        print(&#34;D1 Upper\n&#34;, d1histupperbound)
+        print(&#34;D1 Histogram to bound D2\n&#34;, d1histbound)
+        print(&#34;Original D2 Histogram\n&#34;, d2hist)
+        print(&#34;Probability of D2 Histogram\n&#34;, py)
+        print(&#34;D2 Lower\n&#34;, d2lower)
+        print(&#34;D2 Upper\n&#34;, d2histupperbound)
+        print(&#34;D2 Histogram to bound D1\n&#34;, d2histbound)
+        print(&#34;Comparison - D2 bound to D1\n&#34;, np.greater(d1hist, np.zeros(d1hist.size)), np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound)))
+        print(&#34;Comparison - D1 bound to D2\n&#34;, np.greater(d2hist, np.zeros(d2hist.size)), np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+
+    # Check if any of the bounds across the bins violate the relaxed DP condition
+    bound_exceeded = np.any(np.logical_and(np.greater(d1hist, np.zeros(d1hist.size)), np.greater(d1lower, d2histupperbound))) or \
+    np.any(np.logical_and(np.greater(d2hist, np.zeros(d2hist.size)), np.greater(d2lower, d1histupperbound)))
+    return not bound_exceeded, d1histupperbound, d2histupperbound, d1lower, d2lower</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_histogram_neighbors"><code class="name flex">
+<span>def <span class="ident">generate_histogram_neighbors</span></span>(<span>self, fD1, fD2, numbins=0, binsize='auto', exact=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_histogram_neighbors(self, fD1, fD2, numbins=0, binsize=&#34;auto&#34;, exact=False):
+    d1 = fD1
+    d2 = fD2
+    d = np.concatenate((d1, d2), axis=None)
+    n = d.size
+    binlist = []
+    minval = min(min(d1), min(d2))
+    maxval = max(max(d1), max(d2))
+    if(exact):
+        binlist = np.linspace(minval, maxval, 2)
+    elif(numbins &gt; 0):
+        binlist = np.linspace(minval, maxval, numbins)
+    elif(binsize == &#34;auto&#34;):
+        iqr = np.subtract(*np.percentile(d, [75, 25]))
+        numerator = 2 * iqr if iqr &gt; 0 else maxval - minval
+        denominator = n ** (1. / 3)
+        binwidth = numerator / denominator # Freedman–Diaconis&#39; choice
+        numbins = int(math.ceil((maxval - minval) / binwidth)) if maxval &gt; minval else 20
+        binlist = np.linspace(minval, maxval, numbins)
+    else:
+        # Choose bin size of unity
+        binlist = np.arange(np.floor(minval),np.ceil(maxval))
+
+    # Calculating histograms of fD1 and fD2
+    d1hist, bin_edges = np.histogram(d1, bins = binlist, density = False)
+    d2hist, bin_edges = np.histogram(d2, bins = binlist, density = False)
+
+    return d1hist, d2hist, bin_edges</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_neighbors"><code class="name flex">
+<span>def <span class="ident">generate_neighbors</span></span>(<span>self, load_csv=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_neighbors(self, load_csv = False):
+    if(load_csv):
+        self.df = pd.read_csv(self.dataset_path)
+
+    if(self.N == 0):
+        print(&#34;No records in dataframe to run the test&#34;)
+        return None, None
+
+    d1 = self.df
+    drop_idx = np.random.choice(self.df.index, 1, replace=False)
+    d2 = self.df.drop(drop_idx)
+    print(&#34;Length of D1: &#34;, len(d1), &#34; Length of D2: &#34;, len(d2))
+
+    if(load_csv):
+        # Storing the data as a CSV for applying queries via Burdock querying system
+        d1_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d1.csv&#34;)
+        d2_file_path = os.path.join(self.file_dir, self.csv_path , &#34;d2.csv&#34;)
+
+        d1.to_csv(d1_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+        d2.to_csv(d2_file_path, sep=&#39;,&#39;, encoding=&#39;utf-8&#39;, index=False)
+
+    d1_table = self.metadata
+    d2_table = copy.copy(d1_table)
+    d1_table.schema, d2_table.schema = &#34;d1&#34;, &#34;d2&#34;
+    d1_table.name, d2_table.name = &#34;d1&#34;, &#34;d2&#34;
+    d2_table.rowcount = d1_table.rowcount - 1
+    d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+    return d1, d2, d1_metadata, d2_metadata</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.get_bounded_histogram"><code class="name flex">
+<span>def <span class="ident">get_bounded_histogram</span></span>(<span>self, d1hist, d2hist, binlist, d1size, d2size, exact, alpha=0.05)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def get_bounded_histogram(self, d1hist, d2hist, binlist, d1size, d2size, exact, alpha=0.05):
+    d1_error_interval = 0.0
+    d2_error_interval = 0.0
+    # Lower and Upper bound
+    if(not exact):
+        num_buckets = binlist.size - 1
+        critical_value = stats.norm.ppf(1-(alpha / 2 / num_buckets), loc=0.0, scale=1.0)
+        d1_error_interval = critical_value * math.sqrt(num_buckets / d1size) / 2
+        d2_error_interval = critical_value * math.sqrt(num_buckets / d2size) / 2
+
+    num_buckets = binlist.size - 1
+    px = np.divide(d1hist, d1size)
+    py = np.divide(d2hist, d2size)
+
+    d1histbound = px * math.exp(self.epsilon) + self.delta
+    d2histbound = py * math.exp(self.epsilon) + self.delta
+
+    d1upper = np.power(np.sqrt(px * num_buckets) + d1_error_interval, 2) / num_buckets
+    d2upper = np.power(np.sqrt(py * num_buckets) + d2_error_interval, 2) / num_buckets
+    d1lower = np.power(np.sqrt(px * num_buckets) - d1_error_interval, 2) / num_buckets
+    d2lower = np.power(np.sqrt(py * num_buckets) - d2_error_interval, 2) / num_buckets
+
+    np.maximum(d1lower, 0.0, d1lower)
+    np.maximum(d2lower, 0.0, d1lower)
+
+    d1histupperbound = d1upper * math.exp(self.epsilon) + self.delta
+    d2histupperbound = d2upper * math.exp(self.epsilon) + self.delta
+
+    return px, py, d1histupperbound, d2histupperbound, d1histbound, d2histbound, d1lower, d2lower</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.kl_divergence"><code class="name flex">
+<span>def <span class="ident">kl_divergence</span></span>(<span>self, p, q)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def kl_divergence(self, p, q):
+    return np.sum(np.where(p != 0, p * np.log(p / q), 0))</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.ks_test"><code class="name flex">
+<span>def <span class="ident">ks_test</span></span>(<span>self, fD1, fD2)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def ks_test(self, fD1, fD2):
+    return stats.ks_2samp(fD1, fD2)</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main(self):
+    # COUNT Example
+    d1_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d1.d1&#34;
+    d2_query = &#34;SELECT COUNT(UserId) AS UserCount FROM d2.d2&#34;
+    dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+    d1_query = &#34;SELECT SUM(Usage) AS Usage FROM d1.d1&#34;
+    d2_query = &#34;SELECT SUM(Usage) AS Usage FROM d2.d2&#34;
+    dp_res, acc_res, utility_res, bias_res = dv.dp_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+    d1_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d1.d1 GROUP BY Role, Segment&#34;
+    d2_query = &#34;SELECT Role, Segment, COUNT(UserId) AS UserCount, SUM(Usage) AS Usage FROM d2.d2 GROUP BY Role, Segment&#34;
+    dp_res, acc_res, utility_res, bias_res = dv.dp_groupby_query_test(d1_query, d2_query, plot=False, repeat_count=1000)
+
+    # Powerset Test on SUM query
+    query_str = &#34;SELECT SUM(Usage) AS TotalUsage FROM &#34;
+    dp_res, acc_res, utility_res, bias_res = self.dp_powerset_test(query_str, plot=False, repeat_count=1000)
+
+    # Yarrow Test
+    # dataset_root = os.getenv(&#39;DATASET_ROOT&#39;, &#39;/home/ankit/Documents/github/datasets/&#39;)
+    # test_csv_path = dataset_root + &#39;data/PUMS_california_demographics_1000/data.csv&#39;
+
+    # dp_yarrow_mean_res = self.yarrow_test(test_csv_path, yarrow.dp_mean, &#39;income&#39;, float, epsilon=self.epsilon, minimum=0, maximum=100, num_records=1000)
+    # dp_yarrow_var_res = self.yarrow_test(test_csv_path, yarrow.dp_variance, &#39;educ&#39;, int, epsilon=self.epsilon, minimum=0, maximum=12, num_records=1000)
+    # dp_yarrow_moment_res = self.yarrow_test(test_csv_path, yarrow.dp_moment_raw, &#39;married&#39;, float, epsilon=.15, minimum=0, maximum=12, num_records=1000000, order = 3)
+    # dp_yarrow_covariance_res = self.yarrow_test(test_csv_path, yarrow.dp_covariance, &#39;married&#39;, int, &#39;sex&#39;, int, epsilon=.15, minimum_x=0, maximum_x=1, minimum_y=0, maximum_y=1, num_records=1000)
+    return dp_res, acc_res, utility_res, bias_res</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.plot_histogram_neighbors"><code class="name flex">
+<span>def <span class="ident">plot_histogram_neighbors</span></span>(<span>self, fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, binlist, bound=True, exact=False)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def plot_histogram_neighbors(self, fD1, fD2, d1histupperbound, d2histupperbound, d1hist, d2hist, d1lower, d2lower, binlist, bound=True, exact=False):
+    plt.figure(figsize=(15,5))
+    if(exact):
+        ax = plt.subplot(1, 1, 1)
+        ax.ticklabel_format(useOffset=False)
+        plt.xlabel(&#39;Bin&#39;)
+        plt.ylabel(&#39;Probability&#39;)
+        plt.hist(fD1, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+        plt.hist(fD2, width=0.2, alpha=0.5, ec=&#34;k&#34;, align = &#34;right&#34;, bins = 1)
+        ax.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+        return
+
+    ax = plt.subplot(1, 2, 1)
+    ax.ticklabel_format(useOffset=False)
+    plt.xlabel(&#39;Bin&#39;)
+    plt.ylabel(&#39;Probability&#39;)
+    if(bound):
+        plt.bar(binlist[:-1], d2histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.bar(binlist[:-1], d1lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+    else:
+        plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.legend([&#39;D1&#39;, &#39;D2&#39;], loc=&#34;upper right&#34;)
+
+    ax = plt.subplot(1, 2, 2)
+    ax.ticklabel_format(useOffset=False)
+    plt.xlabel(&#39;Bin&#39;)
+    plt.ylabel(&#39;Probability&#39;)
+    if(bound):
+        plt.bar(binlist[:-1], d1histupperbound, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.bar(binlist[:-1], d2lower, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+    else:
+        plt.bar(binlist[:-1], d2hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.bar(binlist[:-1], d1hist, alpha=0.5, width=np.diff(binlist), ec=&#34;k&#34;, align=&#34;edge&#34;)
+        plt.legend([&#39;D2&#39;, &#39;D1&#39;], loc=&#34;upper right&#34;)
+    plt.show()</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.dp_verification.DPVerification.wasserstein_distance"><code class="name flex">
+<span>def <span class="ident">wasserstein_distance</span></span>(<span>self, d1hist, d2hist)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def wasserstein_distance(self, d1hist, d2hist):
+    return stats.wasserstein_distance(d1hist, d2hist)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="opendp.whitenoise.evaluation" href="index.html">opendp.whitenoise.evaluation</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification">DPVerification</a></code></h4>
+<ul class="">
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.accuracy_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.accuracy_test">accuracy_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.aggtest" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.aggtest">aggtest</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.anderson_ksamp" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.anderson_ksamp">anderson_ksamp</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.apply_aggregation_neighbors" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.apply_aggregation_neighbors">apply_aggregation_neighbors</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.bias_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.bias_test">bias_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.create_simulated_dataset" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.create_simulated_dataset">create_simulated_dataset</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_groupby_query_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_groupby_query_test">dp_groupby_query_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_powerset_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_powerset_test">dp_powerset_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_query_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_query_test">dp_query_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.dp_test">dp_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_histogram_neighbors" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_histogram_neighbors">generate_histogram_neighbors</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_neighbors" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.generate_neighbors">generate_neighbors</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.get_bounded_histogram" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.get_bounded_histogram">get_bounded_histogram</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.kl_divergence" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.kl_divergence">kl_divergence</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.ks_test" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.ks_test">ks_test</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.main" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.main">main</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.plot_histogram_neighbors" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.plot_histogram_neighbors">plot_histogram_neighbors</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.dp_verification.DPVerification.wasserstein_distance" href="#opendp.whitenoise.evaluation.dp_verification.DPVerification.wasserstein_distance">wasserstein_distance</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>

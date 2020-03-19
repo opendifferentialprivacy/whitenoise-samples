@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.7.5" />
+<title>opendp.whitenoise.evaluation.exploration API documentation</title>
+<meta name="description" content="" />
+<link href='https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css' rel='stylesheet'>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/8.0.0/sanitize.min.css' rel='stylesheet'>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" rel="stylesheet">
+<style>.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{font-weight:bold}#index h4 + ul{margin-bottom:.6em}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>opendp.whitenoise.evaluation.exploration</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python"># This file contains methods to set and scan a search space of datasets that we shall be using for DP evaluation.
+# We need to search databases, neighboring pairs and queries for running the DP predicate test.
+# We shall start a small 3-row databases to create our 12 neighboring pairs per database
+# Then we shall use halton sequence to generate a set of such 3 row databases randomly in a 3-D log-space
+import numpy as np
+import pandas as pd
+import os
+import copy
+from statsmodels.tools import sequences
+from opendp.whitenoise.metadata.collection import *
+
+
+class Exploration:
+    def __init__(self, dataset_size=3, csv_path=r&#39;../service/datasets/evaluation&#39;):  # TODO changed default to &#34;.&#34;
+        self.dataset_size = dataset_size
+        self.file_dir = os.path.dirname(os.path.abspath(__file__))
+        self.csv_path = csv_path
+
+        self.numerical_col_name = &#34;Usage&#34;
+        self.numerical_col_type = &#34;int&#34;
+        self.N = dataset_size
+        # if we are exploring 3 dimensions, corners shall be [-1000, -1000, -1000] to [1000, 1000, 1000]
+        self.corners = np.array([[-1*(10**self.N)]*self.N, [10**self.N]*self.N])
+        self.visited = []
+        self.neighbor_pair = {}
+
+    # Create a dataset with one numerical column on which we shall evaluate DP queries
+    def create_small_dataset(self, sample, file_name = &#34;small&#34;):
+        userids = list(range(1, self.dataset_size+1))
+        userids = [&#34;A&#34; + str(user) for user in userids]
+        usage = list(sample)
+        df = pd.DataFrame(list(zip(userids, usage)), columns=[&#39;UserId&#39;, self.numerical_col_name])
+        metadata = Table(file_name, file_name, self.dataset_size, \
+        [\
+            String(&#34;UserId&#34;, self.dataset_size, True),\
+            Int(self.numerical_col_name, min(usage), max(usage))
+        ])
+        return df, metadata
+
+    # Generate halton samples in a n-dimensional space. Defaulted to 3 dimensions
+    def generate_halton_samples(self, bounds, dims, n_sample=10):
+        samples = sequences.halton(dim=dims, n_sample=n_sample, bounds=bounds)
+        return samples
+
+    # Given a list of N records in a database, create a powerset of neighboring datasets by traversing the edges of database search graph
+    # Perform DFS to traverse the database search graph
+    # Convention of file names = &lt;d1/d2&gt;_&lt;list of row indexes in d1&gt;_&lt;row index removed to create d2&gt;
+    def generate_powerset(self, d1):
+        if(len(d1) == 0):
+            return
+        else:
+            indexes = list(d1.index.values)
+            s = [str(i) for i in indexes]
+            d1_idx_range = &#34;&#34;.join(s)
+            for drop_idx in indexes:
+                filename = d1_idx_range + &#34;_&#34; + str(drop_idx)
+                if(filename not in self.visited):
+                    d2 = d1.drop(drop_idx)
+                    min_val = min(d1[self.numerical_col_name])
+                    max_val = max(d1[self.numerical_col_name])
+                    # Avoiding sensitivity to be 0
+                    min_val = min_val if max_val &gt; min_val else 0
+                    max_val = max_val if max_val &gt; min_val else abs(max_val)
+
+                    d1_table = Table(&#34;d1_&#34; + filename, &#34;d1_&#34; + filename, len(d1), \
+                    [\
+                        String(&#34;UserId&#34;, len(d1), True),\
+                        Int(self.numerical_col_name, min_val, max_val)
+                    ])
+                    d2_table = copy.copy(d1_table)
+                    d2_table.schema, d2_table.name, d2_table.rowcount = &#34;d2_&#34; + filename, &#34;d2_&#34; + filename, d1_table.rowcount - 1
+                    d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+                    self.neighbor_pair[filename] = [d1, d2, d1_metadata, d2_metadata]
+                    self.visited.append(filename)
+                    self.generate_powerset(d2)
+            return
+
+    def test_exploration(self):
+        samples = self.generate_halton_samples(bounds = self.corners, dims = self.N)
+        for sample in samples:
+            df, metadata = self.create_small_dataset(sample)
+            print(&#34;Loaded &#34; + str(len(df)) + &#34; records&#34;)
+            self.generate_powerset(df)
+            print(self.visited)
+
+    def main(self):
+        self.test_exploration()
+
+if __name__ == &#34;__main__&#34;:
+    ex = Exploration()
+    ex.main()</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration"><code class="flex name class">
+<span>class <span class="ident">Exploration</span></span>
+<span>(</span><span>dataset_size=3, csv_path='../service/datasets/evaluation')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Exploration:
+    def __init__(self, dataset_size=3, csv_path=r&#39;../service/datasets/evaluation&#39;):  # TODO changed default to &#34;.&#34;
+        self.dataset_size = dataset_size
+        self.file_dir = os.path.dirname(os.path.abspath(__file__))
+        self.csv_path = csv_path
+
+        self.numerical_col_name = &#34;Usage&#34;
+        self.numerical_col_type = &#34;int&#34;
+        self.N = dataset_size
+        # if we are exploring 3 dimensions, corners shall be [-1000, -1000, -1000] to [1000, 1000, 1000]
+        self.corners = np.array([[-1*(10**self.N)]*self.N, [10**self.N]*self.N])
+        self.visited = []
+        self.neighbor_pair = {}
+
+    # Create a dataset with one numerical column on which we shall evaluate DP queries
+    def create_small_dataset(self, sample, file_name = &#34;small&#34;):
+        userids = list(range(1, self.dataset_size+1))
+        userids = [&#34;A&#34; + str(user) for user in userids]
+        usage = list(sample)
+        df = pd.DataFrame(list(zip(userids, usage)), columns=[&#39;UserId&#39;, self.numerical_col_name])
+        metadata = Table(file_name, file_name, self.dataset_size, \
+        [\
+            String(&#34;UserId&#34;, self.dataset_size, True),\
+            Int(self.numerical_col_name, min(usage), max(usage))
+        ])
+        return df, metadata
+
+    # Generate halton samples in a n-dimensional space. Defaulted to 3 dimensions
+    def generate_halton_samples(self, bounds, dims, n_sample=10):
+        samples = sequences.halton(dim=dims, n_sample=n_sample, bounds=bounds)
+        return samples
+
+    # Given a list of N records in a database, create a powerset of neighboring datasets by traversing the edges of database search graph
+    # Perform DFS to traverse the database search graph
+    # Convention of file names = &lt;d1/d2&gt;_&lt;list of row indexes in d1&gt;_&lt;row index removed to create d2&gt;
+    def generate_powerset(self, d1):
+        if(len(d1) == 0):
+            return
+        else:
+            indexes = list(d1.index.values)
+            s = [str(i) for i in indexes]
+            d1_idx_range = &#34;&#34;.join(s)
+            for drop_idx in indexes:
+                filename = d1_idx_range + &#34;_&#34; + str(drop_idx)
+                if(filename not in self.visited):
+                    d2 = d1.drop(drop_idx)
+                    min_val = min(d1[self.numerical_col_name])
+                    max_val = max(d1[self.numerical_col_name])
+                    # Avoiding sensitivity to be 0
+                    min_val = min_val if max_val &gt; min_val else 0
+                    max_val = max_val if max_val &gt; min_val else abs(max_val)
+
+                    d1_table = Table(&#34;d1_&#34; + filename, &#34;d1_&#34; + filename, len(d1), \
+                    [\
+                        String(&#34;UserId&#34;, len(d1), True),\
+                        Int(self.numerical_col_name, min_val, max_val)
+                    ])
+                    d2_table = copy.copy(d1_table)
+                    d2_table.schema, d2_table.name, d2_table.rowcount = &#34;d2_&#34; + filename, &#34;d2_&#34; + filename, d1_table.rowcount - 1
+                    d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+                    self.neighbor_pair[filename] = [d1, d2, d1_metadata, d2_metadata]
+                    self.visited.append(filename)
+                    self.generate_powerset(d2)
+            return
+
+    def test_exploration(self):
+        samples = self.generate_halton_samples(bounds = self.corners, dims = self.N)
+        for sample in samples:
+            df, metadata = self.create_small_dataset(sample)
+            print(&#34;Loaded &#34; + str(len(df)) + &#34; records&#34;)
+            self.generate_powerset(df)
+            print(self.visited)
+
+    def main(self):
+        self.test_exploration()</code></pre>
+</details>
+<h3>Methods</h3>
+<dl>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration.create_small_dataset"><code class="name flex">
+<span>def <span class="ident">create_small_dataset</span></span>(<span>self, sample, file_name='small')</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def create_small_dataset(self, sample, file_name = &#34;small&#34;):
+    userids = list(range(1, self.dataset_size+1))
+    userids = [&#34;A&#34; + str(user) for user in userids]
+    usage = list(sample)
+    df = pd.DataFrame(list(zip(userids, usage)), columns=[&#39;UserId&#39;, self.numerical_col_name])
+    metadata = Table(file_name, file_name, self.dataset_size, \
+    [\
+        String(&#34;UserId&#34;, self.dataset_size, True),\
+        Int(self.numerical_col_name, min(usage), max(usage))
+    ])
+    return df, metadata</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration.generate_halton_samples"><code class="name flex">
+<span>def <span class="ident">generate_halton_samples</span></span>(<span>self, bounds, dims, n_sample=10)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_halton_samples(self, bounds, dims, n_sample=10):
+    samples = sequences.halton(dim=dims, n_sample=n_sample, bounds=bounds)
+    return samples</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration.generate_powerset"><code class="name flex">
+<span>def <span class="ident">generate_powerset</span></span>(<span>self, d1)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def generate_powerset(self, d1):
+    if(len(d1) == 0):
+        return
+    else:
+        indexes = list(d1.index.values)
+        s = [str(i) for i in indexes]
+        d1_idx_range = &#34;&#34;.join(s)
+        for drop_idx in indexes:
+            filename = d1_idx_range + &#34;_&#34; + str(drop_idx)
+            if(filename not in self.visited):
+                d2 = d1.drop(drop_idx)
+                min_val = min(d1[self.numerical_col_name])
+                max_val = max(d1[self.numerical_col_name])
+                # Avoiding sensitivity to be 0
+                min_val = min_val if max_val &gt; min_val else 0
+                max_val = max_val if max_val &gt; min_val else abs(max_val)
+
+                d1_table = Table(&#34;d1_&#34; + filename, &#34;d1_&#34; + filename, len(d1), \
+                [\
+                    String(&#34;UserId&#34;, len(d1), True),\
+                    Int(self.numerical_col_name, min_val, max_val)
+                ])
+                d2_table = copy.copy(d1_table)
+                d2_table.schema, d2_table.name, d2_table.rowcount = &#34;d2_&#34; + filename, &#34;d2_&#34; + filename, d1_table.rowcount - 1
+                d1_metadata, d2_metadata = CollectionMetadata([d1_table], &#34;csv&#34;), CollectionMetadata([d2_table], &#34;csv&#34;)
+
+                self.neighbor_pair[filename] = [d1, d2, d1_metadata, d2_metadata]
+                self.visited.append(filename)
+                self.generate_powerset(d2)
+        return</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration.main"><code class="name flex">
+<span>def <span class="ident">main</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def main(self):
+    self.test_exploration()</code></pre>
+</details>
+</dd>
+<dt id="opendp.whitenoise.evaluation.exploration.Exploration.test_exploration"><code class="name flex">
+<span>def <span class="ident">test_exploration</span></span>(<span>self)</span>
+</code></dt>
+<dd>
+<section class="desc"></section>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def test_exploration(self):
+    samples = self.generate_halton_samples(bounds = self.corners, dims = self.N)
+    for sample in samples:
+        df, metadata = self.create_small_dataset(sample)
+        print(&#34;Loaded &#34; + str(len(df)) + &#34; records&#34;)
+        self.generate_powerset(df)
+        print(self.visited)</code></pre>
+</details>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3>Super-module</h3>
+<ul>
+<li><code><a title="opendp.whitenoise.evaluation" href="index.html">opendp.whitenoise.evaluation</a></code></li>
+</ul>
+</li>
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="opendp.whitenoise.evaluation.exploration.Exploration" href="#opendp.whitenoise.evaluation.exploration.Exploration">Exploration</a></code></h4>
+<ul class="">
+<li><code><a title="opendp.whitenoise.evaluation.exploration.Exploration.create_small_dataset" href="#opendp.whitenoise.evaluation.exploration.Exploration.create_small_dataset">create_small_dataset</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.exploration.Exploration.generate_halton_samples" href="#opendp.whitenoise.evaluation.exploration.Exploration.generate_halton_samples">generate_halton_samples</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.exploration.Exploration.generate_powerset" href="#opendp.whitenoise.evaluation.exploration.Exploration.generate_powerset">generate_powerset</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.exploration.Exploration.main" href="#opendp.whitenoise.evaluation.exploration.Exploration.main">main</a></code></li>
+<li><code><a title="opendp.whitenoise.evaluation.exploration.Exploration.test_exploration" href="#opendp.whitenoise.evaluation.exploration.Exploration.test_exploration">test_exploration</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc"><cite>pdoc</cite> 0.7.5</a>.</p>
+</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad()</script>
+</body>
+</html>
